@@ -1,3 +1,11 @@
+# Connect 4
+
+This is a personal project to get started in front-end development, more specifically Javascript and React.
+As my first front-end app, I hope this code will be useful for others learning React/front-end development.
+The Connect 4 game is an ideal learning ground to get the hang of single page applications in React.
+
+# Create React App Docs
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>

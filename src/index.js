@@ -93,11 +93,24 @@ class Grid extends React.Component {
     // if (checkForWinner(cells) || cells[i]) {
     //   return;
     // }
-    grid[r][c] = this.state.redIsNext ? 'red' : 'yellow';
+    let bottomCell = this.findBottomCell(c);
+    if (bottomCell === null) return;
+    grid[bottomCell][c] = this.state.redIsNext ? 'red' : 'yellow';
     this.setState({
       grid: grid,
       redIsNext: !this.state.redIsNext,
     });
+  }
+
+  findBottomCell(col) {
+    for (let r = this.state.rows - 1; r >= 0; r--) {
+      for (let c = 0; c < this.state.cols; c++) {
+        if (c === col && this.state.grid[r][c] === 'empty') {
+          return r;
+        }
+      }
+    }
+    return null;
   }
 
   render() {
