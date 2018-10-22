@@ -49,7 +49,7 @@ class Grid extends React.Component {
   initGrid() {
     let grid = [];
     for (let r = 0; r < this.state.rows; r++) {
-      var row = [];
+      let row = [];
       for (let c = 0; c < this.state.cols; c++) {
         row.push('empty');
       }
@@ -90,11 +90,8 @@ class Grid extends React.Component {
 
   handleClick(r, c) {
     const grid = this.state.grid.slice();
-    // if (checkForWinner(cells) || cells[i]) {
-    //   return;
-    // }
     let bottomCell = this.findBottomCell(c);
-    if (bottomCell === null) return;
+    if (this.checkForWinner() || bottomCell === null) return;
     grid[bottomCell][c] = this.state.redIsNext ? 'red' : 'yellow';
     this.setState({
       grid: grid,
@@ -103,6 +100,7 @@ class Grid extends React.Component {
   }
 
   findBottomCell(col) {
+    // Finds the bottom empty cell in a column, where the coin should drop to.
     for (let r = this.state.rows - 1; r >= 0; r--) {
       for (let c = 0; c < this.state.cols; c++) {
         if (c === col && this.state.grid[r][c] === 'empty') {
@@ -113,8 +111,51 @@ class Grid extends React.Component {
     return null;
   }
 
+  checkForWinner() {
+    // The idea of this function is to basically limit the checks to those that make sense.
+    // For example, when checking cells top down (see the first loop),
+    // you only need to check the upper 3 rows (r = 0, 1, 2) in each column (c = 0, 1, 2, 3, 4, 5, 6).
+    // That's because starting lower would run off the bottom of the board
+    // before finding a possible win. In other words, row sets {0,1,2,3}, {1,2,3,4} and {2,3,4,5}
+    // would be valid but {3,4,5,6} would not, because the six valid rows are 0-5.
+    
+    const grid = this.state.grid;
+
+    // Check down
+    for (let r = 0; r < this.state.rows - 3; r++)
+        for (let c = 0; c < this.state.cols; c++)
+            if (this.checkLine(grid[r][c], grid[r+1][c], grid[r+2][c], grid[r+3][c]))
+                return grid[r][c];
+  
+    // Check right
+    for (let r = 0; r < this.state.rows; r++)
+        for (let c = 0; c < this.state.cols - 3; c++)
+            if (this.checkLine(grid[r][c], grid[r][c+1], grid[r][c+2], grid[r][c+3]))
+                return grid[r][c];
+  
+    // Check down-right
+    for (let r = 0; r < this.state.rows - 3; r++)
+        for (let c = 0; c < this.state.cols - 3; c++)
+            if (this.checkLine(grid[r][c], grid[r+1][c+1], grid[r+2][c+2], grid[r+3][c+3]))
+                return grid[r][c];
+  
+    // Check down-left
+    for (let r = this.state.rows - 3; r < this.state.rows; r++)
+        for (let c = 0; c < this.state.cols - 3; c++)
+            if (this.checkLine(grid[r][c], grid[r-1][c+1], grid[r-2][c+2], grid[r-3][c+3]))
+                return grid[r][c];
+  
+    return null;
+  }
+  
+  checkLine(a, b, c, d) {
+    // Check if the first cell is not 'empty' and the next cells match
+    return ((a !== 'empty') && (a === b) && (a === c) && (a === d));
+  }
+  
+  
   render() {
-    const winner = checkForWinner(this.state.grid);
+    const winner = this.checkForWinner();
     let status;
     if (winner) {
       status = 'Winner: ' + winner;
@@ -124,9 +165,11 @@ class Grid extends React.Component {
 
     return (
       <div>
-        <div className="status">{status}</div>
+        <h3 className="status red">{status}</h3>
         <div id="gameGrid">
           {
+            // This construct 'loops' to create the rows of the grid;
+            // regular looping is not available inside JSX code!
             [...Array(this.state.rows)].map((el, i) => {
               return this.renderRow(i);
             })
@@ -149,10 +192,6 @@ class Game extends React.Component {
       </div>
     );
   }
-}
-
-function checkForWinner(grid) {
-
 }
 
 // ========================================
