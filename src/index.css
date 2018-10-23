@@ -61,7 +61,7 @@ body {
   border-bottom: 0.25rem solid yellow;
 }
 
-.status {
+.winner {
   height: 2rem;
   width: 50rem;
   position: absolute;
@@ -74,12 +74,20 @@ body {
   padding-top: 0.75rem;
 }
 
-.status.red {
+.winner.red {
   background-color: red;
   border: 0.2rem solid rgb(126, 4, 4);
 }
-.status.yellow {
+
+.winner.yellow {
   background-color: yellow;
   border: 0.2rem solid rgb(133, 133, 2);
+}
 
+.status.red {
+  color: red;
+}
+
+.status.yellow {
+  color: rgb(192, 192, 2);
 }

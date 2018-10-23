@@ -156,16 +156,17 @@ class Grid extends React.Component {
   
   render() {
     const winner = this.checkForWinner();
-    let status;
-    if (winner) {
-      status = 'Winner: ' + winner;
-    } else {
-      status = 'Next player: ' + (this.state.redIsNext ? 'red' : 'yellow');
-    }
+    // let status;
+    // if (winner) {
+    //   status = 'Winner: ' + winner;
+    // } else {
+    //   status = 'Next player: ' + (this.state.redIsNext ? 'red' : 'yellow');
+    // }
 
     return (
       <div>
-        <h3 className="status red">{status}</h3>
+        {/* <h3 className="status red">{status}</h3> */}
+        <Status winner={winner} redIsNext={this.state.redIsNext} />
         <div id="gameGrid">
           {
             // This construct 'loops' to create the rows of the grid;
@@ -177,6 +178,23 @@ class Grid extends React.Component {
         </div>
       </div>
     );
+  }
+}
+
+function Status(props) {
+  let status;
+  if (props.winner) {
+    status = 'Winner: ' + props.winner + '!!!';
+    if (props.winner === 'red')
+      return (<h3 className="winner red">{status}</h3>);
+    else
+      return (<h3 className="winner yellow">{status}</h3>);
+  } else {
+    status = 'Next player: ' + (props.redIsNext ? 'red' : 'yellow');
+    if (props.redIsNext)
+      return (<h3 className="status red">{status}</h3>);
+    else
+      return (<h3 className="status yellow">{status}</h3>);
   }
 }
 
