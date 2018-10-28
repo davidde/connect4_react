@@ -3,7 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "ajv": "^6.5.4",
+    "animejs": "^1.1.1",
+    "gsap": "^2.0.2",
     "react": "^16.5.2",
+    "react-anime": "^0.2.1",
     "react-dom": "^16.5.2",
     "react-scripts": "2.0.5"
   },

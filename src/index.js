@@ -1,6 +1,18 @@
+/*****************************************************************************
+* Appearantly it is near impossible to animate the grid such that the coins  *
+* fall behind the grid, but before the 'holes' (which aren't real holes,     *
+* since they're just circles filled with background color). We need a        *
+* different approach; looking into both CSS grid layout and SVG elements.    *
+******************************************************************************/
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import TweenMax from 'gsap/TweenMax';
+// import Anime from 'react-anime';
+// import anime from 'animejs';
+// import TweenLite from 'gsap/TweenLite';
+// import 'gsap/CSSPlugin';
+
 
 // Refactored to function component!
 // class Cell extends React.Component {
@@ -26,12 +38,172 @@ import './index.css';
 //   }
 // }
 
-function Cell(props) {
-  let classValue= "cell " + props.color;
-  return (
-    <div className={classValue} onClick={props.onClick} />
-  );
+// class Cell extends React.Component {
+//   constructor(props) {
+//     super(props);
+
+//     this.state = {
+//       cellClass: '',
+//       coin: null,
+//     };
+//   }
+
+//   showCoin() {
+//     let cellClass;
+//     if (this.props.redIsNext)
+//       cellClass = 'cell red next';
+//     else cellClass = 'cell yellow next';
+//     //console.log('cellClass = ', cellClass);
+//     this.setState({coin:
+//                     <Anime
+//                       delay={(el, index) => index * 10}
+//                       easing='easeOutSine'
+//                       duration={1000}
+//                       direction={'normal'}
+//                       translateY={'13rem'}
+//                     >
+//                       <div className={cellClass}/>
+//                     </Anime>
+//                   });
+//   }
+
+//   render() {
+//     console.log('Render');
+//     let cellClass = 'cell ' + this.props.color;
+//     this.state.cellClass = cellClass;
+//     return (
+//       <div
+//         className={this.state.cellClass}
+//         onMouseEnter={() => this.showCoin()}
+//         onMouseLeave={() => this.setState({coin: null})}
+//         onClick={this.props.onClick}
+//       >
+//       {this.state.coin}
+//       </div>
+//     );
+//   }
+// }
+
+
+// class Cell extends React.Component {
+//   constructor(props) {
+//     super(props);
+
+//     this.state = {
+//       cellClass: '',
+//       coin: null,
+//     };
+//   }
+
+//   showCoin() {
+//     let cellClass;
+//     if (this.props.redIsNext)
+//       cellClass = 'cell red next';
+//     else cellClass = 'cell yellow next';
+//     //console.log('cellClass = ', cellClass);
+//     this.setState({coin: <div className={cellClass}/>});
+//     console.log('cellClass = ', cellClass);
+//     anime({
+//       targets: '.next',
+//       translateY: '27.5rem', // Animate all divs translateX property to 250px
+//       duration: 600,
+//       loop: false,
+//       direction: 'normal',
+//       easing: 'easeOutCubic',
+//     });
+//   }
+
+//   render() {
+//     console.log('Render');
+//     let cellClass = 'cell ' + this.props.color;
+//     this.state.cellClass = cellClass;
+//     anime({
+//       targets: '.next',
+//       translateY: '27.5rem', // Animate all divs translateX property to 250px
+//       duration: 600,
+//       loop: false,
+//       direction: 'normal',
+//       easing: 'easeOutSine',
+//     });
+//     return (
+//       <div
+//         className={this.state.cellClass}
+//         onMouseEnter={() => this.showCoin()}
+//         onMouseLeave={() => this.setState({coin: null})}
+//         onClick={this.props.onClick}
+//       >
+//       {this.state.coin}
+//       </div>
+//     );
+//   }
+// }
+// eslint-disable-next-line
+class Cell extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      cellClass: '',
+      coin: null,
+    };
+  }
+
+  showCoin() {
+    let cellClass;
+    if (this.props.redIsNext)
+      cellClass = 'cell red next';
+    else cellClass = 'cell yellow next';
+    //console.log('cellClass = ', cellClass);
+    this.setState({coin: <Coin className={cellClass}/>});
+
+  }
+
+  render() {
+    // console.log('Render');
+    let cellClass = 'cell ' + this.props.color;
+    // eslint-disable-next-line
+    this.state.cellClass = cellClass;
+    return (
+      <div
+        className={this.state.cellClass}
+        onMouseEnter={() => this.showCoin()}
+        onMouseLeave={() => this.setState({coin: null})}
+        onClick={this.props.onClick}
+      >
+      {this.state.coin}
+      </div>
+    );
+  }
 }
+
+class Coin extends React.Component {
+  constructor(props){
+    super(props);
+    // reference to the DOM node
+    this.myElement = null;
+    // reference to the animation
+    this.myTween = null;
+  }
+
+  componentDidMount(){
+    // use the node ref to create the animation
+    // this.myTween = TweenLite.to(this.myElement, 1, {y: '27.5rem'});
+    this.myTween = TweenMax.fromTo(this.myElement, 1,
+      {x: '-45rem'}, {x:'-45rem', y: '550rem', ease: 'easeOutBounce'});
+  }
+
+  render(){
+    // console.log('cellClass = ', this.props.className);
+    return <div className={this.props.className} ref={div => this.myElement = div} />;
+  }
+}
+
+// function Cell(props) {
+//   let classValue= "cell " + props.color;
+//   return (
+//     <div className={classValue} onClick={props.onClick} />
+//   );
+// }
 
 class Grid extends React.Component {
   constructor(props) {
@@ -58,6 +230,7 @@ class Grid extends React.Component {
 
     // this.setState({grid: grid}) is a no-op if the component
     // is not yet fully mounted => nasty bug!!!
+    // eslint-disable-next-line
     this.state.grid = grid;
     // console.log('grid = ', grid);
     // console.log('this.state.grid = ', this.state.grid);
@@ -76,12 +249,20 @@ class Grid extends React.Component {
     );
   }
 
+/*****************************************************************************
+* Appearantly it is near impossible to animate the grid such that the coins  *
+* fall behind the grid, but before the 'holes' (which aren't real holes,     *
+* since they're just circles filled with background color). We need a        *
+* different approach; looking into both CSS grid layout and SVG elements.    *
+******************************************************************************/
   renderCell(r, c) {
+    // return (<svg width="3.5rem" height="3.5rem" xmlns="http://www.w3.org/2000/svg" key={c}>
+    //           <circle cx="1.75rem" cy="1.75rem" r="1.75rem" fill="red" />
+    //         </svg>);
     return <Cell
               color={this.state.grid[r][c]}
-              row={r}
-              col={c}
               key={c}
+              redIsNext={this.state.redIsNext}
               //onMouseEnter={() => this.showCoin()}
               //onMouseLeave={() => this.setState({coin: null})}
               onClick={() => this.handleClick(r, c)}
@@ -153,19 +334,11 @@ class Grid extends React.Component {
     return ((a !== 'empty') && (a === b) && (a === c) && (a === d));
   }
   
-  
   render() {
     const winner = this.checkForWinner();
-    // let status;
-    // if (winner) {
-    //   status = 'Winner: ' + winner;
-    // } else {
-    //   status = 'Next player: ' + (this.state.redIsNext ? 'red' : 'yellow');
-    // }
 
     return (
       <div>
-        {/* <h3 className="status red">{status}</h3> */}
         <Status winner={winner} redIsNext={this.state.redIsNext} />
         <div id="gameGrid">
           {
