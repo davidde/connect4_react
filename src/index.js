@@ -1,3 +1,7 @@
+/*****************************************************************************************
+ * Very buggy on mobile; probably due to too big graphically and over-use of REM in CSS! *
+ *****************************************************************************************/
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
@@ -155,18 +159,9 @@ class Grid extends React.Component {
   
   
   render() {
-    const winner = this.checkForWinner();
-    // let status;
-    // if (winner) {
-    //   status = 'Winner: ' + winner;
-    // } else {
-    //   status = 'Next player: ' + (this.state.redIsNext ? 'red' : 'yellow');
-    // }
-
     return (
       <div>
-        {/* <h3 className="status red">{status}</h3> */}
-        <Status winner={winner} redIsNext={this.state.redIsNext} />
+        <Status winner={this.checkForWinner()} redIsNext={this.state.redIsNext} />
         <div id="gameGrid">
           {
             // This construct 'loops' to create the rows of the grid;
