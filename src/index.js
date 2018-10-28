@@ -1,7 +1,3 @@
-/*****************************************************************************************
- * Very buggy on mobile; probably due to too big graphically and over-use of REM in CSS! *
- *****************************************************************************************/
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';

@@ -6,11 +6,10 @@ body {
 
 #gameGrid {
   background-color: black;
-  border: 0.5rem solid black;
+  border: 1.2vmin solid black;
   position: absolute;
   top: 50%;
   left: 50%;
-  margin: 1rem;
   margin-right: -50%;
   transform: translate(-50%, -50%);
 }
@@ -35,30 +34,32 @@ body {
 }
 
 .cell {
-  width: 3.5rem;
-  height: 3.5rem;
+  /* width: 3.5rem;
+  height: 3.5rem; */
+  width: 8vmin;
+  height: 8vmin;
   display: inline-block;
   border-radius: 50%;
-  margin: 0.25rem;
+  margin: 0.5vmin;
   cursor: pointer;
 }
 
 .cell.empty {
   background-color: rgb(218, 236, 236);
-  border-left: 0.25rem solid rgb(100, 100, 100);
-  border-bottom: 0.25rem solid rgb(100, 100, 100);
+  border-left: 0.6vmin solid rgb(100, 100, 100);
+  border-bottom: 0.7vmin solid rgb(100, 100, 100);
 }
 
 .cell.red {
   background-color: red;
-  border-left: 0.25rem solid red;
-  border-bottom: 0.25rem solid red;
+  border-left: 0.6vmin solid red;
+  border-bottom: 0.7vmin solid red;
 }
 
 .cell.yellow {
   background-color: yellow;
-  border-left: 0.25rem solid yellow;
-  border-bottom: 0.25rem solid yellow;
+  border-left: 0.6vmin solid yellow;
+  border-bottom: 0.7vmin solid yellow;
 }
 
 .winner {
