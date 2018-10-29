@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <style>
+    body {
+      background-color: rgb(218, 236, 236);
+    }
+
+    #gameGrid {
+      background-color: black;
+      border: 1.2vmin solid black;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-right: -50%;
+      margin-top: 1rem;
+      transform: translate(-50%, -50%);
+    }
+
+
+    #gameGrid:after,
+    #gameGrid:before {
+      content: '';
+      background: black;
+      height: 110%;
+      width: 7.6%;
+      position: absolute;
+      top: 0%;
+      border-radius: 10%;
+    }
+
+    #gameGrid:after {
+      right: -7%;
+    }
+
+    #gameGrid:before {
+      left: -7%;
+    }
+
+    .cell {
+      width: 8vmin;
+      height: 8vmin;
+      display: inline-block;
+      border-radius: 50%;
+      margin: 0.5vmin;
+      cursor: pointer;
+    }
+
+    .cell.empty {
+      background-color: rgb(218, 236, 236);
+      border-left: 0.6vmin solid rgb(100, 100, 100);
+      border-bottom: 0.7vmin solid rgb(100, 100, 100);
+      z-index: -10;
+    }
+
+    .cell.red {
+      background-color: red;
+      border-left: 0.6vmin solid red;
+      border-bottom: 0.7vmin solid red;
+      z-index: -1;
+    }
+
+    .cell.yellow {
+      background-color: yellow;
+      border-left: 0.6vmin solid yellow;
+      border-bottom: 0.7vmin solid yellow;
+      z-index: -1;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(min-content, min-content));
+      grid-template-rows: 1fr 6fr;
+      border: 1.2vmin solid black;
+      width: min-content;
+    }
+
+    .column {
+      display: flex;
+      flex-direction: column-reverse;
+      justify-content: space-evenly;
+      align-items: center;
+      align-content: center;
+      background-color: black;
+      border-top: 1.2vmin solid black;
+      z-index: 100;
+    }
+  </style>
+  <title>CSS Grid Test</title>
+</head>
+<body>
+  <div class='grid'>
+    <div></div> <div></div> <div></div> <div></div> <div></div> <div></div> <div></div>
+      <div class='column'>
+          <div class='cell empty'></div>
+          <div class='cell empty'> <span class='cell yellow'></span> </div>
+          <!-- Impossible for the yellow cells to be both behind the grid,
+          and in front of the empty cells, since the empty cells need to be
+          in front of the grid or they wouldn't show ... -->
+          <div class='cell empty'></div>
+          <div class='cell empty'></div>
+          <div class='cell empty'></div>
+          <div class='cell empty'></div>
+      </div>
+
+      <div class='column'>
+          <div class='cell empty'></div>
+          <div class='cell empty'></div>
+          <div class='cell empty'></div>
+          <div class='cell empty'></div>
+          <div class='cell empty'></div>
+          <div class='cell empty'></div>
+      </div>
+
+      <div class='column'>
+          <div class='cell empty'></div>
+          <div class='cell empty'></div>
+          <div class='cell empty'></div>
+          <div class='cell empty'></div>
+          <div class='cell empty'></div>
+          <div class='cell empty'></div>
+      </div>
+
+      <div class='column'>
+          <div class='cell empty'></div>
+          <div class='cell empty'></div>
+          <div class='cell empty'></div>
+          <div class='cell empty'></div>
+          <div class='cell empty'></div>
+          <div class='cell empty'></div>
+      </div>
+
+      <div class='column'>
+          <div class='cell empty'></div>
+          <div class='cell empty'></div>
+          <div class='cell empty'></div>
+          <div class='cell empty'></div>
+          <div class='cell empty'></div>
+          <div class='cell empty'></div>
+      </div>
+
+      <div class='column'>
+          <div class='cell empty'></div>
+          <div class='cell empty'></div>
+          <div class='cell empty'> <span class='cell yellow'></span> </div>
+          <div class='cell empty'></div>
+          <div class='cell empty'></div>
+          <div class='cell empty'></div>
+      </div>
+
+      <div class='column'>
+          <div class='cell empty'></div>
+          <div class='cell empty'></div>
+          <div class='cell empty'></div>
+          <div class='cell empty'></div>
+          <div class='cell empty'></div>
+          <div class='cell empty'></div>
+      </div>
+  </div><span class='cell yellow'></span>
+</body>
+</html>
