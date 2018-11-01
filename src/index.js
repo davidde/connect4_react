@@ -42,9 +42,12 @@ class Grid extends React.Component {
       grid: [],
       redIsNext: true,
     };
-    this.initGrid();
+    // this.initGrid();
   }
 
+  componentWillMount() {
+    this.initGrid();
+  }
 
   initGrid() {
     let grid = [];
@@ -56,9 +59,10 @@ class Grid extends React.Component {
       grid.push(row);
     }
 
+    this.setState({grid: grid});
     // this.setState({grid: grid}) is a no-op if the component
     // is not yet fully mounted => nasty bug!!!
-    this.state.grid = grid;
+    // this.state.grid = grid;
     // console.log('grid = ', grid);
     // console.log('this.state.grid = ', this.state.grid);
   }
