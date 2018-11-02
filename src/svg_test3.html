@@ -4,18 +4,29 @@
   <meta charset="UTF-8">
 
   <style>
+    /* 
+    * {
+      /* Great for debugging; see outlines of all elements, without changing layout *
+      outline: solid 1px red;
+    } 
+    */
+
     body {
       background-color: rgb(218, 236, 236);
     }
 
     #gameGrid {
-      /* border: 1.2vmin solid black; */
+      border: 1.5vmin solid black;
       position: absolute;
       top: 50%;
       left: 50%;
       margin-right: -50%;
-      /* margin-top: 1rem; */
+      margin-top: 1rem;
       transform: translate(-50%, -50%);
+    }
+
+    .svgBorder {
+      outline: 1.5vmin solid rgb(3, 3, 3);
     }
 
     #gameGrid:after,
@@ -25,16 +36,16 @@
       height: 115%;
       width: 10%;
       position: absolute;
-      top: -1.82%;
+      top: -2.2%;
       border-radius: 10%;
     }
 
     #gameGrid:after {
-      right: -10%;
+      right: -9%;
     }
 
     #gameGrid:before {
-      left: -10%;
+      left: -9%;
     }
 
     .cell {
@@ -75,28 +86,8 @@
 </head>
 
 <body>
-  <!-- <svg width="10%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-
-      <pattern id="hole" patternUnits="userSpaceOnUse" width="100" height="100">
-        <circle cx="50" cy="50" r="45" fill="black"></circle>
-      </pattern>
-
-      <mask id="cell-mask">
-        <rect width="100" height="100" fill="white"></rect>
-        <rect width="100" height="100" fill="url(#hole)"></rect>
-      </mask>
-
-    </defs>
-
-    <circle cx="50" cy="10" r="45" fill="red"></circle>
-    <rect width="100" height="100" fill="black" mask="url(#cell-mask)"></rect>
-  </svg> -->
-
-  <br>
-
-
-  <svg id='grid' width="65%" viewBox="0 0 700 600" xmlns="http://www.w3.org/2000/svg">
+  <div id='gameGrid'>
+  <svg class='svgBorder' width="100%" viewBox="0 0 700 600" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <pattern id="hole" patternUnits="userSpaceOnUse" width="100" height="100">
         <circle cx="50" cy="50" r="40" fill="black"></circle>
@@ -107,48 +98,50 @@
       </mask>
       <style>
         @media screen and (max-width: 600px) {
-            #grid {
+            #gameGrid {
                 width: 90%;
             }
         }
         @media screen and (min-width: 1100px) {
-            #grid {
+            #gameGrid {
                 width: 40%;
             }
         }
       </style>
     </defs>
 
-    <svg id='column1' x="0" y="0">
-      <circle cx="50" cy="550" r="40" fill="yellow"></circle>
+    <svg class='svgBorder' id='column1' x="0" y="0">
+      <circle cx="50" cy="550" r="35" fill="yellow" stroke='orange' stroke-width="10"></circle>
       <rect width="100" height="600" fill="black" mask="url(#cell-mask)"></rect>
     </svg>
 
-    <svg id='column2' x="100" y="0">
+    <svg class='svgBorder' id='column2' x="100" y="0">
       <rect width="100" height="600" fill="black" mask="url(#cell-mask)"></rect>
     </svg>
 
-    <svg id='column3' x="200" y="0">
+    <svg class='svgBorder' id='column3' x="200" y="0">
       <circle cx="50" cy="550" r="40" fill="red"></circle>
       <circle cx="50" cy="300" r="40" fill="red"></circle>
       <rect width="100" height="600" fill="black" mask="url(#cell-mask)"></rect>
     </svg>
 
-    <svg id='column4' x="300" y="0">
+    <svg class='svgBorder' id='column4' x="300" y="0">
+      <circle cx="50" cy="0" r="40" fill="red"></circle>
       <rect width="100" height="600" fill="black" mask="url(#cell-mask)"></rect>
     </svg>
 
-    <svg id='column5' x="400" y="0">
+    <svg class='svgBorder' id='column5' x="400" y="0">
       <rect width="100" height="600" fill="black" mask="url(#cell-mask)"></rect>
     </svg>
     
-    <svg id='column6' x="500" y="0">
+    <svg class='svgBorder' id='column6' x="500" y="0">
       <rect width="100" height="600" fill="black" mask="url(#cell-mask)"></rect>
     </svg>
 
-    <svg id='column7' x="600" y="0">
+    <svg class='svgBorder' id='column7' x="600" y="0">
       <rect width="100" height="600" fill="black" mask="url(#cell-mask)"></rect>
     </svg>
   </svg>
-
+  
+</div>
 </body>
