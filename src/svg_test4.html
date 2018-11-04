@@ -4,12 +4,12 @@
   <meta charset='UTF-8'>
 
   <style>
-/*     
+
     * {
-      /* Great for debugging; see outlines of all elements, without changing layout *
+      /* Great for debugging; see outlines of all elements, without changing layout */
       outline: solid 1px red;
     } 
-      */
+      
 
     body {
       background-color: rgb(218, 236, 236);
@@ -21,7 +21,7 @@
 </head>
 
 <body>
-  <svg id='container' width='50%' viewBox='0 0 800 770' xmlns='http://www.w3.org/2000/svg'>
+  <svg id='container' width='50%' viewBox='0 0 800 785' xmlns='http://www.w3.org/2000/svg'>
     <!-- This is the grid container, which holds the left and right 'pillars', the top and bottom
          paddings, and an extra invisible top row, which will show the coins that are about to drop,
          when hovering. -->
@@ -43,10 +43,11 @@
         }
       </style>
 
-    <rect id='left-pillar' width='60' height='685' fill='black' x='0' y='85' rx='10' ry='10'></rect>
-    <rect id='top-padding' width='700' height='20' x='51' y='85' fill='black'></rect>
+    <rect id='left-pillar' width='60' height='685' fill='black' x='0' y='100' rx='10' ry='10'></rect>
+    <rect id='top-padding' width='700' height='20' x='51' y='100' fill='black'></rect>
 
-    <svg id='gameGrid' width='700' height='640' x='51' y='100' xmlns='http://www.w3.org/2000/svg'>
+    <circle cx='102' cy='50' r='40' fill='red'></circle>
+    <svg id='gameGrid' width='700' height='640' x='51' y='115' xmlns='http://www.w3.org/2000/svg'>
       <!-- This is the actual gamegrid consisting of 6 rows x 7 columns of square 100px x 100px cells;
            this means this svg is 600px by 700px with each column being 600 by 100px. -->
       <defs>
@@ -111,8 +112,8 @@
 
     </svg>
 
-    <rect id='bottom-padding' width='700' height='20' x='51' y='697' fill='black'></rect>
-    <rect id='right-pillar' width='60' height='685' fill='black' x='737' y='85' rx='10' ry='10'></rect>
+    <rect id='bottom-padding' width='700' height='20' x='51' y='712' fill='black'></rect>
+    <rect id='right-pillar' width='60' height='685' fill='black' x='737' y='100' rx='10' ry='10'></rect>
   </svg>
   
 </div>
