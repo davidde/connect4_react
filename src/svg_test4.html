@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+
+  <style>
+/*     
+    * {
+      /* Great for debugging; see outlines of all elements, without changing layout *
+      outline: solid 1px red;
+    } 
+      */
+
+    body {
+      background-color: rgb(218, 236, 236);
+    }
+
+  </style>
+
+  <title>SVG Test</title>
+</head>
+
+<body>
+  <svg id='container' width='50%' viewBox='0 0 800 770' xmlns='http://www.w3.org/2000/svg'>
+    <!-- This is the grid container, which holds the left and right 'pillars', the top and bottom
+         paddings, and an extra invisible top row, which will show the coins that are about to drop,
+         when hovering. -->
+      <style>
+        @media screen and (max-width: 750px) {
+          #container {
+            width: 90%;
+          }
+        }
+        @media screen and (max-width: 1080px) and (max-aspect-ratio: 10/16) {
+          #container {
+            width: 90%;
+          }
+        }
+        @media screen and (min-width: 1500px) and (min-aspect-ratio: 16/10) {
+          #container {
+            width: 40%;
+          }
+        }
+      </style>
+
+    <rect id='left-pillar' width='60' height='685' fill='black' x='0' y='85' rx='10' ry='10'></rect>
+    <rect id='top-padding' width='700' height='20' x='51' y='85' fill='black'></rect>
+
+    <svg id='gameGrid' width='700' height='640' x='51' y='100' xmlns='http://www.w3.org/2000/svg'>
+      <!-- This is the actual gamegrid consisting of 6 rows x 7 columns of square 100px x 100px cells;
+           this means this svg is 600px by 700px with each column being 600 by 100px. -->
+      <defs>
+        <pattern id='hole' patternUnits='userSpaceOnUse' width='100' height='100'>
+          <!-- The <pattern> matches the size of a cell, 100x100, and contains a <circle>,
+               representing the hole, that matches the size of the coin.
+               The <circle> gets a fill color of 'black', meaning the absence of space,
+               or full transparency, as opposed to literal black. -->
+          <circle cx='50' cy='50' r='40' fill='black'></circle>
+        </pattern>
+
+        <mask id='cell-mask'>
+          <!-- The <mask> is composed of two <rect> elements that match the grid column size;
+               the first gets a fill color of 'white' (opposite of 'black' in a mask) to represent
+               the part of the column we want to be opaque/visible.
+               The second <rect> sits on top of the first and has a fill of url(#hole) which refers
+               to the pattern we created above. -->
+          <rect width='100' height='600' fill='white'></rect>
+          <rect width='100' height='600' fill='url(#hole)'></rect>
+        </mask>
+      </defs>
+
+      <!-- Now, we can set the mask attribute for our grid column <rect>, by referencing
+           the <mask> element by id: 'url(#cell-mask)'. A nice feature of the <pattern> element
+           is that it repeats itself, based on the height/width attributes we've provided.
+           This means we can reveal the 6 rows of a single column without adding each
+           circular hole to the DOM explicitly. To build multiple columns, we simply add
+           a nested <svg> element at the correct x position to wrap each masked <rect>! -->
+      <svg id='column1' x='0' y='0'>
+        <circle cx='50' cy='550' r='35' fill='yellow' stroke='orange' stroke-width='10'></circle>
+        
+        <rect width='100' height='600' fill='black' mask='url(#cell-mask)'></rect>
+        
+      </svg>
+
+      <svg id='column2' x='99' y='0'>
+        <rect width='100' height='600' fill='black' mask='url(#cell-mask)'></rect>
+      </svg>
+
+      <svg id='column3' x='198' y='0'>
+        <circle cx='50' cy='550' r='40' fill='red'></circle>
+        <circle cx='50' cy='300' r='40' fill='red'></circle>
+        <rect width='100' height='600' fill='black' mask='url(#cell-mask)'></rect>
+      </svg>
+
+      <svg id='column4' x='297' y='0'>
+        <!-- <circle cx='50' cy='0' r='40' fill='red'></circle> -->
+        <rect width='100' height='600' fill='black' mask='url(#cell-mask)'></rect>
+      </svg>
+
+      <svg id='column5' x='396' y='0'>
+        <rect width='100' height='600' fill='black' mask='url(#cell-mask)'></rect>
+      </svg>
+      
+      <svg id='column6' x='495' y='0'>
+        <rect width='100' height='600' fill='black' mask='url(#cell-mask)'></rect>
+      </svg>
+
+      <svg id='column7' x='594' y='0'>
+        <rect width='100' height='600' fill='black' mask='url(#cell-mask)'></rect>
+      </svg>
+
+    </svg>
+
+    <rect id='bottom-padding' width='700' height='20' x='51' y='697' fill='black'></rect>
+    <rect id='right-pillar' width='60' height='685' fill='black' x='737' y='85' rx='10' ry='10'></rect>
+  </svg>
+  
+</div>
+</body>
