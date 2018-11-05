@@ -4,12 +4,12 @@
   <meta charset='UTF-8'>
 
   <style>
-
+    /*
     * {
-      /* Great for debugging; see outlines of all elements, without changing layout */
+      /* Great for debugging; see outlines of all elements, without changing layout *
       outline: solid 1px red;
     } 
-      
+      */
 
     body {
       background-color: rgb(218, 236, 236);
@@ -44,16 +44,23 @@
       </style>
 
     <rect id='left-pillar' width='60' height='685' fill='black' x='0' y='100' rx='10' ry='10'></rect>
-    <rect id='top-padding' width='700' height='20' x='51' y='100' fill='black'></rect>
+    
 
-    <circle cx='102' cy='50' r='40' fill='red'></circle>
+    <circle cx='101' cy='50' r='40' fill='red'></circle>
+    <circle cx='200' cy='165' r='40' fill='yellow'></circle>
+    <circle cx='299' cy='265' r='40' fill='red'></circle>
+    <circle cx='398' cy='365' r='40' fill='yellow'></circle>
+    <circle cx='497' cy='465' r='40' fill='red'></circle>
+    <circle cx='596' cy='565' r='40' fill='yellow'></circle>
+    <circle cx='695' cy='665' r='40' fill='red'></circle>
+
     <svg id='gameGrid' width='700' height='640' x='51' y='115' xmlns='http://www.w3.org/2000/svg'>
       <!-- This is the actual gamegrid consisting of 6 rows x 7 columns of square 100px x 100px cells;
-           this means this svg is 600px by 700px with each column being 600 by 100px. -->
+           this means the actual grid is 600px by 700px with each column being 600 by 100px. -->
       <defs>
         <pattern id='hole' patternUnits='userSpaceOnUse' width='100' height='100'>
           <!-- The <pattern> matches the size of a cell, 100x100, and contains a <circle>,
-               representing the hole, that matches the size of the coin.
+               representing the hole, that matches the size of the checker.
                The <circle> gets a fill color of 'black', meaning the absence of space,
                or full transparency, as opposed to literal black. -->
           <circle cx='50' cy='50' r='40' fill='black'></circle>
@@ -77,10 +84,7 @@
            circular hole to the DOM explicitly. To build multiple columns, we simply add
            a nested <svg> element at the correct x position to wrap each masked <rect>! -->
       <svg id='column1' x='0' y='0'>
-        <circle cx='50' cy='550' r='35' fill='yellow' stroke='orange' stroke-width='10'></circle>
-        
         <rect width='100' height='600' fill='black' mask='url(#cell-mask)'></rect>
-        
       </svg>
 
       <svg id='column2' x='99' y='0'>
@@ -88,13 +92,10 @@
       </svg>
 
       <svg id='column3' x='198' y='0'>
-        <circle cx='50' cy='550' r='40' fill='red'></circle>
-        <circle cx='50' cy='300' r='40' fill='red'></circle>
         <rect width='100' height='600' fill='black' mask='url(#cell-mask)'></rect>
       </svg>
 
       <svg id='column4' x='297' y='0'>
-        <!-- <circle cx='50' cy='0' r='40' fill='red'></circle> -->
         <rect width='100' height='600' fill='black' mask='url(#cell-mask)'></rect>
       </svg>
 
@@ -112,6 +113,7 @@
 
     </svg>
 
+    <rect id='top-padding' width='700' height='20' x='51' y='100' fill='black'></rect>
     <rect id='bottom-padding' width='700' height='20' x='51' y='712' fill='black'></rect>
     <rect id='right-pillar' width='60' height='685' fill='black' x='737' y='100' rx='10' ry='10'></rect>
   </svg>
