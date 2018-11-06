@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+
+  <style>
+    /*
+    * {
+      /* Great for debugging; see outlines of all elements, without changing layout *
+      outline: solid 1px red;
+    } 
+    */
+
+    body {
+      background-color: rgb(218, 236, 236);
+    }
+
+  </style>
+
+  <title>SVG Test</title>
+</head>
+
+<body>
+  <svg id='container' width='50%' viewBox='0 0 810 785' xmlns='http://www.w3.org/2000/svg'>
+    <!-- This is the grid container, which holds the left and right 'pillars', the top and bottom
+         paddings, and an extra invisible top row, which will show the coins that are about to drop,
+         when hovering. -->
+    <style>
+      @media screen and (max-width: 750px) {
+        #container {
+          width: 90%;
+        }
+      }
+      @media screen and (max-width: 1080px) and (max-aspect-ratio: 10/16) {
+        #container {
+          width: 90%;
+        }
+      }
+      @media screen and (min-width: 1500px) and (min-aspect-ratio: 16/10) {
+        #container {
+          width: 40%;
+        }
+      }
+    </style>
+
+    <defs>
+      <radialGradient id='yellow' cx='50%' cy='50%' r='50%' fx='50%' fy='50%'>
+        <stop offset='63%' style='stop-color:rgb(251, 255, 0);stop-opacity:0.9' />
+        <stop offset='100%' style='stop-color:rgb(255, 174, 0);stop-opacity:1' />
+      </radialGradient>(235, 118, 10)
+      <radialGradient id='orange' cx='50%' cy='50%' r='50%' fx='50%' fy='50%'>
+          <stop offset='65%' style='stop-color:rgb(253, 156, 0);stop-opacity:0.65' />
+          <stop offset='100%' style='stop-color:rgb(253, 101, 0);stop-opacity:0.95' />
+      </radialGradient>
+      <radialGradient id='red' cx='50%' cy='50%' r='50%' fx='50%' fy='50%'>
+          <stop offset='60%' style='stop-color:rgb(246, 75, 7);stop-opacity:0.8' />
+          <stop offset='100%' style='stop-color:rgb(209, 0, 7);stop-opacity:1' />
+      </radialGradient>
+      <radialGradient id='green' cx='50%' cy='50%' r='50%' fx='50%' fy='50%'>
+          <stop offset='65%' style='stop-color:rgb(134, 246, 7);stop-opacity:0.8' />
+          <stop offset='100%' style='stop-color:rgb(21, 139, 0);stop-opacity:1' />
+      </radialGradient>
+      <radialGradient id='cyan' cx='50%' cy='50%' r='50%' fx='50%' fy='50%'>
+          <stop offset='65%' style='stop-color:rgb(66, 255, 182);stop-opacity:1' />
+          <stop offset='100%' style='stop-color:rgb(15, 119, 145);stop-opacity:1' />
+      </radialGradient>
+      <radialGradient id='blue' cx='50%' cy='50%' r='50%' fx='50%' fy='50%'>
+          <stop offset='60%' style='stop-color:rgb(7, 210, 246);stop-opacity:0.8' />
+          <stop offset='100%' style='stop-color:rgb(0, 79, 251);stop-opacity:1' />
+      </radialGradient>
+      <radialGradient id='purple' cx='50%' cy='50%' r='50%' fx='50%' fy='50%'>
+          <stop offset='60%' style='stop-color:rgb(255, 84, 190);stop-opacity:0.8' />
+          <stop offset='100%' style='stop-color:rgb(159, 0, 251);stop-opacity:1' />
+      </radialGradient>
+
+      <linearGradient id='blackTop' x1='0' y1='0' x2='0' y2='1'>
+          <stop offset='30%' style='stop-color:rgb(54, 51, 51);stop-opacity:1' />
+          <stop offset='50%' style='stop-color:rgb(0, 0, 0);stop-opacity:1' />
+          <stop offset='85%' style='stop-color:rgb(54, 51, 51);stop-opacity:1' /> 
+      </linearGradient>
+      <linearGradient id='blackBottom' x1='0' y1='0' x2='0' y2='1'>
+          <stop offset='30%' style='stop-color:rgb(77, 72, 72);stop-opacity:1' />
+          <stop offset='50%' style='stop-color:rgb(0, 0, 0);stop-opacity:1' />
+          <stop offset='85%' style='stop-color:rgb(54, 51, 51);stop-opacity:1' /> 
+      </linearGradient>
+      <linearGradient id='blackBottom2' x1='0' y1='0' x2='0' y2='1'>
+          <stop offset='0%' style='stop-color:rgb(0, 0, 0);stop-opacity:1' />
+          <stop offset='20%' style='stop-color:rgb(37, 35, 35);stop-opacity:1' />
+          <stop offset='35%' style='stop-color:rgb(54, 51, 51);stop-opacity:1' />
+          <stop offset='55%' style='stop-color:rgb(54, 51, 51);stop-opacity:1' />
+          <stop offset='70%' style='stop-color:rgb(37, 35, 35);stop-opacity:1' />
+          <stop offset='100%' style='stop-color:rgb(0, 0, 0);stop-opacity:1' />
+      </linearGradient>
+      <linearGradient id='blackGreyBlack' x1='0' y1='0' x2='1' y2='0'>
+          <stop offset='0%' style='stop-color:rgb(0, 0, 0);stop-opacity:1' />
+          <stop offset='20%' style='stop-color:rgb(37, 35, 35);stop-opacity:1' />
+          <stop offset='35%' style='stop-color:rgb(54, 51, 51);stop-opacity:1' />
+          <stop offset='50%' style='stop-color:rgb(77, 72, 72);stop-opacity:1' />
+          <stop offset='65%' style='stop-color:rgb(54, 51, 51);stop-opacity:1' />
+          <stop offset='80%' style='stop-color:rgb(37, 35, 35);stop-opacity:1' />
+          <stop offset='100%' style='stop-color:rgb(0, 0, 0);stop-opacity:1' />
+      </linearGradient>
+      <linearGradient id='blackGreeeyBlack' x1='0' y1='0' x2='1' y2='0'>
+          <stop offset='0%' style='stop-color:rgb(0, 0, 0);stop-opacity:1' />
+          <stop offset='15%' style='stop-color:rgb(37, 35, 35);stop-opacity:0.8' />
+          <stop offset='35%' style='stop-color:rgb(77, 72, 72);stop-opacity:0.8' />
+          <stop offset='50%' style='stop-color:rgb(77, 72, 72);stop-opacity:0.9' />
+          <stop offset='65%' style='stop-color:rgb(54, 51, 51);stop-opacity:0.8' />
+          <stop offset='85%' style='stop-color:rgb(37, 35, 35);stop-opacity:0.8' />
+          <stop offset='100%' style='stop-color:rgb(0, 0, 0);stop-opacity:1' />
+      </linearGradient>
+    </defs>
+
+    <circle cx='107' cy='50' r='40' fill='url(#yellow)'
+        style='stroke:rgb(235, 173, 2);stroke-width:1;' />
+
+    <circle cx='206' cy='165' r='40' fill='url(#orange)'
+        style='stroke:rgb(226, 85, 3);stroke-width:2;' />
+
+    <circle cx='305' cy='265' r='40' fill='url(#red)'
+        style='stroke:rgb(199, 5, 12);stroke-width:3;' />
+
+    <circle cx='404' cy='365' r='40' fill='url(#green)'
+        style='stroke:rgb(31, 134, 5);stroke-width:2;' />
+
+    <circle cx='503' cy='465' r='40' fill='url(#cyan)'
+        style='stroke:rgb(6, 90, 199);stroke-width:1;' />
+
+    <circle cx='602' cy='565' r='40' fill='url(#blue)'
+        style='stroke:blue;stroke-width:2;' />
+
+    <circle cx='701' cy='665' r='40' fill='url(#purple)'
+        style='stroke:rgb(155, 3, 226);stroke-width:2;' />
+
+    <svg id='gameGrid' width='700' height='640' x='57' y='115' xmlns='http://www.w3.org/2000/svg'>
+      <!-- This is the actual gamegrid consisting of 6 rows x 7 columns of square 100px x 100px cells;
+           this means the actual grid is 600px by 700px with each column being 600 by 100px. -->
+      <defs>
+        <pattern id='hole' patternUnits='userSpaceOnUse' width='100' height='100'>
+          <!-- The <pattern> matches the size of a cell, 100x100, and contains a <circle>,
+               representing the hole, that matches the size of the checker.
+               The <circle> gets a fill color of 'black', meaning the absence of space,
+               or full transparency, as opposed to literal black. -->
+          <circle cx='50' cy='50' r='40' fill='black'></circle>
+        </pattern>
+
+        <mask id='cell-mask'>
+          <!-- The <mask> is composed of two <rect> elements that match the grid column size;
+               the first gets a fill color of 'white' (opposite of 'black' in a mask) to represent
+               the part of the column we want to be opaque/visible.
+               The second <rect> sits on top of the first and has a fill of url(#hole) which refers
+               to the pattern we created above. -->
+          <rect width='100' height='600' fill='white'></rect>
+          <rect width='100' height='600' fill='url(#hole)'></rect>
+        </mask>
+      </defs>
+
+      <!-- Now, we can set the mask attribute for our grid column <rect>, by referencing
+           the <mask> element by id: 'url(#cell-mask)'. A nice feature of the <pattern> element
+           is that it repeats itself, based on the height/width attributes we've provided.
+           This means we can reveal the 6 rows of a single column without adding each
+           circular hole to the DOM explicitly. To build multiple columns, we simply add
+           a nested <svg> element at the correct x position to wrap each masked <rect>! -->
+      <svg id='column1' x='0' y='0'>
+        <rect width='100' height='600' fill='url(#blackGreeeyBlack)' mask='url(#cell-mask)' />
+      </svg>
+
+      <svg id='column2' x='99' y='0'>
+        <rect width='100' height='600' fill='url(#blackGreeeyBlack)' mask='url(#cell-mask)' />
+      </svg>
+
+      <svg id='column3' x='198' y='0'>
+        <rect width='100' height='600' fill='url(#blackGreeeyBlack)' mask='url(#cell-mask)' />
+      </svg>
+
+      <svg id='column4' x='297' y='0'>
+        <rect width='100' height='600' fill='url(#blackGreeeyBlack)' mask='url(#cell-mask)' />
+      </svg>
+
+      <svg id='column5' x='396' y='0'>
+        <rect width='100' height='600' fill='url(#blackGreeeyBlack)' mask='url(#cell-mask)' />
+      </svg>
+      
+      <svg id='column6' x='495' y='0'>
+        <rect width='100' height='600' fill='url(#blackGreeeyBlack)' mask='url(#cell-mask)' />
+      </svg>
+
+      <svg id='column7' x='594' y='0'>
+        <rect width='106' height='600' fill='url(#blackGreeeyBlack)' mask='url(#cell-mask)' />
+      </svg>
+
+    </svg>
+
+    
+    <rect id='bottom-padding' width='700' height='20' x='51' y='712' fill='url(#blackBottom)' />
+    <rect id='left-pillar' width='60' height='685' fill='url(#blackGreyBlack)' x='0' y='100' rx='10' ry='10' />
+    <rect id='right-pillar' width='60' height='685' fill='url(#blackGreyBlack)' x='750' y='100' rx='10' ry='10' />
+    <rect id='top-padding' width='710' height='20' x='48' y='100' fill='url(#blackTop)' />
+  </svg>
+  
+</div>
+</body>
