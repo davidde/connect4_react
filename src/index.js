@@ -163,7 +163,7 @@ class Grid extends React.Component {
       <React.Fragment>
         <Status winner={this.checkForWinner()} redIsNext={this.state.redIsNext} />
         <div id='gameboard'>
-          <svg id='container' width='98%' viewBox='0 0 810 785' xmlns='http://www.w3.org/2000/svg'>
+          <svg id='container' width='100%' viewBox='0 0 810 785' xmlns='http://www.w3.org/2000/svg'>
             {/* This is the gameboard container, which holds the left and right 'pillars', the top and bottom
                 paddings, and an extra invisible top row, which will show the coins that are about to drop,
                 when hovering. */}
@@ -227,7 +227,7 @@ class Grid extends React.Component {
                   </linearGradient>
                 </defs>
               
-              <svg id='gameGrid' width='700' height='640' x='57' y='115' xmlns='http://www.w3.org/2000/svg'>
+              <svg id='grid' width='700' height='640' x='57' y='115' xmlns='http://www.w3.org/2000/svg'>
                  {/* This is the actual gameboard consisting of 6 rows x 7 columns of square 100px x 100px cells;
                     this means the board itself is 600px by 700px with each column being 600 by 100px. */}
                 <defs>
@@ -303,15 +303,15 @@ function Status(props) {
   if (props.winner) {
     status = 'Winner: ' + props.winner + '!!!';
     if (props.winner === 'red')
-      return (<div id='turn-status'><h3 className='winner red'>{status}</h3></div>);
+      return (<div id='status'><h3 className='winner red'>{status}</h3></div>);
     else
-      return (<div id='turn-status'><h3 className='winner yellow'>{status}</h3></div>);
+      return (<div id='status'><h3 className='winner yellow'>{status}</h3></div>);
   } else {
     status = 'Next player: ' + (props.redIsNext ? 'red' : 'yellow');
     if (props.redIsNext)
-      return (<div id='turn-status'><p className='status red'>{status}</p></div>);
+      return (<div id='status'><p className='status red'>{status}</p></div>);
     else
-      return (<div id='turn-status'><p className='status yellow'>{status}</p></div>);
+      return (<div id='status'><p className='status yellow'>{status}</p></div>);
   }
 }
 
@@ -319,6 +319,7 @@ class Game extends React.Component {
   render() {
     return (
       <div id='game'>
+        {/* 'game' is a css grid containing the gameboard */}
         <Grid />
         <div className='game-info'>
           <div>{/* status */}</div>
