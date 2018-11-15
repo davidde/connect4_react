@@ -1,7 +1,14 @@
+// LSD: Layout Space Debugger
+// Set to true for visual indicators of which elements are where,
+// along with their paddings and borders.
+$LSD: false;
+
 * {
-  /* Debug-helper; see outlines of all elements, without changing layout */
-  outline: solid 1px red;
   margin: 0;
+
+  @if $LSD {
+    outline: solid 1px red;
+  }
 }
 
 html, body {
@@ -12,7 +19,7 @@ html, body {
 
 #game {
   display: grid;
-  grid-template-columns: 1fr minmax(90vmin, 1fr);
+  grid-template-columns: 1fr minmax(90vmin, 1.5fr);
   /* In CSS Grid, the set of columns and rows are called tracks;
   For the 2 columns we want a dynamic approach: we want both 'settings'
   and 'gameboard' to grow (and shrink), but we want the 'gameboard' section
@@ -142,5 +149,55 @@ html, body {
     grid-template-areas: 'status'
                          'settings'
                          'gameboard';
+  }
+}
+
+// LSD: Layout Space Debugger
+// Code for tagging most important elements
+.svg-tags {
+  display: none;
+}
+@if $LSD {
+  .svg-tags {
+    display: block;
+  }
+  #gameboard,
+  #game,
+  #status,
+  #settings {
+    position: relative;
+  }
+  // :after does not work on svgs!
+  // This means we can't use #svg-container:after
+  // or #svg-grid:after => svg-tags work-around.
+  #gameboard:after,
+  #game:after,
+  #settings:after {
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: white;
+    background-color: red;
+    padding: 0.2rem;
+    font-size: 0.9rem;
+  }
+  #gameboard:after {
+    content: '#gameboard-div';
+  }
+  #game:after {
+    content: '#game';
+  }
+  #settings:after {
+    content: '#settings';
+  }
+  #status:after {
+    content: '#status';
+    position: absolute;
+    right: 0; // coincides with #game tag when on the left
+    top: 0;
+    color: white;
+    background-color: red;
+    padding: 0.2rem;
+    font-size: 0.9rem;
   }
 }

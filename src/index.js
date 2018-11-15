@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import './index.scss';
 
 // Refactored to function component!
 // class Cell extends React.Component {
@@ -163,10 +163,10 @@ class Grid extends React.Component {
       <React.Fragment>
         <Status winner={this.checkForWinner()} redIsNext={this.state.redIsNext} />
         <div id='gameboard'>
-          <svg id='container' width='100%' viewBox='0 0 810 785' xmlns='http://www.w3.org/2000/svg'>
-            {/* This is the gameboard container, which holds the left and right 'pillars', the top and bottom
-                paddings, and an extra invisible top row, which will show the coins that are about to drop,
-                when hovering. */}
+          <svg id='svg-container' width='100%' viewBox='0 0 810 785' xmlns='http://www.w3.org/2000/svg'>
+            {/* This is the container svg, which holds the left and right 'pillars', the top and bottom
+                paddings, and an extra invisible top row, which will show the checkers that are about to drop,
+                when hovering. Turn on the $LSD bool in css to visualise this. */}
                 <defs>
                   <radialGradient id='yellow' cx='50%' cy='50%' r='50%' fx='50%' fy='50%'>
                     <stop offset='63%' stopColor='rgb(251, 255, 0)' stopOpacity='0.9' />
@@ -225,10 +225,15 @@ class Grid extends React.Component {
                       <stop offset='88%' stopColor='rgb(15, 15, 15)' stopOpacity='0.9' />
                       <stop offset='100%' stopColor='rgb(0, 0, 0)' stopOpacity='1' />
                   </linearGradient>
+                  {/* Filter for generating red svg tags for LSD */}
+                  <filter id='redtags' x='-0.25' y='-0.25' width='1.5' height='1.6'>
+                    <feFlood flood-color='red'/>
+                    <feComposite in='SourceGraphic'/>
+                  </filter>
                 </defs>
-              
-              <svg id='grid' width='700' height='640' x='57' y='115' xmlns='http://www.w3.org/2000/svg'>
-                 {/* This is the actual gameboard consisting of 6 rows x 7 columns of square 100px x 100px cells;
+                
+              <svg id='svg-grid' width='700' height='640' x='57' y='115' xmlns='http://www.w3.org/2000/svg'>
+                 {/* This is the actual gameboard svg consisting of 6 rows x 7 columns of square 100px x 100px cells;
                     this means the board itself is 600px by 700px with each column being 600 by 100px. */}
                 <defs>
                   <pattern id='hole' patternUnits='userSpaceOnUse' width='100' height='100'>
@@ -286,11 +291,16 @@ class Grid extends React.Component {
 
               </svg>
               
-            
-            <rect id='bottom-padding' width='700' height='20' x='51' y='712' fill='url(#blackBottom)' />
-            <rect id='left-pillar' width='60' height='685' fill='url(#blackPillars)' x='0' y='100' rx='10' ry='10' />
-            <rect id='right-pillar' width='60' height='685' fill='url(#blackPillars)' x='750' y='100' rx='10' ry='10' />
-            <rect id='top-padding' width='710' height='20' x='48' y='100' fill='url(#blackTop)' />
+            <g>
+              <rect id='bottom-padding' width='700' height='20' x='51' y='712' fill='url(#blackBottom)' />
+              <rect id='left-pillar' width='60' height='685' fill='url(#blackPillars)' x='0' y='100' rx='10' ry='10' />
+              <rect id='right-pillar' width='60' height='685' fill='url(#blackPillars)' x='750' y='100' rx='10' ry='10' />
+              <rect id='top-padding' width='710' height='20' x='48' y='100' fill='url(#blackTop)' />
+              
+              <text class='svg-tags' filter='url(#redtags)' x='22' y='15' fontSize='0.9rem' fill='white'>#svg-container</text>
+              <text class='svg-tags' filter='url(#redtags)' x='77' y='137' fontSize='0.9rem' fill='white'>#svg-grid</text>
+              <text class='svg-tags' filter='url(#redtags)' x='250' y='50' fontSize='0.9rem' fill='white'>ROW 0: Invisible top row for checkers about to drop</text>
+            </g>
           </svg>
         </div>
       </React.Fragment>
