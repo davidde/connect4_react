@@ -488,7 +488,7 @@ class Game extends React.Component {
   initGrid() {
     // Create grid data structure to keep track of which grid cells
     // contain checkers of which color:
-    // 'grid' = array of columns!
+    // 'grid' = array of COLUMN arrays!
     let grid = [];
     for (let c = 0; c < this.state.cols; c++) {
       let column = [];
@@ -504,7 +504,7 @@ class Game extends React.Component {
   findBottomCell(col) {
     // Finds the bottom empty cell in a column, where the coin should drop to.
     // The bottom of the column is defined here as the START of the array!
-    for (let r = 0; r < this.state.rows - 1; r++) {
+    for (let r = 0; r < this.state.rows; r++) {
       if (this.state.grid[col][r] === 'empty') {
         return r;
       }
@@ -512,48 +512,67 @@ class Game extends React.Component {
     return null;
   }
 
-  // !! Still needs to be modified to account for the change in the grid data structure:
-  // 'grid' = array of columns instead of array of rows!
   checkForWinner() {
     // The idea of this function is to basically limit the checks to those that make sense.
-    // For example, when checking cells top down (see the first loop),
-    // you only need to check the upper 3 rows (r = 0, 1, 2) in each column (c = 0, 1, 2, 3, 4, 5, 6).
-    // That's because starting lower would run off the bottom of the board
+    // For example, when checking cells bottom to top (see the first loop),
+    // you only need to check the bottom 3 rows (r = 0, 1, 2) in each column (c = 0, 1, 2, 3, 4, 5, 6).
+    // That's because starting higher would run off the top of the board
     // before finding a possible win. In other words, row sets {0,1,2,3}, {1,2,3,4} and {2,3,4,5}
     // would be valid but {3,4,5,6} would not, because the six valid rows are 0-5.
     
     const grid = this.state.grid;
 
-    // Check down
-    for (let r = 0; r < this.state.rows - 3; r++)
-        for (let c = 0; c < this.state.cols; c++)
-            if (this.checkLine(grid[r][c], grid[r+1][c], grid[r+2][c], grid[r+3][c]))
-                return grid[r][c];
+    // Check bottom to top
+    for (let c = 0; c < this.state.cols; c++) {
+        for (let r = 0; r < this.state.rows - 3; r++) {
+            if (grid[c][r] === 'empty')
+                // if the bottom of the column is empty, continue with next column ...
+                break;
+            if (this.checkLine(grid[c][r], grid[c][r+1], grid[c][r+2], grid[c][r+3]))
+                return grid[c][r];
+        }
+    }
+
+    // Check left to right
+    for (let c = 0; c < this.state.cols - 3; c++) {
+        for (let r = 0; r < this.state.rows; r++) {
+            if (grid[c][r] === 'empty')
+                // if the left of the row is empty, continue with next column ...
+                break;
+            if (this.checkLine(grid[c][r], grid[c+1][r], grid[c+2][r], grid[c+3][r]))
+                return grid[c][r];
+        }
+    }
+
   
-    // Check right
-    for (let r = 0; r < this.state.rows; r++)
-        for (let c = 0; c < this.state.cols - 3; c++)
-            if (this.checkLine(grid[r][c], grid[r][c+1], grid[r][c+2], grid[r][c+3]))
-                return grid[r][c];
+    // Check down-left to top-right
+    for (let c = 0; c < this.state.cols - 3; c++) {
+        for (let r = 0; r < this.state.rows - 3; r++) {
+            if (grid[c][r] === 'empty')
+                // if the left of the line is empty, continue with next column ...
+                break;
+            if (this.checkLine(grid[c][r], grid[c+1][r+1], grid[c+2][r+2], grid[c+3][r+3]))
+                return grid[c][r];
+        }
+    }
   
-    // Check down-right
-    for (let r = 0; r < this.state.rows - 3; r++)
-        for (let c = 0; c < this.state.cols - 3; c++)
-            if (this.checkLine(grid[r][c], grid[r+1][c+1], grid[r+2][c+2], grid[r+3][c+3]))
-                return grid[r][c];
-  
-    // Check down-left
-    for (let r = this.state.rows - 3; r < this.state.rows; r++)
-        for (let c = 0; c < this.state.cols - 3; c++)
-            if (this.checkLine(grid[r][c], grid[r-1][c+1], grid[r-2][c+2], grid[r-3][c+3]))
-                return grid[r][c];
+    // Check down-right to top-left
+    for (let c = this.state.cols - 1; c >= 3; c--) {
+        for (let r = 0; r < this.state.rows - 3; r++) {
+            if (grid[c][r] === 'empty')
+                // if the right of the line is empty, continue with next column on the left ...
+                break;
+            if (this.checkLine(grid[c][r], grid[c-1][r+1], grid[c-2][r+2], grid[c-3][r+3]))
+                return grid[c][r];
+        }
+    }
   
     return null;
   }
   
-  checkLine(a, b, c, d) {
-    // Check if the first cell is not 'empty' and the next cells match
-    return ((a !== 'empty') && (a === b) && (a === c) && (a === d));
+  checkLine(color, a, b, c) {
+    // Check if all cells have the same color
+    return ((color === a) && (color === b) && (color === c));
   }
 
   render() {
