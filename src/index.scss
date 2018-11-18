@@ -21,8 +21,8 @@ html, body {
   display: grid;
   grid-template-columns: 1fr minmax(90vmin, 1.5fr);
   /* In CSS Grid, the set of columns and rows are called tracks;
-  For the 2 columns we want a dynamic approach: we want both 'settings'
-  and 'gameboard' to grow (and shrink), but we want the 'gameboard' section
+  For the 2 columns we want a dynamic approach: we want both the 'settings'
+  and 'grid' section to grow (and shrink), but we want the 'grid' section
   to be at most 1.5 times wider than the 'settings' section, and at least
   90% of the length of the smallest viewport side (i.e. height when in
   landscape, width when in portrait). This is exactly what the minmax()
@@ -41,7 +41,7 @@ html, body {
   but allow it to grow bigger if it is required to make the content fit.
   The second row gets a height of 90% of the viewport height. */
   grid-template-areas: 'status   status'
-                       'settings gameboard';
+                       'settings grid';
   /* 'grid-template-areas' takes a string of space-separated names, allowing us to give
   each cell a name. If two adjacent cells have the same name, they are going to be
   coalesced into the same area. To finish up, we need to register our chosen names
@@ -60,8 +60,8 @@ html, body {
   grid-area: settings;
 }
 
-#gameboard {
-  grid-area: gameboard;
+#grid {
+  grid-area: grid;
   display: flex;
   justify-content: center;
   padding: 1rem;
@@ -144,11 +144,11 @@ html, body {
   #game {
     grid-template-columns: 1fr;
     grid-template-rows: 10vh auto 90vmin;
-    /* The third row containing the gameboard will be a square
+    /* The third row containing the grid will be a square
     the size of the viewport width (only in portrait modes) */
     grid-template-areas: 'status'
                          'settings'
-                         'gameboard';
+                         'grid';
   }
 }
 
@@ -161,7 +161,7 @@ html, body {
   .svg-tags {
     display: block;
   }
-  #gameboard,
+  #grid,
   #game,
   #status,
   #settings {
@@ -170,7 +170,7 @@ html, body {
   // :after does not work on svgs!
   // This means we can't use #svg-container:after
   // or #svg-grid:after => svg-tags work-around.
-  #gameboard:after,
+  #grid:after,
   #game:after,
   #settings:after {
     position: absolute;
@@ -181,8 +181,8 @@ html, body {
     padding: 0.2rem;
     font-size: 0.9rem;
   }
-  #gameboard:after {
-    content: '#gameboard-div';
+  #grid:after {
+    content: '#grid div';
   }
   #game:after {
     content: '#game';
