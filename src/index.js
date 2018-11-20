@@ -322,19 +322,17 @@ function Status(props) {
 
 class Grid extends React.Component {
   floatChecker() {
-    // Show a checker in the invisible top row of the column that is hoovered on.
-    // It seems like we need to rework the svg again; React can't return the checkers
-    // outside of their svg columns!
-    // => We need to add an invisible top cell to each svg column itself ...
+    // Show checker in the invisible top cell of the column that is hoovered on.
+
 
   }
-  
+
   render() {
     return (
       <div id='grid'>
-        <svg id='svg-container' width='100%' viewBox='0 0 810 785' xmlns='http://www.w3.org/2000/svg'>
-          {/* This is the container svg, which holds the left and right 'pillars', the top and bottom
-              paddings, and an extra invisible top row, which will show the checkers that are about to drop,
+        <svg id='svg-container' width='100%' viewBox='0 0 800 780' xmlns='http://www.w3.org/2000/svg'>
+          {/* This is the container svg, which holds the left and right 'pillars', the bottom padding,
+              and an extra invisible top row, which will show the checkers that are about to drop,
               when hovering. Turn on the $LSD bool in css to visualise this. */}
           <defs>
             {/* Gradients to make checkers look all fancy */}
@@ -368,11 +366,6 @@ class Grid extends React.Component {
             </radialGradient>
 
             {/* Gradients to make board look more realistic */}
-            <linearGradient id='blackTop' x1='0' y1='0' x2='0' y2='1'>
-                <stop offset='20%' stopColor='rgb(54, 51, 51)' stopOpacity='0.95' />
-                <stop offset='50%' stopColor='rgb(0, 0, 0)' stopOpacity='1' />
-                <stop offset='90%' stopColor='rgb(54, 51, 51)' stopOpacity='0.9' /> 
-            </linearGradient>
             <linearGradient id='blackBottom' x1='0' y1='0' x2='0' y2='1'>
                 <stop offset='30%' stopColor='rgb(10, 10, 10)' stopOpacity='0.8' />
                 <stop offset='50%' stopColor='rgb(0, 0, 0)' stopOpacity='0.9' />
@@ -396,6 +389,31 @@ class Grid extends React.Component {
                 <stop offset='88%' stopColor='rgb(25, 25, 25)' stopOpacity='0.95' />
                 <stop offset='100%' stopColor='rgb(0, 0, 0)' stopOpacity='1' />
             </linearGradient>
+
+            {/* pattern and mask to punch the holes in the grid */}
+            <pattern id='hole' patternUnits='userSpaceOnUse' width='100' height='100'>
+              {/* The <pattern> matches the size of a cell, 100x100, and contains a <circle>,
+                  representing the hole, that matches the size of the checker.
+                  The <circle> gets a fill color of 'black'; in the context of a <mask>, this
+                  means the absence of space, or full transparency, as opposed to literal black. */}
+              <circle cx='50' cy='50' r='42' fill='black'></circle>
+            </pattern>
+            <mask id='cell-mask'>
+              {/* The <mask> is composed of two <rect> elements that match the grid column size;
+                  the first gets a fill color of 'white' (opposite of 'black' in a mask) to represent
+                  the part of the column we want to be opaque/visible.
+                  The second <rect> sits on top of the first and has a fill of url(#hole) which refers
+                  to the pattern we created above. */}
+              <rect width='100' height='700' fill='white'></rect>
+              <rect width='100' height='700' fill='url(#hole)'></rect>
+              {/* Now, we can set the mask attribute for our grid column <rect>, by referencing
+                  the <mask> element by id: 'url(#cell-mask)'. A nice feature of the <pattern> element
+                  is that it repeats itself, based on the height/width attributes we've provided.
+                  This means we can reveal the 6 rows of a single column without adding each
+                  circular hole to the DOM explicitly. To build multiple columns, we simply add
+                  a nested <svg> element at the correct x position to wrap each masked <rect>! */}
+            </mask>
+
             {/* Filter for generating red svg tags for LSD */}
             <filter id='redtags' x='-0.25' y='-0.25' width='1.5' height='1.6'>
               <feFlood flood-color='red'/>
@@ -403,76 +421,60 @@ class Grid extends React.Component {
             </filter>
           </defs>
 
-          {/* Added checkers belong here! */}
-          
+          <svg id='svg-grid' width='700' height='700' x='54' y='0' xmlns='http://www.w3.org/2000/svg'>
+            {/* This is the actual grid svg consisting of 7 column svg's;
+                each column is 700px high by 100px wide, with the top cell an invisible one,
+                to show pending checkers. */}
 
-          <svg id='svg-grid' width='700' height='640' x='57' y='115' xmlns='http://www.w3.org/2000/svg'>
-              {/* This is the actual grid svg consisting of 6 rows x 7 columns of square 100px x 100px cells;
-                this means the board itself is 600px by 700px with each column being 600 by 100px. */}
-            <defs>
-              <pattern id='hole' patternUnits='userSpaceOnUse' width='100' height='100'>
-                {/* The <pattern> matches the size of a cell, 100x100, and contains a <circle>,
-                    representing the hole, that matches the size of the checker.
-                    The <circle> gets a fill color of 'black'; in the context of a <mask>, this
-                    means the absence of space, or full transparency, as opposed to literal black. */}
-                <circle cx='50' cy='50' r='40' fill='black'></circle>
-              </pattern>
-
-              <mask id='cell-mask'>
-                {/* The <mask> is composed of two <rect> elements that match the grid column size;
-                    the first gets a fill color of 'white' (opposite of 'black' in a mask) to represent
-                    the part of the column we want to be opaque/visible.
-                    The second <rect> sits on top of the first and has a fill of url(#hole) which refers
-                    to the pattern we created above. */}
-                <rect width='100' height='600' fill='white'></rect>
-                <rect width='100' height='600' fill='url(#hole)'></rect>
-              </mask>
-            </defs>
-
-            {/* Now, we can set the mask attribute for our grid column <rect>, by referencing
-                the <mask> element by id: 'url(#cell-mask)'. A nice feature of the <pattern> element
-                is that it repeats itself, based on the height/width attributes we've provided.
-                This means we can reveal the 6 rows of a single column without adding each
-                circular hole to the DOM explicitly. To build multiple columns, we simply add
-                a nested <svg> element at the correct x position to wrap each masked <rect>! */}
             <svg id='column0' x='0' y='0'>
-              <rect width='100' height='600' fill='url(#blackGreyBlack)' mask='url(#cell-mask)' />
+              {/* Any checkers in the column should come at the start: */}
+              <circle class='yellow' cx='50' cy='50' r='42' fill='url(#yellow)'/>
+              {/* Invisible top cell: */}
+              <rect x='0' y='0' width='100' height='100' fill='none' />
+              {/* Actual visible column: */}
+              <rect x='0' y='100' width='100' height='600' fill='url(#blackGreyBlack)' mask='url(#cell-mask)' />
             </svg>
 
-            <svg id='column1' x='99' y='0'>
-              <rect width='100' height='600' fill='url(#blackGreyBlack)' mask='url(#cell-mask)' />
+            <svg id='column1' x='98' y='0'>
+              <rect x='0' y='0' width='100' height='100' fill='none' />
+              <rect x='0' y='100' width='100' height='600' fill='url(#blackGreyBlack)' mask='url(#cell-mask)' />
             </svg>
 
-            <svg id='column2' x='198' y='0'>
-              <rect width='100' height='600' fill='url(#blackGreyBlack)' mask='url(#cell-mask)' />
+            <svg id='column2' x='196' y='0'>
+              <rect x='0' y='0' width='100' height='100' fill='none' />
+              <rect x='0' y='100' width='100' height='600' fill='url(#blackGreyBlack)' mask='url(#cell-mask)' />
             </svg>
 
-            <svg id='column3' x='297' y='0'>
-              <rect width='100' height='600' fill='url(#blackGreyBlack)' mask='url(#cell-mask)' />
+            <svg id='column3' x='294' y='0'>
+              <rect x='0' y='0' width='100' height='100' fill='none' />
+              <rect x='0' y='100' width='100' height='600' fill='url(#blackGreyBlack)' mask='url(#cell-mask)' />
             </svg>
 
-            <svg id='column4' x='396' y='0'>
-              <rect width='100' height='600' fill='url(#blackGreyBlack)' mask='url(#cell-mask)' />
+            <svg id='column4' x='392' y='0'>
+              <rect x='0' y='0' width='100' height='100' fill='none' />
+              <rect x='0' y='100' width='100' height='600' fill='url(#blackGreyBlack)' mask='url(#cell-mask)' />
             </svg>
             
-            <svg id='column5' x='495' y='0'>
-              <rect width='100' height='600' fill='url(#blackGreyBlack)' mask='url(#cell-mask)' />
+            <svg id='column5' x='490' y='0'>
+              <rect x='0' y='0' width='100' height='100' fill='none' />
+              <rect x='0' y='100' width='100' height='600' fill='url(#blackGreyBlack)' mask='url(#cell-mask)' />
             </svg>
 
-            <svg id='column6' x='594' y='0'>
-              <rect width='100' height='600' fill='url(#blackGreyBlack)' mask='url(#cell-mask)' />
+            <svg id='column6' x='588' y='0'>
+              <rect x='0' y='0' width='100' height='100' fill='none' />
+              <rect x='0' y='100' width='100' height='600' fill='url(#blackGreyBlack)' mask='url(#cell-mask)' />
             </svg>
 
           </svg>
             
           <g>
-            <rect id='top-padding' width='710' height='20' x='48' y='100' fill='url(#blackTop)' />
-            <rect id='bottom-padding' width='700' height='20' x='51' y='712' fill='url(#blackBottom)' />
-            <rect id='left-pillar' width='60' height='685' fill='url(#blackPillars)' x='0' y='100' rx='10' ry='10' />
-            <rect id='right-pillar' width='60' height='685' fill='url(#blackPillars)' x='750' y='100' rx='10' ry='10' />
+            <rect id='bottom-padding' width='700' height='20' x='51' y='695' fill='url(#blackBottom)' />
+            <rect id='left-pillar' width='60' height='680' fill='url(#blackPillars)' x='0' y='100' rx='10' ry='10' />
+            <rect id='right-pillar' width='60' height='680' fill='url(#blackPillars)' x='736' y='100' rx='10' ry='10' />
             
+            {/* Svg tags for LSD; only visible when '$LSD: true;' in css */}
             <text class='svg-tags' filter='url(#redtags)' x='22' y='15' fontSize='0.9rem' fill='white'>#svg-container</text>
-            <text class='svg-tags' filter='url(#redtags)' x='77' y='137' fontSize='0.9rem' fill='white'>#svg-grid</text>
+            <text class='svg-tags' filter='url(#redtags)' x='73' y='89' fontSize='0.9rem' fill='white'>#svg-grid</text>
             <text class='svg-tags' filter='url(#redtags)' x='250' y='50' fontSize='0.9rem' fill='white'>Invisible top row for checkers about to drop</text>
           </g>
         </svg>

@@ -62,13 +62,12 @@ html, body {
 
 #grid {
   grid-area: grid;
+  // ?? grid doesn't scale without 'display:flex' ??
   display: flex;
-  justify-content: center;
   padding: 1rem;
   min-height: 200px;
 
 }
-
 
 .yellow {
   stroke: rgb(235, 173, 2);
