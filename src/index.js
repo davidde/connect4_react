@@ -312,20 +312,68 @@ function Status(props) {
     else
       return (<div id='status'><h3 className='winner yellow'>{status}</h3></div>);
   } else {
-    status = 'Next player: ' + (props.redIsNext ? 'red' : 'yellow');
-    if (props.redIsNext)
+    status = 'Next player: ' + (props.p1Next ? 'red' : 'yellow');
+    if (props.p1Next)
       return (<div id='status'><p className='status red'>{status}</p></div>);
     else
       return (<div id='status'><p className='status yellow'>{status}</p></div>);
   }
 }
 
-class Grid extends React.Component {
-  floatChecker() {
-    // Show checker in the invisible top cell of the column that is hoovered on.
-
-
+class Column extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isHovered: false,
+    };
   }
+
+  // ES6 Arrow functions are a more concise syntax for writing JavaScript
+  // functions; we avoid having to type the 'function' and 'return' keyword.
+  // On top of that, arrow functions are anonymous and change the way
+  // 'this' binds in functions; this is why we don't need
+  // 'this.mouseEnter = this.mouseEnter.bind(this);' in the constructor.
+  mouseEnter = () => {
+    this.setState({ isHovered: true });
+  }
+  mouseLeave = () => {
+    this.setState({ isHovered: false });
+  }
+
+  render() {
+    let id = 'column' + this.props.colID;
+    let x = (98 * this.props.colID).toString();
+    let color;
+    if (this.props.p1Next)
+      color = this.props.p1Color;
+    else color = this.props.p2Color;
+
+    return (
+      <React.Fragment>
+        <svg x={x} y='0'
+              id={id}
+              className='column'
+              onMouseEnter={this.mouseEnter}
+              onMouseLeave={this.mouseLeave}>
+          {/* Any checkers in the column should come at the start of the svg,
+              so they're effectively BEHIND the column! Checkers go here: */}
+          { this.state.isHovered ?
+                <circle cx='50' cy='50' r='42'
+                        className={color}
+                        fill={'url(#' + color + ')'} />
+                : null }
+          {/* Invisible top cell: */}
+          <rect x='0' y='0' width='100' height='100' fill='none' />
+          {/* Actual visible column: */}
+          <rect x='0' y='100' width='100' height='600' fill='url(#blackGreyBlack)' mask='url(#cell-mask)' />
+        </svg>
+      </React.Fragment>
+    );
+  }
+}
+
+class Grid extends React.Component {
+
 
   render() {
     return (
@@ -426,44 +474,20 @@ class Grid extends React.Component {
                 each column is 700px high by 100px wide, with the top cell an invisible one,
                 to show pending checkers. */}
 
-            <svg id='column0' x='0' y='0'>
-              {/* Any checkers in the column should come at the start: */}
-              <circle class='yellow' cx='50' cy='50' r='42' fill='url(#yellow)'/>
-              {/* Invisible top cell: */}
-              <rect x='0' y='0' width='100' height='100' fill='none' />
-              {/* Actual visible column: */}
-              <rect x='0' y='100' width='100' height='600' fill='url(#blackGreyBlack)' mask='url(#cell-mask)' />
-            </svg>
-
-            <svg id='column1' x='98' y='0'>
-              <rect x='0' y='0' width='100' height='100' fill='none' />
-              <rect x='0' y='100' width='100' height='600' fill='url(#blackGreyBlack)' mask='url(#cell-mask)' />
-            </svg>
-
-            <svg id='column2' x='196' y='0'>
-              <rect x='0' y='0' width='100' height='100' fill='none' />
-              <rect x='0' y='100' width='100' height='600' fill='url(#blackGreyBlack)' mask='url(#cell-mask)' />
-            </svg>
-
-            <svg id='column3' x='294' y='0'>
-              <rect x='0' y='0' width='100' height='100' fill='none' />
-              <rect x='0' y='100' width='100' height='600' fill='url(#blackGreyBlack)' mask='url(#cell-mask)' />
-            </svg>
-
-            <svg id='column4' x='392' y='0'>
-              <rect x='0' y='0' width='100' height='100' fill='none' />
-              <rect x='0' y='100' width='100' height='600' fill='url(#blackGreyBlack)' mask='url(#cell-mask)' />
-            </svg>
-            
-            <svg id='column5' x='490' y='0'>
-              <rect x='0' y='0' width='100' height='100' fill='none' />
-              <rect x='0' y='100' width='100' height='600' fill='url(#blackGreyBlack)' mask='url(#cell-mask)' />
-            </svg>
-
-            <svg id='column6' x='588' y='0'>
-              <rect x='0' y='0' width='100' height='100' fill='none' />
-              <rect x='0' y='100' width='100' height='600' fill='url(#blackGreyBlack)' mask='url(#cell-mask)' />
-            </svg>
+            {
+              // Since regular looping is not available inside JSX code,
+              // we use an array construct to 'loop' to create
+              // the columns of the grid!
+              [...Array(this.props.cols)].map((el, i) => {
+                return <Column
+                          colID={i}
+                          colData={this.props.grid[i]}
+                          p1Next={this.props.p1Next}
+                          p1Color={this.props.p1Color}
+                          p2Color={this.props.p2Color}
+                       />;
+              })
+            }
 
           </svg>
             
@@ -485,14 +509,16 @@ class Grid extends React.Component {
 
 class Game extends React.Component {
   // The <Game/> component functions as a container component for the
-  // <Status/>, <Settings/> and <Grid/> presentational components.
+  // <Status/>, <Settings/> and <Grid/> presenter components.
   constructor(props) {
     super(props);
     this.state = {
       rows: 6,
       cols: 7,
       grid: [],
-      redIsNext: true,
+      p1Next: true,
+      p1Color: 'red',
+      p2Color: 'yellow',
     };
   }
 
@@ -594,8 +620,17 @@ class Game extends React.Component {
     return (
       <div id='game'>
         {/* 'game' is a css grid containing the <Status/>, <Settings/> and <Grid/> components */}
-        <Status winner={this.checkForWinner()} redIsNext={this.state.redIsNext} />
-        <Grid grid={this.state.grid} />
+        <Status
+            winner={this.checkForWinner()}
+            p1Next={this.state.p1Next}
+        />
+        <Grid
+            grid={this.state.grid}
+            cols={this.state.cols}
+            p1Next={this.state.p1Next}
+            p1Color={this.state.p1Color}
+            p2Color={this.state.p2Color}
+        />
       </div>
     );
   }

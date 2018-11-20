@@ -69,6 +69,11 @@ html, body {
 
 }
 
+.column rect:hover {
+  cursor: pointer;
+  fill-opacity: 0.8;
+}
+
 .yellow {
   stroke: rgb(235, 173, 2);
   stroke-width: 1;
