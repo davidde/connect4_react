@@ -69,9 +69,17 @@ html, body {
 
 }
 
-.column rect:hover {
+.colInFocus rect:hover {
   cursor: pointer;
   fill-opacity: 0.8;
+}
+
+#svg-grid.gridNoFocus {
+  fill-opacity: 0.4;
+}
+
+svg g.gridNoFocus {
+  fill-opacity: 0.25;
 }
 
 .yellow {
@@ -86,7 +94,7 @@ html, body {
 
 .red {
   stroke: rgb(199, 5, 12);
-  stroke-width: 3;
+  stroke-width: 1;
 }
 
 .green {

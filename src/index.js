@@ -3,39 +3,23 @@ import ReactDOM from 'react-dom';
 import './index.scss';
 
 
-function Status(props) {
-  let status;
-  if (props.winner) {
-    status = 'Winner: ' + props.winner + '!!!';
-    if (props.winner === 'red')
-      return (<div id='status'><h3 className='winner red'>{status}</h3></div>);
-    else
-      return (<div id='status'><h3 className='winner yellow'>{status}</h3></div>);
-  } else {
-    status = 'Next player: ' + (props.p1Next ? 'red' : 'yellow');
-    if (props.p1Next)
-      return (<div id='status'><p className='status red'>{status}</p></div>);
-    else
-      return (<div id='status'><p className='status yellow'>{status}</p></div>);
-  }
-}
-
 function Checker(props) {
   // PROPS: - color
-  //        - rowID: the row of the checker; with '6' being the invisible top row,
-  //                 '5' = the top row, '4' the second from the top, etc.
-  //        - key: Each child in an array or iterator should have a unique "key" prop.
-  //               (this is a requirement because of the Array construct we used to
-  //               'loop' the checkers.)
-  let cy = (Math.abs(props.rowID - 6) * 100 + 50).toString();
+  //        - rowID: the row of the checker; with '0' being the invisible top row,
+  //                 '1' = the top row, '2' the second from the top, etc.
+  //        (- key: Each child in an array or iterator should have a unique "key" prop;
+  //                this is a requirement because of the Array construct we used to
+  //                'loop' the checkers.)
+  let cy = (props.rowID * 100 + 50).toString();
   return <circle cx='50' cy={cy} r='42'
                   className={props.color}
                   fill={'url(#' + props.color + ')'} />;
 }
 
 class Column extends React.Component {
-  // PROPS: - key
+  // PROPS: (- key)
   //        - colID
+  //        - gameOver
   //        - p1Next
   //        - p1Color
   //        - p2Color
@@ -44,8 +28,9 @@ class Column extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showCheckerOnHover: false,
-      colData: Array(6).fill(null),
+      colData: [],
+      showChecker: false,
+      fullColumn: false,
     };
   }
 
@@ -55,17 +40,24 @@ class Column extends React.Component {
   // 'this' binds in functions; this is why we don't need
   // 'this.mouseEnter = this.mouseEnter.bind(this);' in the constructor.
   mouseEnter = () => {
-    this.setState({ showCheckerOnHover: true });
+    this.setState({ showChecker: true });
   }
   mouseLeave = () => {
-    this.setState({ showCheckerOnHover: false });
+    this.setState({ showChecker: false });
   }
 
   handleClick = () => {
-    let getColData = this.props.onColumnClick;
-    let colData = getColData(this.props.colID);
-    this.mouseLeave();
-    if (colData)
+    // Guard against changing colData after gameOver or fullColumn:
+    if (this.state.fullColumn || this.props.gameOver)
+      return;
+    let setGet_colData = this.props.onColumnClick;
+    let colData = setGet_colData(this.props.colID);
+
+    //this.mouseLeave();
+
+    if (colData === 'fullColumn')
+      this.setState({ fullColumn: true });
+    else if (Array.isArray(colData))
       this.setState({ colData });
   }
 
@@ -74,19 +66,28 @@ class Column extends React.Component {
     let x = (98 * this.props.colID).toString();
     let color = this.props.p1Next ? this.props.p1Color : this.props.p2Color;
 
+    let className = 'colNoFocus';
+    let colFocus = false;
+    if (this.state.showChecker && !this.props.gameOver && !this.state.fullColumn) {
+      // In these conditions, enable a column to be focussed on,
+      // and hovered over with a checker.
+      className = 'colInFocus';
+      colFocus = true;
+    }
+
     return (
       <React.Fragment>
         <svg x={x} y='0'
               id={id}
-              className='column'
+              className={className}
               onMouseEnter={this.mouseEnter}
               onMouseLeave={this.mouseLeave}
               onClick={this.handleClick}>
           {/* Any checkers in the column should come at the start of the svg,
               so they're effectively BEHIND the column! So checkers go here: */}
-          { 
-            this.state.showCheckerOnHover ?
-                <Checker color={color} rowID='6' /> : null
+          {
+            colFocus ? // Hover checker in invisible top row:
+                <Checker color={color} rowID='0' /> : null
           }
 
           {
@@ -94,7 +95,9 @@ class Column extends React.Component {
               if (color)
                   return <Checker
                             key={i}
-                            rowID={i}
+                            // Invert rowID order because svg orders top down
+                            // and the colData array is ordered bottom up!
+                            rowID={Math.abs(i - 6)}
                             color={color} />;
               return null;
             })
@@ -114,7 +117,14 @@ class Column extends React.Component {
 }
 
 class Grid extends React.Component {
+  // This may seem like a nasty wall of code, but it is entirely
+  // inline-svg; it does nothing than set the visuals of the grid
+  // and its checkers. The magic happens in its <Column/> child
+  // components, and its parent component, <Game/>.
   render() {
+    let className;
+    if (this.props.gameOver)
+      className = 'gridNoFocus'
     return (
       <div id='grid'>
         <svg id='svg-container' width='100%' viewBox='0 0 800 780' xmlns='http://www.w3.org/2000/svg'>
@@ -208,7 +218,7 @@ class Grid extends React.Component {
             </filter>
           </defs>
 
-          <svg id='svg-grid' width='700' height='700' x='54' y='0' xmlns='http://www.w3.org/2000/svg'>
+          <svg id='svg-grid' className={className} width='700' height='700' x='54' y='0' xmlns='http://www.w3.org/2000/svg'>
             {/* This is the actual grid svg consisting of 7 column svg's;
                 each column is 700px high by 100px wide, with the top cell an invisible one,
                 to show pending checkers. */}
@@ -220,6 +230,7 @@ class Grid extends React.Component {
                 return <Column
                           key={i}
                           colID={i}
+                          gameOver={this.props.gameOver}
                           p1Next={this.props.p1Next}
                           p1Color={this.props.p1Color}
                           p2Color={this.props.p2Color}
@@ -229,8 +240,8 @@ class Grid extends React.Component {
             }
           </svg>
 
-          <g>
-            <rect id='bottom-padding' width='700' height='20' x='51' y='695' fill='url(#blackBottom)' />
+          <g className={className}>
+            <rect id='bottom-padding' width='688' height='20' x='54' y='695' fill='url(#blackBottom)' />
             <rect id='left-pillar' width='60' height='680' fill='url(#blackPillars)' x='0' y='100' rx='10' ry='10' />
             <rect id='right-pillar' width='60' height='680' fill='url(#blackPillars)' x='736' y='100' rx='10' ry='10' />
             
@@ -254,6 +265,7 @@ class Game extends React.Component {
       rows: 6,
       cols: 7,
       grid: [],
+      gameOver: false,
       p1Next: true,
       p1Color: 'red',
       p2Color: 'yellow',
@@ -280,28 +292,38 @@ class Game extends React.Component {
     this.setState({grid: grid});
   }
 
-  handleColumnClick = (colID) => {
-    // This method needs to be passed to <Column/> through props, where
-    // it will receive its 'colID' argument (the ID of the Column its
-    // executing in). It then executes within the <Game/> context (since
-    // this is an ES6 arrow function). Finally, it returns its modified
-    // colData array to the <Column/> component, which is then used
-    // to render individual checkers in the column.
-    const grid = this.state.grid.slice();
+  setGet_colData = (colID) => {
+    // This method is called on every click on a column, to modify the
+    // grid data structure. It needs to be passed to <Column/> through
+    // props, where it will receive its 'colID' argument (the ID of the
+    // Column its executing in). It then executes within the <Game/>
+    // component's context (since this is an ES6 arrow function), and
+    // sets the bottom cell of the grid data structure to the relevant
+    // color. Finally, it either returns its modified colData array to the
+    // <Column/> component, which is then used to render individual
+    // checkers in that column, or it returns a string indicating 'fullColumn'.
     let bottomCell = this.findBottomCell(colID);
-    if (this.checkForWinner() || bottomCell === null) return;
+
+    const grid = this.state.grid.slice();
     grid[colID][bottomCell] = this.state.p1Next ? this.state.p1Color : this.state.p2Color;
     this.setState({
       grid: grid,
       p1Next: !this.state.p1Next,
     });
 
+    bottomCell = this.findBottomCell(colID);
+    if (bottomCell === null) return 'fullColumn';
+
+    if (this.checkForWinner()) {
+      this.setState({ gameOver: true });
+    }
+
     let colData = grid[colID];
     return colData;
   }
 
   findBottomCell(col) {
-    // Finds the bottom empty cell in a column, where the coin should drop to.
+    // Finds the bottom empty cell in a column, where the checker should drop to.
     // The bottom of the column is defined here as the START of the array!
     for (let r = 0; r < this.state.rows; r++) {
       if (this.state.grid[col][r] === null) {
@@ -318,7 +340,6 @@ class Game extends React.Component {
     // That's because starting higher would run off the top of the board
     // before finding a possible win. In other words, row sets {0,1,2,3}, {1,2,3,4} and {2,3,4,5}
     // would be valid but {3,4,5,6} would not, because the six valid rows are 0-5.
-    
     const grid = this.state.grid;
 
     // Check bottom to top
@@ -343,7 +364,6 @@ class Game extends React.Component {
         }
     }
 
-  
     // Check down-left to top-right
     for (let c = 0; c < this.state.cols - 3; c++) {
         for (let r = 0; r < this.state.rows - 3; r++) {
@@ -365,11 +385,14 @@ class Game extends React.Component {
                 return grid[c][r];
         }
     }
+
     return null;
   }
   
   checkLine(color, a, b, c) {
     // Check if all cells have the same color
+    // NOTE: Calling function needs to make sure
+    //       first argument is a color, and not null.
     return ((color === a) && (color === b) && (color === c));
   }
 
@@ -383,15 +406,35 @@ class Game extends React.Component {
         />
         <Grid
             cols={this.state.cols}
+            gameOver={this.state.gameOver}
             p1Next={this.state.p1Next}
             p1Color={this.state.p1Color}
             p2Color={this.state.p2Color}
-            onColumnClick={this.handleColumnClick}
+            onColumnClick={this.setGet_colData}
         />
       </div>
     );
   }
 }
+
+
+function Status(props) {
+  let status;
+  if (props.winner) {
+    status = 'Winner: ' + props.winner + '!!!';
+    if (props.winner === 'red')
+      return (<div id='status'><h3 className='winner red'>{status}</h3></div>);
+    else
+      return (<div id='status'><h3 className='winner yellow'>{status}</h3></div>);
+  } else {
+    status = 'Next player: ' + (props.p1Next ? 'red' : 'yellow');
+    if (props.p1Next)
+      return (<div id='status'><p className='status red'>{status}</p></div>);
+    else
+      return (<div id='status'><p className='status yellow'>{status}</p></div>);
+  }
+}
+
 
 // ========================================
 
