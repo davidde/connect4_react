@@ -1,25 +1,47 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
+import TweenMax from 'gsap/TweenMax';
 
 
-function Checker(props) {
+class Checker extends React.Component {
   // PROPS: - color
   //        - rowID: the row of the checker; with '0' being the invisible top row,
   //                 '1' = the top row, '2' the second from the top, etc.
   //        (- key: Each child in an array or iterator should have a unique "key" prop;
   //                this is a requirement because of the Array construct we used to
   //                'loop' the checkers.)
-  let cy = (props.rowID * 100 + 50).toString();
-  let color = props.color;
-  let className = props.color;
-  if (color === color.toUpperCase()) {
-    color = color.toLowerCase();
-    className = color + ' winningChecker';
+  constructor(props) {
+    super(props);
+    // reference to the DOM node
+    this.element = null;
+    // reference to the animation
+    this.tween = null;
   }
-  return <circle cx='50' cy={cy} r='42'
-                  className={className}
-                  fill={'url(#' + color + ')'} />;
+
+  componentDidMount() {
+    // Use the node ref to create the animation, but except invisible top row (rowID = 0)
+    if (this.props.rowID) {
+      let cy = (this.props.rowID * 100).toString();
+      this.tween = TweenMax.fromTo(this.element, 1,
+        {x: '0', y: '0'}, {x:'0', y: cy, ease: 'easeOutBounce'});
+    }
+  }
+
+  render() {
+    let color = this.props.color;
+    let className = this.props.color;
+
+    if (color === color.toUpperCase()) {
+      color = color.toLowerCase();
+      className = color + ' winningChecker';
+    }
+    
+    return <circle cx='50' cy='50' r='42'
+                    ref={circle => this.element = circle}
+                    className={className}
+                    fill={'url(#' + color + ')'} />;
+  }
 }
 
 class Column extends React.Component {
@@ -93,7 +115,7 @@ class Column extends React.Component {
               so they're effectively BEHIND the column! So checkers go here: */}
           {
             hoverChecker ? // Hover checker in invisible top row:
-                <Checker color={color} rowID='0' /> : null
+                <Checker color={color} rowID={0} /> : null
           }
 
           {
