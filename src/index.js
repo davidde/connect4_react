@@ -11,15 +11,21 @@ function Checker(props) {
   //                this is a requirement because of the Array construct we used to
   //                'loop' the checkers.)
   let cy = (props.rowID * 100 + 50).toString();
+  let color = props.color;
+  let className = props.color;
+  if (color === color.toUpperCase()) {
+    color = color.toLowerCase();
+    className = color + ' winningChecker';
+  }
   return <circle cx='50' cy={cy} r='42'
-                  className={props.color}
-                  fill={'url(#' + props.color + ')'} />;
+                  className={className}
+                  fill={'url(#' + color + ')'} />;
 }
 
 class Column extends React.Component {
   // PROPS: (- key)
   //        - colID
-  //        - gameOver
+  //        - winner
   //        - p1Next
   //        - p1Color
   //        - p2Color
@@ -29,7 +35,7 @@ class Column extends React.Component {
     super(props);
     this.state = {
       colData: [],
-      showChecker: false,
+      isHovered: false,
       fullColumn: false,
     };
   }
@@ -40,15 +46,15 @@ class Column extends React.Component {
   // 'this' binds in functions; this is why we don't need
   // 'this.mouseEnter = this.mouseEnter.bind(this);' in the constructor.
   mouseEnter = () => {
-    this.setState({ showChecker: true });
+    this.setState({ isHovered: true });
   }
   mouseLeave = () => {
-    this.setState({ showChecker: false });
+    this.setState({ isHovered: false });
   }
 
   handleClick = () => {
-    // Guard against changing colData after gameOver or fullColumn:
-    if (this.state.fullColumn || this.props.gameOver)
+    // Guard against changing colData after winner or fullColumn:
+    if (this.state.fullColumn || this.props.winner)
       return;
     let setGet_colData = this.props.onColumnClick;
     let colData = setGet_colData(this.props.colID);
@@ -67,12 +73,12 @@ class Column extends React.Component {
     let color = this.props.p1Next ? this.props.p1Color : this.props.p2Color;
 
     let className = 'colNoFocus';
-    let colFocus = false;
-    if (this.state.showChecker && !this.props.gameOver && !this.state.fullColumn) {
+    let hoverChecker = false;
+    if (this.state.isHovered && !this.state.fullColumn && !this.props.winner) {
       // In these conditions, enable a column to be focussed on,
       // and hovered over with a checker.
       className = 'colInFocus';
-      colFocus = true;
+      hoverChecker = true;
     }
 
     return (
@@ -86,7 +92,7 @@ class Column extends React.Component {
           {/* Any checkers in the column should come at the start of the svg,
               so they're effectively BEHIND the column! So checkers go here: */}
           {
-            colFocus ? // Hover checker in invisible top row:
+            hoverChecker ? // Hover checker in invisible top row:
                 <Checker color={color} rowID='0' /> : null
           }
 
@@ -123,7 +129,7 @@ class Grid extends React.Component {
   // components, and its parent component, <Game/>.
   render() {
     let className;
-    if (this.props.gameOver)
+    if (this.props.winner)
       className = 'gridNoFocus'
     return (
       <div id='grid'>
@@ -230,7 +236,7 @@ class Grid extends React.Component {
                 return <Column
                           key={i}
                           colID={i}
-                          gameOver={this.props.gameOver}
+                          winner={this.props.winner}
                           p1Next={this.props.p1Next}
                           p1Color={this.props.p1Color}
                           p2Color={this.props.p2Color}
@@ -265,7 +271,7 @@ class Game extends React.Component {
       rows: 6,
       cols: 7,
       grid: [],
-      gameOver: false,
+      winner: null, // also serves as a gameOver boolean
       p1Next: true,
       p1Color: 'red',
       p2Color: 'yellow',
@@ -311,12 +317,13 @@ class Game extends React.Component {
       p1Next: !this.state.p1Next,
     });
 
+    let winner = this.checkForWinner();
+    if (winner) {
+      this.setState({ winner });
+    }
+
     bottomCell = this.findBottomCell(colID);
     if (bottomCell === null) return 'fullColumn';
-
-    if (this.checkForWinner()) {
-      this.setState({ gameOver: true });
-    }
 
     let colData = grid[colID];
     return colData;
@@ -340,55 +347,72 @@ class Game extends React.Component {
     // That's because starting higher would run off the top of the board
     // before finding a possible win. In other words, row sets {0,1,2,3}, {1,2,3,4} and {2,3,4,5}
     // would be valid but {3,4,5,6} would not, because the six valid rows are 0-5.
-    const grid = this.state.grid;
+    var grid = this.state.grid;
 
     // Check bottom to top
     for (let c = 0; c < this.state.cols; c++) {
-        for (let r = 0; r < this.state.rows - 3; r++) {
-            if (grid[c][r] === null)
-                // if the bottom of the column is empty, continue with next column ...
-                break;
-            if (this.checkLine(grid[c][r], grid[c][r+1], grid[c][r+2], grid[c][r+3]))
-                return grid[c][r];
+      for (let r = 0; r < this.state.rows - 3; r++) {
+        if (grid[c][r] === null)
+          // if the bottom of the column is empty, continue with next column ...
+          break;
+        if (this.checkLine(grid[c][r], grid[c][r+1], grid[c][r+2], grid[c][r+3])) {
+          let winColor = grid[c][r];
+          // Make winning checkers recognizable in grid data structure:
+          grid[c][r] = grid[c][r+1] = grid[c][r+2] = grid[c][r+3] = winColor.toUpperCase();
+          this.setState({ grid });
+          return winColor;
         }
+      }
     }
 
     // Check left to right
     for (let c = 0; c < this.state.cols - 3; c++) {
-        for (let r = 0; r < this.state.rows; r++) {
-            if (grid[c][r] === null)
-                // if the left of the row is empty, continue with next column ...
-                break;
-            if (this.checkLine(grid[c][r], grid[c+1][r], grid[c+2][r], grid[c+3][r]))
-                return grid[c][r];
+      for (let r = 0; r < this.state.rows; r++) {
+        if (grid[c][r] === null)
+          // if the left of the row is empty, continue with next column ...
+          break;
+        if (this.checkLine(grid[c][r], grid[c+1][r], grid[c+2][r], grid[c+3][r])) {
+          let winColor = grid[c][r];
+          grid[c][r] = grid[c+1][r] = grid[c+2][r] = grid[c+3][r] = winColor.toUpperCase();
+          this.setState({ grid });
+          return winColor;
         }
+      }
     }
 
     // Check down-left to top-right
     for (let c = 0; c < this.state.cols - 3; c++) {
-        for (let r = 0; r < this.state.rows - 3; r++) {
-            if (grid[c][r] === null)
-                // if the left of the line is empty, continue with next column ...
-                break;
-            if (this.checkLine(grid[c][r], grid[c+1][r+1], grid[c+2][r+2], grid[c+3][r+3]))
-                return grid[c][r];
+      for (let r = 0; r < this.state.rows - 3; r++) {
+        if (grid[c][r] === null)
+          // if the left of the line is empty, continue with next column ...
+          break;
+        if (this.checkLine(grid[c][r], grid[c+1][r+1], grid[c+2][r+2], grid[c+3][r+3])) {
+          let winColor = grid[c][r];
+          grid[c][r] = grid[c+1][r+1] = grid[c+2][r+2] = grid[c+3][r+3] = winColor.toUpperCase();
+          this.setState({ grid });
+          return winColor;
         }
+      }
     }
   
     // Check down-right to top-left
     for (let c = this.state.cols - 1; c >= 3; c--) {
-        for (let r = 0; r < this.state.rows - 3; r++) {
-            if (grid[c][r] === null)
-                // if the right of the line is empty, continue with next column on the left ...
-                break;
-            if (this.checkLine(grid[c][r], grid[c-1][r+1], grid[c-2][r+2], grid[c-3][r+3]))
-                return grid[c][r];
+      for (let r = 0; r < this.state.rows - 3; r++) {
+        if (grid[c][r] === null)
+          // if the right of the line is empty, continue with next column on the left ...
+          break;
+        if (this.checkLine(grid[c][r], grid[c-1][r+1], grid[c-2][r+2], grid[c-3][r+3])) {
+          let winColor = grid[c][r];
+          grid[c][r] = grid[c-1][r+1] = grid[c-2][r+2] = grid[c-3][r+3] = winColor.toUpperCase();
+          this.setState({ grid });
+          return winColor;
         }
+      }
     }
 
     return null;
   }
-  
+
   checkLine(color, a, b, c) {
     // Check if all cells have the same color
     // NOTE: Calling function needs to make sure
@@ -401,12 +425,12 @@ class Game extends React.Component {
       <div id='game'>
         {/* 'game' is a css grid containing the <Status/>, <Settings/> and <Grid/> components */}
         <Status
-            winner={this.checkForWinner()}
+            winner={this.state.winner}
             p1Next={this.state.p1Next}
         />
         <Grid
             cols={this.state.cols}
-            gameOver={this.state.gameOver}
+            winner={this.state.winner}
             p1Next={this.state.p1Next}
             p1Color={this.state.p1Color}
             p2Color={this.state.p2Color}

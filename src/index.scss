@@ -79,7 +79,7 @@ html, body {
 }
 
 svg g.gridNoFocus {
-  fill-opacity: 0.25;
+  fill-opacity: 0.35;
 }
 
 .yellow {
@@ -115,6 +115,10 @@ svg g.gridNoFocus {
 .purple {
   stroke: rgb(155, 3, 226);
   stroke-width: 2;
+}
+
+.winningChecker {
+  fill-opacity: 1;
 }
 
 .winner {
