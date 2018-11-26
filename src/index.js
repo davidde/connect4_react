@@ -13,19 +13,21 @@ class Checker extends React.Component {
   //                'loop' the checkers.)
   constructor(props) {
     super(props);
-    // reference to the DOM node
-    this.element = null;
-    // reference to the animation
+    // Reference to the DOM node:
+    this.node = null;
+    // Reference to the animation:
     this.tween = null;
   }
 
   componentDidMount() {
-    // Use the node ref to create the animation, but except invisible top row (rowID = 0)
-    if (this.props.rowID) {
-      let cy = (this.props.rowID * 100).toString();
-      this.tween = TweenMax.fromTo(this.element, 1,
-        {x: '0', y: '0'}, {x:'0', y: cy, ease: 'easeOutBounce'});
-    }
+    let cy = (this.props.rowID * 100).toString();
+    let duration = (this.props.rowID * 0.1 + 0.2).toString();
+    // Use the node ref to create the animation:
+    this.tween = TweenMax.fromTo(this.node,
+                                duration,
+                                {x: '0', y: '0'},
+                                {x: '0', y: cy,
+                                ease: 'easeOutBounce'});
   }
 
   render() {
@@ -36,11 +38,15 @@ class Checker extends React.Component {
       color = color.toLowerCase();
       className = color + ' winningChecker';
     }
-    
-    return <circle cx='50' cy='50' r='42'
-                    ref={circle => this.element = circle}
-                    className={className}
-                    fill={'url(#' + color + ')'} />;
+
+    return <circle
+              r ='42'
+              cx='50'
+              cy='50'
+              className={className}
+              fill={'url(#' + color + ')'}
+              ref={circle => this.node = circle}
+            />;
   }
 }
 
@@ -81,7 +87,7 @@ class Column extends React.Component {
     let setGet_colData = this.props.onColumnClick;
     let colData = setGet_colData(this.props.colID);
 
-    //this.mouseLeave();
+    this.mouseLeave();
 
     if (colData === 'fullColumn')
       this.setState({ fullColumn: true });
@@ -133,7 +139,8 @@ class Column extends React.Component {
           {/* Invisible top cell: */}
           <rect x='0' y='0' width='100' height='100' fill='none' />
           {/* Actual visible column: */}
-          <rect x='0' y='100'
+          <rect x='0'
+                y='100'
                 width='100'
                 height='600'
                 fill='url(#blackGreyBlack)'
