@@ -1,0 +1,12 @@
+.colInFocus rect:hover {
+  cursor: pointer;
+  fill-opacity: 0.8;
+}
+
+#svg-grid.gridNoFocus {
+  fill-opacity: 0.4;
+}
+
+svg g.gridNoFocus {
+  fill-opacity: 0.35;
+}

@@ -1,0 +1,41 @@
+#status {
+  grid-area: status;
+  background-color: #4d4444;
+  text-align: center;
+
+}
+
+.winner {
+  height: 2rem;
+  width: 50rem;
+  position: absolute;
+  top: 1.5%;
+  left: 50%;
+  margin: 1rem;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  padding-top: 0.75rem;
+}
+
+.winner.red {
+  background-color: red;
+  border: 0.2rem solid rgb(126, 4, 4);
+}
+
+.winner.yellow {
+  background-color: yellow;
+  border: 0.2rem solid rgb(133, 133, 2);
+}
+
+.status {
+  margin-top: 1rem;
+}
+
+.status.red {
+  color: red;
+}
+
+.status.yellow {
+  color: rgb(192, 192, 2);
+}

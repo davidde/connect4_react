@@ -1,0 +1,8 @@
+#grid {
+  grid-area: grid;
+  // ?? grid doesn't scale without 'display:flex' ??
+  display: flex;
+  padding: 1rem;
+  min-height: 200px;
+
+}
