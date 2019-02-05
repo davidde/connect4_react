@@ -17,7 +17,7 @@ html, body {
   background-color: rgb(218, 236, 236);
 }
 
-#game {
+#app {
   display: grid;
   grid-template-columns: 1fr minmax(90vmin, 1.5fr);
   /* In CSS Grid, the set of columns and rows are called tracks;
@@ -56,7 +56,7 @@ html, body {
 
 
 @media (orientation: portrait) {
-  #game {
+  #app {
     grid-template-columns: 1fr;
     grid-template-rows: 10vh auto 90vmin;
     /* The third row containing the grid will be a square
@@ -77,7 +77,7 @@ html, body {
     display: block;
   }
   #grid,
-  #game,
+  #app,
   #status,
   #settings {
     position: relative;
@@ -86,7 +86,7 @@ html, body {
   // This means we can't use #svg-container:after
   // or #svg-grid:after => svg-tags work-around.
   #grid:after,
-  #game:after,
+  #app:after,
   #settings:after {
     position: absolute;
     left: 0;
@@ -99,8 +99,8 @@ html, body {
   #grid:after {
     content: '#grid div';
   }
-  #game:after {
-    content: '#game';
+  #app:after {
+    content: '#app';
   }
   #settings:after {
     content: '#settings';
@@ -108,7 +108,7 @@ html, body {
   #status:after {
     content: '#status';
     position: absolute;
-    right: 0; // coincides with #game tag when on the left
+    right: 0; // coincides with #app tag when on the left
     top: 0;
     color: white;
     background-color: red;
