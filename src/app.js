@@ -1,7 +1,10 @@
 import React from 'react';
 
 import './app.scss';
+import styles from './settings.scss';
+
 import Status from './status';
+import Settings from './settings';
 import Grid from './grid';
 
 
@@ -18,6 +21,11 @@ class App extends React.Component {
       p1Next: true,
       p1Color: 'red',
       p2Color: 'yellow',
+      // Settings/Sidebar state:
+      portraitActive: false,
+      landscapePassive: false,
+      clientX: null,
+      clientY: null,
     };
   }
 
@@ -163,14 +171,114 @@ class App extends React.Component {
     return ((color === a) && (color === b) && (color === c));
   }
 
+  //////////////////////////////////
+  //       Sidebar Methods:       //
+  //////////////////////////////////
+  handleTouchStart = (event) => {
+    // 'touches' returns a list of all the touch objects
+    // that are currently in contact with the surface;
+    // touches[0] indicates that it will only show the
+    // coordinates of one finger (the first).
+    let clientX = event.touches[0].clientX;
+    let clientY = event.touches[0].clientY;
+    this.setState({ clientX, clientY });
+  }
+
+  handleTouchMove = (event) => {
+    // 'clientX' returns the X coordinate of the touch point
+    // relative to the left edge of the browser viewport,
+    // not including any scroll offset.
+    let clientX = this.state.clientX;
+    // 'clientY' returns the Y coordinate of the touch point
+    // relative to the top edge of the browser viewport,
+    // not including any scroll offset.
+    let clientY = this.state.clientY;
+
+    if ( !clientX || !clientY ) {
+        return;
+    }
+
+    if ( Math.abs(clientX) > ((25/100) * (window.screen.width)) ) {
+      if ( !this.state.portraitActive ) {
+        return;
+      }
+    }
+
+    let xDelta = event.touches[0].clientX - clientX;
+    let yDelta = event.touches[0].clientY - clientY;
+
+    if ( Math.abs(xDelta) > Math.abs(yDelta) ) {
+      // if xDelta > 0: right swipe
+      if (xDelta > 0) {
+        if ( window.matchMedia("(orientation: landscape)").matches && window.innerWidth > styles.mediaQueryWidth) {
+          this.setState({ landscapePassive: true });
+        } else {
+          this.setState({ portraitActive: true });
+        }
+      } else {
+        // if xDelta < 0: left swipe
+        if ( window.matchMedia("(orientation: landscape)").matches && window.innerWidth > styles.mediaQueryWidth) {
+          this.setState({ landscapePassive: false });
+        } else {
+          this.setState({ portraitActive: false });
+        }
+      }
+    }
+
+    clientX = null;
+    clientY = null;
+    this.setState({ clientX, clientY });
+
+    //event.preventDefault();
+  }
+
+  toggleLandscape = () => {
+    this.setState({ landscapePassive: !this.state.landscapePassive });
+  }
+
+  togglePortrait = () => {
+    this.setState({ portraitActive: !this.state.portraitActive });
+  }
+
+  handleClick = () => {
+    if ( window.matchMedia("(orientation: landscape)").matches && window.innerWidth > styles.mediaQueryWidth) {
+      this.toggleLandscape();
+    } else {
+      this.togglePortrait();
+    }
+  }
+
+  handleSideClick = () => {
+    if ( window.matchMedia("(orientation: landscape)").matches && window.innerWidth > styles.mediaQueryWidth) {
+      if (this.state.landscapePassive) {
+        this.toggleLandscape();
+      }
+    } else {
+      if (!this.state.portraitActive) {
+        this.togglePortrait();
+      }
+    }
+  }
+
   render() {
     return (
-      <div id='app'>
+      <div id='app'
+            onTouchStart={this.handleTouchStart}
+            onTouchMove={this.handleTouchMove} >
         {/* 'app' is a css grid containing the <Status/>, <Settings/> and <Grid/> components */}
+
         <Status
             winner={this.state.winner}
             p1Next={this.state.p1Next}
         />
+
+        <Settings
+            landscapePassive={this.state.landscapePassive}
+            portraitActive={this.state.portraitActive}
+            onClick={this.handleClick}
+            onSideClick={this.handleSideClick}
+        />
+
         <Grid
             cols={this.state.cols}
             winner={this.state.winner}

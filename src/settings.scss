@@ -1,0 +1,166 @@
+//////////////////////////////////
+//         Variables:           //
+//////////////////////////////////
+$sidebarFillColor: #250d0d;
+$sidebarFontColor: #7d4444;
+$sidebarHoverColor: #f1f1f1;
+
+$sidebarLandscapeWidth: 40vw;
+$sidebarPortraitWidth: 80vw;
+
+$transitionDuration: 0.4s;
+
+$mediaQueryWidth: 1200px;
+:export {
+  mediaQueryWidth: 1200;
+}
+
+
+//////////////////////////////////
+//       Sidebar Styles:        //
+//////////////////////////////////
+.sidebar {
+  grid-area: settings;
+  height: 100%;
+  background-color: $sidebarFillColor;
+  border-right: 2px solid $sidebarFontColor;
+  
+  @media (orientation: landscape), (min-width: $mediaQueryWidth) {
+    width: $sidebarLandscapeWidth;
+    transition: width $transitionDuration;
+    &.landscapePassive {
+      cursor: pointer;
+      width: 0.5rem;
+    }
+  }
+  
+  @media (orientation: portrait), (max-width: $mediaQueryWidth) {
+    width: 0.5rem;
+    transition: width $transitionDuration;
+
+    cursor: pointer;
+  }
+
+  @media (hover: none) {
+    // Prevent blue focus on touch devices when tapping 'sidebar-content':
+    cursor: auto;
+  }
+
+  .sidebar-trigger {
+    z-index: 10;
+    position: fixed;
+    top: 0;
+    height: 4.1rem;
+    padding: 0.5rem 1rem 0.8rem 1rem;
+    margin: 0;
+    color: $sidebarFontColor;
+    background-color: $sidebarFillColor;
+    font-size: 2.5rem;
+    
+    cursor: pointer;
+    outline: none;
+    text-decoration: none;
+    border: none;
+    border-right: 2px solid $sidebarFontColor;
+
+    &:hover {
+      color: $sidebarHoverColor;
+    }
+    @media (hover: none) {
+      // Prevent color change on touch devices:
+      &:hover {
+        color: $sidebarFontColor;
+      }
+    }
+  }
+
+  @media (orientation: portrait), (max-width: $mediaQueryWidth) {
+    .sidebar-background {
+      position: fixed;
+      top: 0;
+      width: 100vw;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      visibility: hidden;
+      &.portraitActive {
+        visibility: visible;
+      }
+    }
+  }
+
+  .sidebar-content {
+    height: 100vh;
+    width: inherit;
+    z-index: 5;
+    background-color: $sidebarFillColor;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    cursor: auto;
+
+    @media (orientation: landscape), (min-width: $mediaQueryWidth) {
+      width: $sidebarLandscapeWidth;
+      left: 0;
+      &.landscapePassive {
+        left: -90vw;
+      }
+      transition: left 0.5s;
+    }
+
+    @media (orientation: portrait), (max-width: $mediaQueryWidth) {
+      width: $sidebarPortraitWidth;
+
+      left: -90vw;
+      &.portraitActive {
+        left: 0;
+      }
+      transition: left $transitionDuration;
+    }
+  
+    .sidebar-name {
+      height: 2.6rem;
+      padding: 0.8rem 5rem 0.7rem 4.5rem;
+      margin: 0;
+      color: $sidebarFontColor;
+      font-size: 2rem;
+      text-align: center;
+
+    }
+
+    .line {
+      padding: 0;
+      margin: 0;
+      border-color: $sidebarFontColor;
+      @-moz-document url-prefix() {
+        // Firefox Specific:
+        border-style: solid;
+      }
+
+    }
+
+    .padding {
+      padding: 8rem 1rem 1rem 1rem;
+
+      button {
+        padding: 0.5rem;
+        font-size: 1.2rem;
+        background-color: $sidebarFillColor;
+        color: $sidebarFontColor;
+        display: block;
+        border: none;
+        cursor: pointer;
+    
+        &:hover {
+          color: $sidebarHoverColor;
+        }
+        @media (hover: none) {
+          // Prevent color change on touch devices:
+          &:hover {
+            color: $sidebarFontColor;
+          }
+        }
+      }
+    
+    }
+  }
+}
