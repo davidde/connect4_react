@@ -1,0 +1,17 @@
+$sidebarFillColor: #250d0d;
+$sidebarFontColor: #7d4444;
+$sidebarHoverColor: #f1f1f1;
+
+$bodyFillColor: #faf1d7;
+$statusFillColor: #ffd381;
+$statusBorderColor: #830602;
+
+$sidebarLandscapeWidth: 40vw;
+$sidebarPortraitWidth: 80vw;
+
+$transitionDuration: 0.4s;
+
+$mediaQueryWidth: 1200px;
+:export {
+  mediaQueryWidth: 1200;
+}

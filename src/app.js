@@ -1,7 +1,7 @@
 import React from 'react';
 
 import './app.scss';
-import styles from './settings.scss';
+import vars from './_variables.scss';
 
 import Status from './status';
 import Settings from './settings';
@@ -210,14 +210,14 @@ class App extends React.Component {
     if ( Math.abs(xDelta) > Math.abs(yDelta) ) {
       // if xDelta > 0: right swipe
       if (xDelta > 0) {
-        if ( window.matchMedia("(orientation: landscape)").matches && window.innerWidth > styles.mediaQueryWidth) {
+        if ( window.matchMedia("(orientation: landscape)").matches && window.innerWidth > vars.mediaQueryWidth) {
           this.setState({ landscapePassive: true });
         } else {
           this.setState({ portraitActive: true });
         }
       } else {
         // if xDelta < 0: left swipe
-        if ( window.matchMedia("(orientation: landscape)").matches && window.innerWidth > styles.mediaQueryWidth) {
+        if ( window.matchMedia("(orientation: landscape)").matches && window.innerWidth > vars.mediaQueryWidth) {
           this.setState({ landscapePassive: false });
         } else {
           this.setState({ portraitActive: false });
@@ -241,7 +241,7 @@ class App extends React.Component {
   }
 
   handleClick = () => {
-    if ( window.matchMedia("(orientation: landscape)").matches && window.innerWidth > styles.mediaQueryWidth) {
+    if ( window.matchMedia("(orientation: landscape)").matches && window.innerWidth > vars.mediaQueryWidth) {
       this.toggleLandscape();
     } else {
       this.togglePortrait();
@@ -249,7 +249,7 @@ class App extends React.Component {
   }
 
   handleSideClick = () => {
-    if ( window.matchMedia("(orientation: landscape)").matches && window.innerWidth > styles.mediaQueryWidth) {
+    if ( window.matchMedia("(orientation: landscape)").matches && window.innerWidth > vars.mediaQueryWidth) {
       if (this.state.landscapePassive) {
         this.toggleLandscape();
       }

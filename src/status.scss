@@ -1,6 +1,14 @@
+// This will copy all the variables from '_variables.scss' into this file:
+@import "variables";
+
 #status {
   grid-area: status;
-  background-color: #4d4444;
+  background-color: $statusFillColor;
+  border-bottom: 2px solid $statusBorderColor;
+  height: 3.6rem;
+  padding: 0.5rem 1rem 0rem 4.5rem;
+  overflow: hidden;
+  white-space: nowrap;
   text-align: center;
 
 }

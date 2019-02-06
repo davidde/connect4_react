@@ -1,3 +1,6 @@
+// This will copy all the variables from '_variables.scss' into this file:
+@import "variables";
+
 // LSD: Layout Space Debugger
 // Set to true for visual indicators of which elements are where,
 // along with their paddings and borders.
@@ -14,7 +17,7 @@ $LSD: false;
 html, body {
   min-height: 100vh;
   max-width: 100vw;
-  background-color: rgb(218, 236, 236);
+  background-color: $bodyFillColor;
   .noScroll {
     // Prevent scrolling when sidebar is showing
     overflow: hidden;
@@ -23,7 +26,7 @@ html, body {
 
 #app {
   display: grid;
-  grid-template-columns: 1fr minmax(90vmin, 1.5fr);
+  grid-template-columns: min-content 1fr;
   /* In CSS Grid, the set of columns and rows are called tracks;
   For the 2 columns we want a dynamic approach: we want both the 'settings'
   and 'grid' section to grow (and shrink), but we want the 'grid' section
@@ -39,7 +42,7 @@ html, body {
   is actually the smallest again!
   fr, the grid-specific fraction unit, allows us to elegantly express
   proportions in relation to each other. */
-  grid-template-rows: minmax(10vh, auto) 90vh;
+  grid-template-rows: minmax(min-content, max-content) 1fr;
   /* 'grid-template-rows' takes a sequence of sizes that define the individual rows.
   In this case, we give the first row a minimum height of 10% of the viewport height,
   but allow it to grow bigger if it is required to make the content fit.
@@ -54,18 +57,6 @@ html, body {
   min-height: 100vh;
 }
 
-
-@media (orientation: portrait) {
-  #app {
-    grid-template-columns: 1fr;
-    grid-template-rows: 10vh auto 90vmin;
-    /* The third row containing the grid will be a square
-    the size of the viewport width (only in portrait modes) */
-    grid-template-areas: 'status'
-                         'settings'
-                         'grid';
-  }
-}
 
 // LSD: Layout Space Debugger
 // Code for tagging most important elements
