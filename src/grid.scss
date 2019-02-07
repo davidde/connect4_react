@@ -1,8 +1,19 @@
 #grid {
+  /* To fix an svg rendering inconsistency between Firefox and Chrome,
+  one workaround is to set the parent position to relative (i.e. '#grid')
+  and the svg's one to absolute. It's like one User Agent (FF) does create
+  a new stack for the svg node, while the other (chrome) doesn't. */
   grid-area: grid;
-  // ?? grid doesn't scale without 'display:flex' ??
-  display: flex;
+  position: relative;
   padding: 1rem;
   min-height: 200px;
+}
 
+#svg-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 95%;
+  width: 95%;
+  padding: 1rem;
 }

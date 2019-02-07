@@ -17,8 +17,6 @@ function Settings(props) {
     contentClass += ' portraitActive';
   }
 
-  document.body.classList.toggle('noScroll', props.portraitActive);
-
   return (
     <div className={sidebarClass} onClick={props.onSideClick}>
         <button className="sidebar-trigger" onClick={props.onClick}>

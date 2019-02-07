@@ -14,7 +14,7 @@ class Grid extends React.Component {
       className = 'gridNoFocus'
     return (
       <div id='grid'>
-        <svg id='svg-container' width='100%' viewBox='0 0 800 780' xmlns='http://www.w3.org/2000/svg'>
+        <svg id='svg-container' viewBox='0 0 800 780' xmlns='http://www.w3.org/2000/svg'>
           {/* This is the container svg, which holds the left and right 'pillars', the bottom padding,
               and an extra invisible top row, which will show the checkers that are about to drop,
               when hovering. Turn on the $LSD bool in css to visualise this. */}

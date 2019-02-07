@@ -64,6 +64,7 @@
       height: 100%;
       background: rgba(0, 0, 0, 0.5);
       visibility: hidden;
+      z-index: 5;
       &.portraitActive {
         visibility: visible;
       }

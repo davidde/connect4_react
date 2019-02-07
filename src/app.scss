@@ -8,6 +8,7 @@ $LSD: false;
 
 * {
   margin: 0;
+  padding: 0;
 
   @if $LSD {
     outline: solid 1px red;
@@ -18,10 +19,7 @@ html, body {
   min-height: 100vh;
   max-width: 100vw;
   background-color: $bodyFillColor;
-  .noScroll {
-    // Prevent scrolling when sidebar is showing
-    overflow: hidden;
-  }
+  overflow: hidden;
 }
 
 #app {
@@ -99,7 +97,7 @@ html, body {
   #status:after {
     content: '#status';
     position: absolute;
-    right: 0; // coincides with #app tag when on the left
+    right: 0; // overlaps with #app tag when on the left
     top: 0;
     color: white;
     background-color: red;
