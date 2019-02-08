@@ -3,19 +3,33 @@ import './status.scss';
 
 function Status(props) {
   let status;
-  if (props.winner) {
+  let className;
+
+  if (props.winner) { // = winning color!
     status = 'Winner: ' + props.winner + '!!!';
-    if (props.winner === 'red')
-      return (<div id='status'><h3 className='winner red'>{status}</h3></div>);
-    else
-      return (<div id='status'><h3 className='winner yellow'>{status}</h3></div>);
-  } else {
-    status = 'Next player: ' + (props.p1Next ? 'red' : 'yellow');
-    if (props.p1Next)
-      return (<div id='status'><p className='status red'>{status}</p></div>);
-    else
-      return (<div id='status'><p className='status yellow'>{status}</p></div>);
+    className = 'status ' + props.winner;
+    return (
+      <div className={className}>
+        <p className='text'>
+          {status}
+        </p>
+      </div>
+    );
   }
+
+  else {
+    let color = (props.p1Next ? props.p1Color : props.p2Color);
+    status = 'Next player: ' + color;
+    className = color + ' text';
+    return (
+      <div className='status'>
+        <p className={className}>
+          {status}
+        </p>
+      </div>
+    );
+  }
+
 }
 
 

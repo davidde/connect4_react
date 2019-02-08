@@ -17,3 +17,11 @@
   width: 95%;
   padding: 1rem;
 }
+
+#svg-grid.gridNoFocus {
+  fill-opacity: 0.4;
+}
+
+svg g.gridNoFocus {
+  fill-opacity: 0.35;
+}

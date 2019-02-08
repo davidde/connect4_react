@@ -270,6 +270,8 @@ class App extends React.Component {
         <Status
             winner={this.state.winner}
             p1Next={this.state.p1Next}
+            p1Color={this.state.p1Color}
+            p2Color={this.state.p2Color}
         />
 
         <Settings

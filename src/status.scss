@@ -1,10 +1,12 @@
 // This will copy all the variables from '_variables.scss' into this file:
 @import "variables";
 
-#status {
+.status {
   grid-area: status;
   background-color: $statusFillColor;
   border-bottom: 2px solid $statusBorderColor;
+  font-size: 1.5rem;
+  font-weight: bold;
   height: 3.6rem;
   padding: 0.5rem 1rem 0rem 4.5rem;
   overflow: hidden;
@@ -13,37 +15,22 @@
 
 }
 
-.winner {
-  height: 2rem;
-  width: 50rem;
-  position: absolute;
-  top: 1.5%;
-  left: 50%;
-  margin: 1rem;
-  margin-right: -50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  padding-top: 0.75rem;
-}
-
-.winner.red {
-  background-color: red;
-  border: 0.2rem solid rgb(126, 4, 4);
-}
-
-.winner.yellow {
-  background-color: yellow;
-  border: 0.2rem solid rgb(133, 133, 2);
-}
-
-.status {
-  margin-top: 1rem;
-}
-
 .status.red {
-  color: red;
+  background-color: red;
 }
 
 .status.yellow {
+  background-color: rgb(251, 255, 0);
+}
+
+.text {
+  margin-top: 1rem;
+}
+
+.text.red {
+  color: red;
+}
+
+.text.yellow {
   color: rgb(192, 192, 2);
 }

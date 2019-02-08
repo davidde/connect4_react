@@ -19,6 +19,7 @@ html, body {
   min-height: 100vh;
   max-width: 100vw;
   background-color: $bodyFillColor;
+  // Ensure no scroll bars ever appear:
   overflow: hidden;
 }
 
