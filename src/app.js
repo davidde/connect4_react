@@ -14,8 +14,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      rows: 6,
-      cols: 7,
+      rows: 6, // cols = rows + 1
       grid: [],
       winner: null, // also serves as a gameOver boolean
       p1Next: true,
@@ -37,8 +36,9 @@ class App extends React.Component {
     // Create grid data structure to keep track of which grid cells
     // contain checkers of which color:
     // 'grid' = array of COLUMN arrays!
+    let cols = this.state.rows + 1;
     let grid = [];
-    for (let c = 0; c < this.state.cols; c++) {
+    for (let c = 0; c < cols; c++) {
       let column = [];
       for (let r = 0; r < this.state.rows; r++) {
         column.push(null);
@@ -98,10 +98,11 @@ class App extends React.Component {
     // That's because starting higher would run off the top of the board
     // before finding a possible win. In other words, row sets {0,1,2,3}, {1,2,3,4} and {2,3,4,5}
     // would be valid but {3,4,5,6} would not, because the six valid rows are 0-5.
-    var grid = this.state.grid;
+    let grid = this.state.grid;
+    let cols = this.state.rows + 1;
 
     // Check bottom to top
-    for (let c = 0; c < this.state.cols; c++) {
+    for (let c = 0; c < cols; c++) {
       for (let r = 0; r < this.state.rows - 3; r++) {
         if (grid[c][r] === null)
           // if the bottom of the column is empty, continue with next column ...
@@ -117,7 +118,7 @@ class App extends React.Component {
     }
 
     // Check left to right
-    for (let c = 0; c < this.state.cols - 3; c++) {
+    for (let c = 0; c < cols - 3; c++) {
       for (let r = 0; r < this.state.rows; r++) {
         if (grid[c][r] === null)
           // if the left of the row is empty, continue with next column ...
@@ -132,7 +133,7 @@ class App extends React.Component {
     }
 
     // Check down-left to top-right
-    for (let c = 0; c < this.state.cols - 3; c++) {
+    for (let c = 0; c < cols - 3; c++) {
       for (let r = 0; r < this.state.rows - 3; r++) {
         if (grid[c][r] === null)
           // if the left of the line is empty, continue with next column ...
@@ -147,7 +148,7 @@ class App extends React.Component {
     }
   
     // Check down-right to top-left
-    for (let c = this.state.cols - 1; c >= 3; c--) {
+    for (let c = cols - 1; c >= 3; c--) {
       for (let r = 0; r < this.state.rows - 3; r++) {
         if (grid[c][r] === null)
           // if the right of the line is empty, continue with next column on the left ...
@@ -282,7 +283,7 @@ class App extends React.Component {
         />
 
         <Grid
-            cols={this.state.cols}
+            rows={this.state.rows}
             winner={this.state.winner}
             p1Next={this.state.p1Next}
             p1Color={this.state.p1Color}

@@ -6,6 +6,7 @@ import './column.scss';
 class Column extends React.Component {
   // PROPS: (- key)
   //        - colID
+  //        - rows
   //        - winner
   //        - p1Next
   //        - p1Color
@@ -84,7 +85,7 @@ class Column extends React.Component {
                             key={i}
                             // Invert rowID order because svg orders top down
                             // and the colData array is ordered bottom up!
-                            rowID={Math.abs(i - 6)}
+                            rowID={Math.abs(i - this.props.rows)}
                             color={color} />;
               return null;
             })
@@ -95,7 +96,7 @@ class Column extends React.Component {
           <rect x='0'
                 y='100'
                 width='100'
-                height='600'
+                height={(this.props.rows * 100).toString()}
                 fill='url(#blackGreyBlack)'
                 mask='url(#cell-mask)' />
         </svg>

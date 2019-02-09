@@ -3,18 +3,28 @@ import Column from './column';
 import './grid.scss';
 
 
-class Grid extends React.Component {
+function Grid(props) {
   // This may seem like a nasty wall of code, but it is entirely
   // inline-svg; it does nothing than set the visuals of the grid
   // and its checkers. The magic happens in its <Column/> child
   // components, and its parent component, <Game/>.
-  render() {
-    let className;
-    if (this.props.winner)
-      className = 'gridNoFocus'
-    return (
+
+  // Standard Medium Gridsize: props.rows = 6
+  let cols = props.rows + 1;  // 7
+  let height = cols * 100;  // 700
+  let viewbox = '0 0 ' + (height + 100) + ' ' + (height + 80); // '0 0 800 780'
+  let bottomPaddingWidth = height - 12; // 688
+  let bottomPaddingY = height - 5; // 695
+  let pillarHeight = height - 20; // 680
+  let rightPillarX = height + 36; // 736
+  
+  let className;
+  if (props.winner)
+      className = 'gridNoFocus';
+
+  return (
       <div id='grid'>
-        <svg id='svg-container' viewBox='0 0 800 780' xmlns='http://www.w3.org/2000/svg'>
+        <svg id='svg-container' viewBox={viewbox} xmlns='http://www.w3.org/2000/svg'>
           {/* This is the container svg, which holds the left and right 'pillars', the bottom padding,
               and an extra invisible top row, which will show the checkers that are about to drop,
               when hovering. Turn on the $LSD bool in css to visualise this. */}
@@ -88,8 +98,8 @@ class Grid extends React.Component {
                   the part of the column we want to be opaque/visible.
                   The second <rect> sits on top of the first and has a fill of url(#hole) which refers
                   to the pattern we created above. */}
-              <rect width='100' height='700' fill='white'></rect>
-              <rect width='100' height='700' fill='url(#hole)'></rect>
+              <rect width='100' height={height} fill='white'></rect>
+              <rect width='100' height={height} fill='url(#hole)'></rect>
               {/* Now, we can set the mask attribute for our grid column <rect>, by referencing
                   the <mask> element by id: 'url(#cell-mask)'. A nice feature of the <pattern> element
                   is that it repeats itself, based on the height/width attributes we've provided.
@@ -105,7 +115,7 @@ class Grid extends React.Component {
             </filter>
           </defs>
 
-          <svg id='svg-grid' className={className} width='700' height='700' x='54' y='0' xmlns='http://www.w3.org/2000/svg'>
+          <svg id='svg-grid' className={className} width={height} height={height} x='54' y='0' xmlns='http://www.w3.org/2000/svg'>
             {/* This is the actual grid svg consisting of 7 column svg's;
                 each column is 700px high by 100px wide, with the top cell an invisible one,
                 to show pending checkers. */}
@@ -113,24 +123,25 @@ class Grid extends React.Component {
               // Since regular looping is not available inside JSX code,
               // we use an array construct to 'loop' to create
               // the columns of the grid!
-              [...Array(this.props.cols)].map((el, i) => {
+              [...Array(cols)].map((el, i) => {
                 return <Column
                           key={i}
                           colID={i}
-                          winner={this.props.winner}
-                          p1Next={this.props.p1Next}
-                          p1Color={this.props.p1Color}
-                          p2Color={this.props.p2Color}
-                          onColumnClick={this.props.onColumnClick}
+                          rows={props.rows}
+                          winner={props.winner}
+                          p1Next={props.p1Next}
+                          p1Color={props.p1Color}
+                          p2Color={props.p2Color}
+                          onColumnClick={props.onColumnClick}
                        />;
               })
             }
           </svg>
 
           <g className={className}>
-            <rect id='bottom-padding' width='688' height='20' x='54' y='695' fill='url(#blackBottom)' />
-            <rect id='left-pillar' width='60' height='680' fill='url(#blackPillars)' x='0' y='100' rx='10' ry='10' />
-            <rect id='right-pillar' width='60' height='680' fill='url(#blackPillars)' x='736' y='100' rx='10' ry='10' />
+            <rect id='bottom-padding' width={bottomPaddingWidth} height='20' x='54' y={bottomPaddingY} fill='url(#blackBottom)' />
+            <rect id='left-pillar' width='60' height={pillarHeight} fill='url(#blackPillars)' x='0' y='100' rx='10' ry='10' />
+            <rect id='right-pillar' width='60' height={pillarHeight} fill='url(#blackPillars)' x={rightPillarX} y='100' rx='10' ry='10' />
             
             {/* Svg tags for LSD; only visible when '$LSD: true;' in css */}
             <text className='svg-tags' filter='url(#redtags)' x='22' y='15' fontSize='0.9rem' fill='white'>#svg-container</text>
@@ -139,8 +150,8 @@ class Grid extends React.Component {
           </g>
         </svg>
       </div>
-    );
-  }
+  );
+
 }
 
 
