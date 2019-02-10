@@ -7,16 +7,18 @@ function Grid(props) {
   // This may seem like a nasty wall of code, but it is entirely
   // inline-svg; it does nothing than set the visuals of the grid
   // and its checkers. The magic happens in its <Column/> child
-  // components, and its parent component, <Game/>.
+  // components, and its parent component, <App/>.
 
   // Standard Medium Gridsize: props.rows = 6
-  let cols = props.rows + 1;  // 7
-  let height = cols * 100;  // 700
+  let cols = props.rows + 1; // 7
+
+  let pillarCorrection = (props.rows - 6) * 2; // 0
+  let height = cols * 100; // 700
   let viewbox = '0 0 ' + (height + 100) + ' ' + (height + 80); // '0 0 800 780'
   let bottomPaddingWidth = height - 12; // 688
   let bottomPaddingY = height - 5; // 695
   let pillarHeight = height - 20; // 680
-  let rightPillarX = height + 36; // 736
+  let rightPillarX = height + 36 - pillarCorrection; // 736
   
   let className;
   if (props.winner)

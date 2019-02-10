@@ -14,7 +14,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      rows: 6, // cols = rows + 1
+      rows: 6, // # rows of the grid; cols = rows + 1
       grid: [],
       winner: null, // also serves as a gameOver boolean
       p1Next: true,
@@ -29,24 +29,27 @@ class App extends React.Component {
   }
 
   componentWillMount() {
-    this.initGrid();
+    this.initGrid(this.state.rows);
   }
 
-  initGrid() {
+  initGrid(rows) {
     // Create grid data structure to keep track of which grid cells
     // contain checkers of which color:
     // 'grid' = array of COLUMN arrays!
-    let cols = this.state.rows + 1;
+    let cols = rows + 1;
     let grid = [];
     for (let c = 0; c < cols; c++) {
       let column = [];
-      for (let r = 0; r < this.state.rows; r++) {
+      for (let r = 0; r < rows; r++) {
         column.push(null);
       }
       grid.push(column);
     }
 
-    this.setState({grid: grid});
+    this.setState({
+      rows,
+      grid,
+    });
   }
 
   setGet_colData = (colID) => {
@@ -261,6 +264,11 @@ class App extends React.Component {
     }
   }
 
+  setGridRows = (event) => {
+    let rows = parseInt(event.target.value);
+    this.initGrid(rows);
+  }
+
   render() {
     return (
       <div id='app'
@@ -280,6 +288,9 @@ class App extends React.Component {
             portraitActive={this.state.portraitActive}
             onClick={this.handleClick}
             onSideClick={this.handleSideClick}
+
+            rows={this.state.rows}
+            setGridRows={this.setGridRows}
         />
 
         <Grid

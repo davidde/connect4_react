@@ -1,6 +1,6 @@
 import React from 'react';
 import './settings.scss';
-
+import Gridsize from './gridsize';
 
 function Settings(props) {
   let sidebarClass = 'sidebar';
@@ -31,9 +31,10 @@ function Settings(props) {
             <div className='sidebar-name'>Settings</div>
             <hr className='line' />
             <div className='padding'>
-              <button>&times; Close</button>
-              <button>&#9776; Navigation</button>
-              <button>&#9881; Settings</button>
+              <Gridsize
+                rows={props.rows}
+                setGridRows={props.setGridRows}
+              />
             </div>
         </div>
     </div>
