@@ -16,6 +16,7 @@ class App extends React.Component {
     this.state = {
       rows: 6, // # rows of the grid; cols = rows + 1
       grid: [],
+      fullColumns: [],
       winner: null, // also serves as a gameOver boolean
       p1Next: true,
       p1Color: 'red',
@@ -38,7 +39,9 @@ class App extends React.Component {
     // 'grid' = array of COLUMN arrays!
     let cols = rows + 1;
     let grid = [];
+    let fullColumns = [];
     for (let c = 0; c < cols; c++) {
+      fullColumns.push(false);
       let column = [];
       for (let r = 0; r < rows; r++) {
         column.push(null);
@@ -49,6 +52,9 @@ class App extends React.Component {
     this.setState({
       rows,
       grid,
+      fullColumns,
+      winner: null,
+      p1Next: true,
     });
   }
 
@@ -77,10 +83,10 @@ class App extends React.Component {
     }
 
     bottomCell = this.findBottomCell(colID);
-    if (bottomCell === null) return 'fullColumn';
-
-    let colData = grid[colID];
-    return colData;
+    const fullColumns = this.state.fullColumns.slice();
+    fullColumns[colID] = true;
+    // If there is not bottom empty cell AFTER grid update, that column is full:
+    if (bottomCell === null) this.setState({ fullColumns });
   }
 
   findBottomCell(col) {
@@ -295,6 +301,8 @@ class App extends React.Component {
 
         <Grid
             rows={this.state.rows}
+            grid={this.state.grid}
+            fullColumns={this.state.fullColumns}
             winner={this.state.winner}
             p1Next={this.state.p1Next}
             p1Color={this.state.p1Color}

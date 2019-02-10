@@ -7,6 +7,8 @@ class Column extends React.Component {
   // PROPS: (- key)
   //        - colID
   //        - rows
+  //        - colData
+  //        - fullColumn
   //        - winner
   //        - p1Next
   //        - p1Color
@@ -16,9 +18,7 @@ class Column extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      colData: [],
       isHovered: false,
-      fullColumn: false,
     };
   }
 
@@ -36,17 +36,12 @@ class Column extends React.Component {
 
   handleClick = () => {
     // Guard against changing colData after winner or fullColumn:
-    if (this.state.fullColumn || this.props.winner)
+    if (this.props.fullColumn || this.props.winner)
       return;
     let setGet_colData = this.props.onColumnClick;
-    let colData = setGet_colData(this.props.colID);
+    setGet_colData(this.props.colID);
 
     this.mouseLeave();
-
-    if (colData === 'fullColumn')
-      this.setState({ fullColumn: true });
-    else if (Array.isArray(colData))
-      this.setState({ colData });
   }
 
   render() {
@@ -56,7 +51,7 @@ class Column extends React.Component {
 
     let className = 'colNoFocus';
     let hoverChecker = false;
-    if (this.state.isHovered && !this.state.fullColumn && !this.props.winner) {
+    if (this.state.isHovered && !this.props.fullColumn && !this.props.winner) {
       // In these conditions, enable a column to be focussed on,
       // and hovered over with a checker.
       className = 'colInFocus';
@@ -79,7 +74,7 @@ class Column extends React.Component {
           }
 
           {
-            this.state.colData.map((color, i) => {
+            this.props.colData.map((color, i) => {
               if (color)
                   return <Checker
                             key={i}

@@ -130,6 +130,8 @@ function Grid(props) {
                           key={i}
                           colID={i}
                           rows={props.rows}
+                          colData={props.grid[i]}
+                          fullColumn={props.fullColumns[i]}
                           winner={props.winner}
                           p1Next={props.p1Next}
                           p1Color={props.p1Color}
