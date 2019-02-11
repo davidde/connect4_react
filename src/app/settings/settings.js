@@ -1,6 +1,7 @@
 import React from 'react';
 import './settings.scss';
 import Gridsize from './gridsize';
+import CheckerColor from './checkercolor';
 
 function Settings(props) {
   let sidebarClass = 'sidebar';
@@ -34,6 +35,16 @@ function Settings(props) {
               <Gridsize
                 rows={props.rows}
                 setGridRows={props.setGridRows}
+              />
+              <CheckerColor
+                player='Player 1:'
+                color={props.p1Color}
+                setCheckerColor={props.setCheckerColor}
+              />
+              <CheckerColor
+                player='Player 2:'
+                color={props.p2Color}
+                setCheckerColor={props.setCheckerColor}
               />
             </div>
         </div>

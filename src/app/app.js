@@ -274,6 +274,27 @@ class App extends React.Component {
     this.initGrid(rows);
   }
 
+  // This method should be passed to the CheckerColor component inside the Settings component;
+  // it takes the checker color as input and sets it in app state.
+  // To pass parameters to event handlers while using property initializer syntax, we need to use currying;
+  // Passing two parameters to same function like 'setCheckerColor = (color, event) => {}' would not work because,
+  // onClick event invokes the callback by passing an event object as first and only parameter.
+  // Hence if we use '= (color, event) => {}' then the event would be passed in 'color' parameter and
+  // 'event' would be undefined. By using currying, we are creating a closure which is equivalent to:
+  //
+  // setCheckerColor = (color) => {
+  //   return (event) => {
+  //     ...
+  //   }
+  // }
+  setCheckerColor = (player) => (event) => {
+    let color = event.target.value;
+    if (player === 'Player 1:')
+      this.setState({p1Color: color});
+    else
+      this.setState({p2Color: color});
+  }
+
   render() {
     return (
       <div id='app'
@@ -296,6 +317,9 @@ class App extends React.Component {
 
             rows={this.state.rows}
             setGridRows={this.setGridRows}
+            p1Color={this.state.p1Color}
+            p2Color={this.state.p2Color}
+            setCheckerColor={this.setCheckerColor}
         />
 
         <Grid
