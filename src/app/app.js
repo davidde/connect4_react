@@ -268,7 +268,7 @@ class App extends React.Component {
   }
 
   // This method should be passed to the Gridsize component inside the Settings component;
-  // it takes the number of rows as input to determine the Gridsize and set the state.
+  // it takes the number of rows as input to determine the Gridsize and set the app state.
   setGridRows = (event) => {
     let rows = parseInt(event.target.value);
     this.initGrid(rows);

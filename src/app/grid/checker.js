@@ -19,13 +19,17 @@ class Checker extends React.Component {
   }
 
   componentDidMount() {
-    let cy = (this.props.rowID * 100).toString();
-    let duration = (this.props.rowID * 0.1 + 0.2).toString();
+    let cy = this.props.rowID * 100;
+    if (this.props.rowID === 0)
+      cy = cy.toString();
+    else
+      cy = (cy + 8).toString();
+    let duration = (this.props.rowID * 0.055 + 0.35).toString();
     // Use the node ref to create the animation:
-    this.tween = TweenMax.fromTo(this.node,
+    this.tween = TweenMax.to(this.node,
                                 duration,
-                                {x: '0', y: '0'},
-                                {x: '0', y: cy,
+                                //{x: '0', y: '0'}, // 'from' position
+                                {x: '0', y: cy,    // 'to' position
                                 ease: 'easeOutBounce'});
   }
 
@@ -39,9 +43,9 @@ class Checker extends React.Component {
     }
 
     return <circle
-              r ='42'
+              r ='42.5'
               cx='50'
-              cy='50'
+              cy='42.5'
               className={className}
               fill={'url(#' + color + ')'}
               ref={circle => this.node = circle}

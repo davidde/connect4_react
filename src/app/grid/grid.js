@@ -13,12 +13,13 @@ function Grid(props) {
   let cols = props.rows + 1; // 7
 
   let pillarCorrection = (props.rows - 6) * 2; // 0
-  let height = cols * 100; // 700
-  let viewbox = '0 0 ' + (height + 100) + ' ' + (height + 80); // '0 0 800 780'
-  let bottomPaddingWidth = height - 12; // 688
-  let bottomPaddingY = height - 5; // 695
-  let pillarHeight = height - 20; // 680
-  let rightPillarX = height + 36 - pillarCorrection; // 736
+  let width = cols * 100; // 700
+  let height = cols * 100 + 8; // 708
+  let viewbox = '0 0 ' + (width + 100) + ' ' + (height + 80); // '0 0 800 788'
+  let bottomPaddingWidth = width - (props.rows * 2); // 688
+  let bottomPaddingY = height + 7; // 715
+  let pillarHeight = width - 20; // 680
+  let rightPillarX = width + 36 - pillarCorrection; // 736
   
   let className;
   if (props.winner)
@@ -117,7 +118,7 @@ function Grid(props) {
             </filter>
           </defs>
 
-          <svg id='svg-grid' className={className} width={height} height={height} x='54' y='0' xmlns='http://www.w3.org/2000/svg'>
+          <svg id='svg-grid' className={className} width={width} height={height} x='54' y='8' xmlns='http://www.w3.org/2000/svg'>
             {/* This is the actual grid svg consisting of 7 column svg's;
                 each column is 700px high by 100px wide, with the top cell an invisible one,
                 to show pending checkers. */}

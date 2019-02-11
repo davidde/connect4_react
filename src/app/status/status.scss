@@ -15,22 +15,63 @@
 
 }
 
-.status.red {
-  background-color: red;
-}
-
 .status.yellow {
   background-color: rgb(251, 255, 0);
 }
 
+.status.orange {
+  background-color: rgb(226, 85, 3);
+}
+
+.status.red {
+  background-color: red;
+}
+
+.status.green {
+  background-color: rgb(31, 134, 5);
+}
+
+.status.cyan {
+  background-color: rgb(6, 90, 199);
+}
+
+.status.blue {
+  background-color: blue;
+}
+
+.status.purple {
+  background-color: rgb(155, 3, 226);
+}
+
+
 .text {
   margin-top: 1rem;
+}
+
+.text.yellow {
+  color: rgb(192, 192, 2);
+}
+
+.text.orange {
+  color: rgb(226, 85, 3);
 }
 
 .text.red {
   color: red;
 }
 
-.text.yellow {
-  color: rgb(192, 192, 2);
+.text.green {
+  color: rgb(31, 134, 5);
+}
+
+.text.cyan {
+  color: rgb(6, 90, 199);
+}
+
+.text.blue {
+  color: blue;
+}
+
+.text.purple {
+  color: rgb(155, 3, 226);
 }

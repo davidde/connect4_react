@@ -89,9 +89,10 @@ class Column extends React.Component {
           <rect x='0' y='0' width='100' height='100' fill='none' />
           {/* Actual visible column: */}
           <rect x='0'
-                y='100'
+                y='92' // This is changed to make the space above the top cell in the grid bigger;
+                       // However, this complicates things in both grid and checker!
                 width='100'
-                height={(this.props.rows * 100).toString()}
+                height={(this.props.rows * 100 + 16).toString()}
                 fill='url(#blackGreyBlack)'
                 mask='url(#cell-mask)' />
         </svg>
