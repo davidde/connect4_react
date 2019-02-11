@@ -1,5 +1,5 @@
 // This will copy all the variables from '_variables.scss' into this file:
-@import "variables";
+@import "../variables";
 
 .status {
   grid-area: status;

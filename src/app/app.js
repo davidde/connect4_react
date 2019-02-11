@@ -3,9 +3,9 @@ import React from 'react';
 import './app.scss';
 import vars from './_variables.scss';
 
-import Status from './status';
-import Settings from './settings';
-import Grid from './grid';
+import Status from './status/status';
+import Settings from './settings/settings';
+import Grid from './grid/grid';
 
 
 class App extends React.Component {
@@ -65,28 +65,26 @@ class App extends React.Component {
     // Column its executing in). It then executes within the <App/>
     // component's context (since this is an ES6 arrow function), and
     // sets the bottom cell of the grid data structure to the relevant
-    // color. Finally, it either returns its modified colData array to the
-    // <Column/> component, which is then used to render individual
-    // checkers in that column, or it returns a string indicating 'fullColumn'.
+    // color. Finally, it checks if this change results in a winner
+    // or a 'fullColumn'.
     let bottomCell = this.findBottomCell(colID);
 
     const grid = this.state.grid.slice();
     grid[colID][bottomCell] = this.state.p1Next ? this.state.p1Color : this.state.p2Color;
-    this.setState({
-      grid: grid,
-      p1Next: !this.state.p1Next,
-    });
 
-    let winner = this.checkForWinner();
-    if (winner) {
-      this.setState({ winner });
-    }
+    let winner = this.checkForWinner(grid);
 
+    // If there is not bottom empty cell AFTER grid update, that column is full:
     bottomCell = this.findBottomCell(colID);
     const fullColumns = this.state.fullColumns.slice();
-    fullColumns[colID] = true;
-    // If there is not bottom empty cell AFTER grid update, that column is full:
-    if (bottomCell === null) this.setState({ fullColumns });
+    if (bottomCell === null) fullColumns[colID] = true;
+
+    this.setState({
+      grid,
+      fullColumns,
+      winner,
+      p1Next: !this.state.p1Next,
+    });
   }
 
   findBottomCell(col) {
@@ -100,14 +98,13 @@ class App extends React.Component {
     return null;
   }
 
-  checkForWinner() {
+  checkForWinner(grid) {
     // The idea of this function is to basically limit the checks to those that make sense.
     // For example, when checking cells bottom to top (see the first loop),
     // you only need to check the bottom 3 rows (r = 0, 1, 2) in each column (c = 0, 1, 2, 3, 4, 5, 6).
     // That's because starting higher would run off the top of the board
     // before finding a possible win. In other words, row sets {0,1,2,3}, {1,2,3,4} and {2,3,4,5}
     // would be valid but {3,4,5,6} would not, because the six valid rows are 0-5.
-    let grid = this.state.grid;
     let cols = this.state.rows + 1;
 
     // Check bottom to top
@@ -270,6 +267,8 @@ class App extends React.Component {
     }
   }
 
+  // This method should be passed to the Gridsize component inside the Settings component;
+  // it takes the number of rows as input to determine the Gridsize and set the state.
   setGridRows = (event) => {
     let rows = parseInt(event.target.value);
     this.initGrid(rows);
