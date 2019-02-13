@@ -1,34 +1,35 @@
 import React from 'react';
 import './status.scss';
 
+
 function Status(props) {
-  let status;
-  let className;
+  let statusMessage;
+  let statusClass;
+  let textClass;
 
   if (props.winner) { // = winning color!
-    status = 'Winner: ' + props.winner + '!!!';
-    className = 'status ' + props.winner;
-    return (
-      <div className={className}>
-        <p className='text'>
-          {status}
-        </p>
-      </div>
-    );
+    statusMessage = 'Winner: ' + props.winner + '!!!';
+    statusClass = 'status ' + props.winner;
+    textClass = 'text';
   }
 
   else {
     let color = (props.p1Next ? props.p1Color : props.p2Color);
-    status = 'Next player: ' + color;
-    className = color + ' text';
-    return (
-      <div className='status'>
-        <p className={className}>
-          {status}
-        </p>
-      </div>
-    );
+    statusMessage = 'Player: ' + color;
+    statusClass = 'status';
+    textClass = color + ' text';
   }
+
+  return (
+    <div className={statusClass}>
+      <p className={textClass}>
+        {statusMessage}
+        {/* <span id='counterDisplay'></span>
+            <span id='filler'>&nbsp;</span>
+            <span id='statusMessage'>&nbsp;{statusMessage}</span> */}
+      </p>
+    </div>
+  );
 
 }
 

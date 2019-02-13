@@ -12,7 +12,23 @@
   overflow: hidden;
   white-space: nowrap;
   text-align: center;
+  // display: flex;
+  // flex-direction: row;
 
+}
+
+#counterDisplay {
+  display: inline-block;
+  text-align: left;
+}
+
+#filler {
+  flex-grow: 5; /* default 0 */
+}
+
+#statusMessage {
+  display: inline-block;
+  text-align: right;
 }
 
 .status.yellow {

@@ -21,12 +21,12 @@ class App extends React.Component {
       p1Next: true,
       p1Color: 'red',
       p2Color: 'yellow',
-      counter: 0,
       // Settings/Sidebar state:
       portraitActive: false,
       landscapePassive: false,
       clientX: null,
       clientY: null,
+      counter: 0,
     };
   }
 
@@ -275,12 +275,10 @@ class App extends React.Component {
     this.initGrid(rows);
   }
 
-  // This method should be passed to the CheckerColor component inside the Settings component;
-  // it takes the checker color as input and sets it in app state.
   // To pass parameters to event handlers while using property initializer syntax, we need to use currying;
-  // Passing two parameters to same function like 'setCheckerColor = (color, event) => {}' would not work because,
-  // onClick event invokes the callback by passing an event object as first and only parameter.
-  // Hence if we use '= (color, event) => {}' then the event would be passed in 'color' parameter and
+  // Passing two parameters to the same function like 'setCheckerColor = (color, event) => {}' would not work,
+  // because the onClick event invokes the callback by passing an event object as first and only parameter.
+  // Hence if we use '= (color, event) => {}' then the event would be passed in the 'color' parameter and
   // 'event' would be undefined. By using currying, we are creating a closure which is equivalent to:
   //
   // setCheckerColor = (color) => {
@@ -288,6 +286,9 @@ class App extends React.Component {
   //     ...
   //   }
   // }
+  //
+  // This method should be passed to the CheckerColor component inside the Settings component;
+  // it takes the checker color as input and sets it in app state.
   setCheckerColor = (player) => (event) => {
     let color = event.target.value;
     if (player === 'Player 1:')
@@ -296,31 +297,36 @@ class App extends React.Component {
       this.setState({p2Color: color});
   }
 
-  setCounter = (event) => {
-    let counter = parseInt(event.target.value);
-    this.setState({counter});
+  // setCounter = (event) => {
+  //   let counter = parseInt(event.target.value);
+  //   this.setState({counter});
 
-    // Use closure to initialise count only once:
-    var countDown = (function () {
-      var count = counter;
-      return function () {count -= 1; return count}
-    })();
+  //   // Use closure to initialise count only once:
+  //   var countDown = (function () {
+  //     var count = counter;
+  //     return function () {count -= 1; return count}
+  //   })();
 
-    // Use setInterval to update the countdown every 1 second (1000 millisec)
-    var interval = setInterval(function() {
-      let seconds = countDown();
+  //   var changeTurn = () => {
+  //     return () => {this.setState({p1Next: !this.state.p1Next});}
+  //   };
+
+  //   // Use setInterval to update the countdown every 1 second (1000 millisec)
+  //   var interval = setInterval(function() {
+  //     let seconds = countDown();
         
-      // Output the result in an element with id="counterDisplay"
-      document.getElementById("counterDisplay").innerHTML = seconds + "s ";
+  //     // Output the result in an element with id="counterDisplay"
+  //     document.getElementById("counterDisplay").innerHTML = seconds + "s ";
         
-      // If the countdown is over, write message:
-      if (seconds < 1) {
-        clearInterval(interval);
-        document.getElementById("counterDisplay").innerHTML = "Turn forfeited";
-      }
+  //     // If the countdown is over, write message:
+  //     if (seconds < 1) {
+  //       clearInterval(interval);
+  //       document.getElementById("counterDisplay").innerHTML = "Turn forfeited";
+  //       changeTurn();
+  //     }
 
-    }, 1000);
-  }
+  //   }, 1000);
+  // }
 
   render() {
     return (
