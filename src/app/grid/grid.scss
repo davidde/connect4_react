@@ -5,8 +5,8 @@
   a new stack for the svg node, while the other (chrome) doesn't. */
   grid-area: grid;
   position: relative;
-  padding: 1rem;
   min-height: 200px;
+  margin: 1rem;
 }
 
 #svg-container {
@@ -15,7 +15,8 @@
   left: 0;
   height: 95%;
   width: 95%;
-  padding: 1rem;
+  margin-left: 0.5rem;
+  padding-right: 1rem;
 }
 
 #svg-grid.gridNoFocus {
