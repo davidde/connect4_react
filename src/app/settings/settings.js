@@ -1,7 +1,10 @@
 import React from 'react';
 import './settings.scss';
+
 import Gridsize from './gridsize';
 import CheckerColor from './checkercolor';
+import Counter from './counter';
+
 
 function Settings(props) {
   let sidebarClass = 'sidebar';
@@ -45,6 +48,10 @@ function Settings(props) {
                 player='Player 2:'
                 color={props.p2Color}
                 setCheckerColor={props.setCheckerColor}
+              />
+              <Counter
+                counter={props.counter}
+                setCounter={props.setCounter}
               />
             </div>
         </div>

@@ -21,6 +21,7 @@ class App extends React.Component {
       p1Next: true,
       p1Color: 'red',
       p2Color: 'yellow',
+      counter: 0,
       // Settings/Sidebar state:
       portraitActive: false,
       landscapePassive: false,
@@ -295,6 +296,32 @@ class App extends React.Component {
       this.setState({p2Color: color});
   }
 
+  setCounter = (event) => {
+    let counter = parseInt(event.target.value);
+    this.setState({counter});
+
+    // Use closure to initialise count only once:
+    var countDown = (function () {
+      var count = counter;
+      return function () {count -= 1; return count}
+    })();
+
+    // Use setInterval to update the countdown every 1 second (1000 millisec)
+    var interval = setInterval(function() {
+      let seconds = countDown();
+        
+      // Output the result in an element with id="counterDisplay"
+      document.getElementById("counterDisplay").innerHTML = seconds + "s ";
+        
+      // If the countdown is over, write message:
+      if (seconds < 1) {
+        clearInterval(interval);
+        document.getElementById("counterDisplay").innerHTML = "Turn forfeited";
+      }
+
+    }, 1000);
+  }
+
   render() {
     return (
       <div id='app'
@@ -320,6 +347,8 @@ class App extends React.Component {
             p1Color={this.state.p1Color}
             p2Color={this.state.p2Color}
             setCheckerColor={this.setCheckerColor}
+            counter={this.state.counter}
+            setCounter={this.setCounter}
         />
 
         <Grid
