@@ -12,23 +12,9 @@
   overflow: hidden;
   white-space: nowrap;
   text-align: center;
-  // display: flex;
-  // flex-direction: row;
+  display: flex;
+  flex-direction: row;
 
-}
-
-#counterDisplay {
-  display: inline-block;
-  text-align: left;
-}
-
-#filler {
-  flex-grow: 5; /* default 0 */
-}
-
-#statusMessage {
-  display: inline-block;
-  text-align: right;
 }
 
 .status.yellow {
@@ -59,35 +45,58 @@
   background-color: rgb(155, 3, 226);
 }
 
-
-.text {
+#counterDisplay {
+  display: inline-block;
+  text-align: left;
   margin-top: 1rem;
 }
 
-.text.yellow {
+#winnerMessage {
+  // Use the empty #winnerMessage as filler, to push #counterDisplay
+  // and #statusMessage to the left and right respectively:
+  flex-grow: 5;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+#statusMessage {
+  display: inline-block;
+  text-align: right;
+  margin-top: 1rem;
+}
+
+#statusMessage.yellow,
+#counterDisplay.yellow {
   color: rgb(192, 192, 2);
 }
 
-.text.orange {
+#statusMessage.orange,
+#counterDisplay.orange {
   color: rgb(226, 85, 3);
 }
 
-.text.red {
+#statusMessage.red,
+#counterDisplay.red {
   color: red;
 }
 
-.text.green {
+#statusMessage.green,
+#counterDisplay.green {
   color: rgb(31, 134, 5);
 }
 
-.text.cyan {
+#statusMessage.cyan,
+#counterDisplay.cyan {
   color: rgb(6, 90, 199);
 }
 
-.text.blue {
+#statusMessage.blue,
+#counterDisplay.blue {
   color: blue;
 }
 
-.text.purple {
+#statusMessage.purple,
+#counterDisplay.purple {
   color: rgb(155, 3, 226);
 }
+

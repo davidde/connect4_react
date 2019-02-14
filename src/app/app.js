@@ -297,36 +297,42 @@ class App extends React.Component {
       this.setState({p2Color: color});
   }
 
-  // setCounter = (event) => {
-  //   let counter = parseInt(event.target.value);
-  //   this.setState({counter});
+  setCounter = (event) => {
+    let counter = parseInt(event.target.value);
+    this.setState({counter});
+    this.initCounter(counter);
+  }
 
-  //   // Use closure to initialise count only once:
-  //   var countDown = (function () {
-  //     var count = counter;
-  //     return function () {count -= 1; return count}
-  //   })();
+  initCounter = (counter) => {
+    // Use closure to initialise count only once:
+    var countDown = (function () {
+      var count = counter;
+      return function () {count -= 1; return count}
+    })();
 
-  //   var changeTurn = () => {
-  //     return () => {this.setState({p1Next: !this.state.p1Next});}
-  //   };
+    var changeTurn = () => {
+      this.setState({p1Next: !this.state.p1Next});
+    };
 
-  //   // Use setInterval to update the countdown every 1 second (1000 millisec)
-  //   var interval = setInterval(function() {
-  //     let seconds = countDown();
+    // Output the first value of the counter in "#counterDisplay":
+    document.getElementById("counterDisplay").innerHTML = counter + "s ";
+    
+    // Use setInterval to update the countdown every 1 second (1000 millisecs):
+    var interval = setInterval(function() {
+      let seconds = countDown();
         
-  //     // Output the result in an element with id="counterDisplay"
-  //     document.getElementById("counterDisplay").innerHTML = seconds + "s ";
+      // Output the resulting counter in "#counterDisplay":
+      document.getElementById("counterDisplay").innerHTML = seconds + "s ";
         
-  //     // If the countdown is over, write message:
-  //     if (seconds < 1) {
-  //       clearInterval(interval);
-  //       document.getElementById("counterDisplay").innerHTML = "Turn forfeited";
-  //       changeTurn();
-  //     }
+      // If the countdown is over, write message:
+      if (seconds < 1) {
+        clearInterval(interval);
+        document.getElementById("counterDisplay").innerHTML = "Turn forfeited";
+        changeTurn();
+      }
 
-  //   }, 1000);
-  // }
+    }, 1000); // 1000 millisecs
+  }
 
   render() {
     return (
