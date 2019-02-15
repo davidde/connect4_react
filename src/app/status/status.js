@@ -1,5 +1,6 @@
 import React from 'react';
 import './status.scss';
+// import TimerDisplay from './timer-display';
 
 
 function Status(props) {
@@ -27,11 +28,25 @@ function Status(props) {
   return (
     <div className={statusClass}>
 
-        {/* {statusMessage} */}
-        <span id='counterDisplay' className={color}></span>
-        <span id='winnerMessage'>{winnerMessage}</span>
-        <span id='statusMessage' className={color}>{statusMessage}</span>
+        {/* '#timerDisplay' displays invisually after win, which pushes the win message to the right: */}
+        <span id='timerDisplay' className={color}>
+          {/* {
+            props.timer ? // Conditionally render TimerDisplay when a timer is set:
+                <TimerDisplay
+                  p1Next={props.p1Next}
+                  changeTurn={props.changeTurn}
+                  timer={props.timer}
+                /> : null
+          } */}
+        </span>
 
+        <span id='winnerMessage'>
+          {winnerMessage}
+        </span>
+
+        <span id='statusMessage' className={color}>
+          {statusMessage}
+        </span>
     </div>
   );
 

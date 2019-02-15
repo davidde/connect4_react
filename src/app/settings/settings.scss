@@ -1,6 +1,8 @@
 // This will copy all the variables from '_variables.scss' into this file:
 @import "../variables";
 
+
+// Styles of the settings sidebar itself:
 .sidebar {
   grid-area: settings;
   height: 100%;
@@ -125,4 +127,10 @@
       padding: 8rem 1rem 1rem 1rem;    
     }
   }
+}
+
+
+// Styles of settings subcomponents:
+.fontColor {
+  color: $sidebarFontColor;
 }

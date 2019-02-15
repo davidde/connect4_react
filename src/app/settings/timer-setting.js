@@ -1,11 +1,11 @@
 import React from 'react';
 
 
-function Counter(props) {
+function TimerInput(props) {
   return (
     <form>
-      <label className='fontColor'>Turn timeout counter: &nbsp;
-        <select name='counter' value={props.counter} onChange={props.setCounter} >
+      <label className='fontColor'>Turn timeout: &nbsp;
+        <select name='timer' value={props.timer} onChange={props.setTimer} >
           <option value='0'>none</option>
           <option value='3'>3</option>
           <option value='4'>4</option>
@@ -32,4 +32,4 @@ function Counter(props) {
 }
 
 
-export default Counter;
+export default TimerInput;

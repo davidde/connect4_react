@@ -1,5 +1,5 @@
 import React from 'react';
-import './settings_content.scss';
+import './settings.scss';
 
 
 function Gridsize(props) {

@@ -45,14 +45,14 @@
   background-color: rgb(155, 3, 226);
 }
 
-#counterDisplay {
+#timerDisplay {
   display: inline-block;
   text-align: left;
   margin-top: 1rem;
 }
 
 #winnerMessage {
-  // Use the empty #winnerMessage as filler, to push #counterDisplay
+  // Use the empty #winnerMessage as filler, to push #timerDisplay
   // and #statusMessage to the left and right respectively:
   flex-grow: 5;
   text-align: center;
@@ -66,37 +66,37 @@
 }
 
 #statusMessage.yellow,
-#counterDisplay.yellow {
+#timerDisplay.yellow {
   color: rgb(192, 192, 2);
 }
 
 #statusMessage.orange,
-#counterDisplay.orange {
+#timerDisplay.orange {
   color: rgb(226, 85, 3);
 }
 
 #statusMessage.red,
-#counterDisplay.red {
+#timerDisplay.red {
   color: red;
 }
 
 #statusMessage.green,
-#counterDisplay.green {
+#timerDisplay.green {
   color: rgb(31, 134, 5);
 }
 
 #statusMessage.cyan,
-#counterDisplay.cyan {
+#timerDisplay.cyan {
   color: rgb(6, 90, 199);
 }
 
 #statusMessage.blue,
-#counterDisplay.blue {
+#timerDisplay.blue {
   color: blue;
 }
 
 #statusMessage.purple,
-#counterDisplay.purple {
+#timerDisplay.purple {
   color: rgb(155, 3, 226);
 }
 

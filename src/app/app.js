@@ -26,11 +26,17 @@ class App extends React.Component {
       landscapePassive: false,
       clientX: null,
       clientY: null,
-      counter: 0,
+      timer: 0,
     };
   }
 
   componentWillMount() {
+    // componentWillMount() will be deprecated;
+    // its code should be put in constructor or componentDidMount(),
+    // but both pose problems here:
+    // the constructor can't contain 'this.setState()',
+    // and componentDidMount() is executed AFTER the component is mounted,
+    // which obviously requires the grid to already be initialised!
     this.initGrid(this.state.rows);
   }
 
@@ -297,38 +303,53 @@ class App extends React.Component {
       this.setState({p2Color: color});
   }
 
-  setCounter = (event) => {
-    let counter = parseInt(event.target.value);
-    this.setState({counter});
-    this.initCounter(counter);
+  setTimer = (event) => {
+    let timer = parseInt(event.target.value);
+    this.setState({timer});
   }
 
-  initCounter = (counter) => {
+  changeTurn = () => {
+    this.setState({p1Next: !this.state.p1Next});
+  }
+
+  // This method needs to be called each time a player's turn changes when a timer is set.
+  // I.e. when 'this.state.timer > 0' AND 'this.state.p1Next' is altered!
+  initTimer = (timer) => {
+    var p1Turn;
     // Use closure to initialise count only once:
-    var countDown = (function () {
-      var count = counter;
+    var countDown = ( () => {
+      p1Turn = this.state.p1Next;
+      var count = timer;
       return function () {count -= 1; return count}
     })();
 
-    var changeTurn = () => {
-      this.setState({p1Next: !this.state.p1Next});
-    };
-
-    // Output the first value of the counter in "#counterDisplay":
-    document.getElementById("counterDisplay").innerHTML = counter + "s ";
     
+
+    // Output the first value of the timer in "#timerDisplay":
+    document.getElementById("timerDisplay").innerText = timer + "s ";
+
     // Use setInterval to update the countdown every 1 second (1000 millisecs):
-    var interval = setInterval(function() {
+    var interval = setInterval( () => {
       let seconds = countDown();
         
-      // Output the resulting counter in "#counterDisplay":
-      document.getElementById("counterDisplay").innerHTML = seconds + "s ";
-        
-      // If the countdown is over, write message:
-      if (seconds < 1) {
+      // Output the resulting timer in "#timerDisplay":
+      document.getElementById("timerDisplay").innerText = seconds + "s ";
+      
+      console.log(p1Turn, this.state.p1Next);
+      // Turn is over because the player dropped a checker:
+      // if (p1Turn !== this.state.p1Next) {
+      //   clearInterval(interval);
+      //   seconds = new countDown();
+      // }
+
+      // Turn is over because the countdown is over => write message:
+      if (seconds < 0) {
         clearInterval(interval);
-        document.getElementById("counterDisplay").innerHTML = "Turn forfeited";
-        changeTurn();
+        document.getElementById("timerDisplay").innerText = "Turn forfeited";
+
+        this.setState({p1Next: !this.state.p1Next});
+        // this.initTimer(timer); // Problematic: infinite recursion!
+        document.getElementById("timerDisplay").innerText = "";
       }
 
     }, 1000); // 1000 millisecs
@@ -346,6 +367,8 @@ class App extends React.Component {
             p1Next={this.state.p1Next}
             p1Color={this.state.p1Color}
             p2Color={this.state.p2Color}
+            changeTurn={this.changeTurn}
+            timer={this.state.timer}
         />
 
         <Settings
@@ -359,8 +382,8 @@ class App extends React.Component {
             p1Color={this.state.p1Color}
             p2Color={this.state.p2Color}
             setCheckerColor={this.setCheckerColor}
-            counter={this.state.counter}
-            setCounter={this.setCounter}
+            timer={this.state.timer}
+            setTimer={this.setTimer}
         />
 
         <Grid

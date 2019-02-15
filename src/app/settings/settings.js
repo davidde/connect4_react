@@ -1,9 +1,9 @@
 import React from 'react';
 import './settings.scss';
 
-import Gridsize from './gridsize';
-import CheckerColor from './checkercolor';
-import Counter from './counter';
+import GridSize from './gridsize-setting';
+import CheckerColor from './checkercolor-setting';
+import TimerInput from './timer-setting';
 
 
 function Settings(props) {
@@ -35,7 +35,7 @@ function Settings(props) {
             <div className='sidebar-name'>Settings</div>
             <hr className='line' />
             <div className='padding'>
-              <Gridsize
+              <GridSize
                 rows={props.rows}
                 setGridRows={props.setGridRows}
               />
@@ -49,9 +49,9 @@ function Settings(props) {
                 color={props.p2Color}
                 setCheckerColor={props.setCheckerColor}
               />
-              <Counter
-                counter={props.counter}
-                setCounter={props.setCounter}
+              <TimerInput
+                timer={props.timer}
+                setTimer={props.setTimer}
               />
             </div>
         </div>
