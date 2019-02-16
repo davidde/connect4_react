@@ -39,9 +39,16 @@ class TimerDisplay extends React.Component {
     let seconds = this.state.currentCount;
     let timerMessage = seconds + 's';
 
-    // Turn is over because time is up => write message:
+    // Turn is almost over because time is almost up => write message:
     if (seconds < 1) {
-      timerMessage = "Quickly now!";
+      timerMessage = 'Quickly now!';
+    }
+
+    // Turn is over because a player dropped a checker:
+    if (this.p1Turn !== this.props.p1Next) {
+      // Prevent displaying the seconds of the previous turn for the
+      // fraction of a second untill tick() resets the timer:
+      timerMessage = '';
     }
 
     return (

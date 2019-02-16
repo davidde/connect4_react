@@ -31,7 +31,7 @@ function Status(props) {
         {/* '#timerDisplay' displays invisually after win, which pushes the win message to the right: */}
         <span id='timerDisplay' className={color}>
           {
-            props.timer ? // Conditionally render TimerDisplay when a timer is set:
+            (props.timer && !props.winner) ? // Conditionally render TimerDisplay when a timer is set:
                 <TimerDisplay
                   p1Next={props.p1Next}
                   changeTurn={props.changeTurn}

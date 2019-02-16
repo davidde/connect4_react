@@ -5,8 +5,19 @@ function TimerInput(props) {
   return (
     <form>
       <label className='fontColor'>Turn timeout: &nbsp;
-        <select name='timer' value={props.timer} onChange={props.setTimer} >
+        <input
+            type='number'
+            step='1'
+            min='0'
+            max='60'
+            name='timerInput'
+            value={props.timer}
+            onChange={props.setTimer}
+        />
+        {/* <select name='timerInput' value={props.timer} onChange={props.setTimer} >
           <option value='0'>none</option>
+          <option value='1'>1</option>
+          <option value='2'>2</option>
           <option value='3'>3</option>
           <option value='4'>4</option>
           <option value='5'>5</option>
@@ -25,7 +36,7 @@ function TimerInput(props) {
           <option value='18'>18</option>
           <option value='19'>19</option>
           <option value='20'>20</option>
-        </select>
+        </select> */}
       </label>
     </form>
   );
