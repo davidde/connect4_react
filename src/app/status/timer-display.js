@@ -7,6 +7,15 @@ class TimerDisplay extends React.Component {
     this.state = {
       currentCount: this.props.timer,
     };
+    /* STATE vs INSTANCE variables in React:
+    Whenever state is updated, React calls render
+    and makes any necessary changes to the real DOM.
+    Because the value of 'this.p1Turn' and 'this.interval'
+    has no effect on the rendering of this component,
+    it shouldn't live in state. Putting it there would
+    cause unnecessary calls to render. So it is perfectly
+    fine to have local component variables that don't
+    live in state! */
     this.p1Turn = this.props.p1Next;
   }
 
@@ -24,7 +33,7 @@ class TimerDisplay extends React.Component {
     this.setState({currentCount});
 
     // Turn is over because time is up:
-    if (this.p1Turn === this.props.p1Next && currentCount < 0) {
+    if (this.p1Turn === this.props.p1Next && currentCount < 1) {
       this.props.changeTurn();
       this.setState({currentCount: this.props.timer});
     }
@@ -37,23 +46,23 @@ class TimerDisplay extends React.Component {
 
   render() {
     let seconds = this.state.currentCount;
-    let timerMessage = seconds + 's';
+    let remainingSeconds = seconds + 's';
 
     // Turn is almost over because time is almost up => write message:
-    if (seconds < 1) {
-      timerMessage = 'Quickly now!';
+    if (seconds < 2) {
+      remainingSeconds = '1s: Quickly now!';
     }
 
     // Turn is over because a player dropped a checker:
     if (this.p1Turn !== this.props.p1Next) {
       // Prevent displaying the seconds of the previous turn for the
       // fraction of a second untill tick() resets the timer:
-      timerMessage = '';
+      remainingSeconds = '';
     }
 
     return (
       <span>
-        {timerMessage}
+        {remainingSeconds}
       </span>
     );
   }
