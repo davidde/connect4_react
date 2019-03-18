@@ -312,49 +312,6 @@ class App extends React.Component {
     this.setState({p1Next: !this.state.p1Next});
   }
 
-  // This method needs to be called each time a player's turn changes when a timer is set.
-  // I.e. when 'this.state.timer > 0' AND 'this.state.p1Next' is altered!
-  initTimer = (timer) => {
-    var p1Turn;
-    // Use closure to initialise count only once:
-    var countDown = ( () => {
-      p1Turn = this.state.p1Next;
-      var count = timer;
-      return function () {count -= 1; return count}
-    })();
-
-    
-
-    // Output the first value of the timer in "#timerDisplay":
-    document.getElementById("timerDisplay").innerText = timer + "s ";
-
-    // Use setInterval to update the countdown every 1 second (1000 millisecs):
-    var interval = setInterval( () => {
-      let seconds = countDown();
-        
-      // Output the resulting timer in "#timerDisplay":
-      document.getElementById("timerDisplay").innerText = seconds + "s ";
-      
-      console.log(p1Turn, this.state.p1Next);
-      // Turn is over because the player dropped a checker:
-      // if (p1Turn !== this.state.p1Next) {
-      //   clearInterval(interval);
-      //   seconds = new countDown();
-      // }
-
-      // Turn is over because the countdown is over => write message:
-      if (seconds < 0) {
-        clearInterval(interval);
-        document.getElementById("timerDisplay").innerText = "Turn forfeited";
-
-        this.setState({p1Next: !this.state.p1Next});
-        // this.initTimer(timer); // Problematic: infinite recursion!
-        document.getElementById("timerDisplay").innerText = "";
-      }
-
-    }, 1000); // 1000 millisecs
-  }
-
   render() {
     return (
       <div id='app'
