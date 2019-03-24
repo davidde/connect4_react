@@ -17,10 +17,11 @@ class App extends React.Component {
       rows: 6, // # rows of the grid; cols = rows + 1
       grid: [],
       fullColumns: [],
-      winner: null, // also serves as a gameOver boolean
       p1Next: true,
       p1Color: 'red',
       p2Color: 'yellow',
+      winner: null, // also serves as a gameOver boolean
+      gameOn: false,
       // Settings/Sidebar state:
       portraitActive: false,
       landscapePassive: false,
@@ -28,25 +29,52 @@ class App extends React.Component {
       clientY: null,
       timer: 0,
     };
+
+    // Initialise 'this.state.grid' and 'this.state.fullColumns',
+    // using an anonymous self-invoking function that takes 'this.state.rows' as input:
+    // (Note: this is a slight duplication of the 'resetGrid' method,
+    // but is required since we cannot call any methods using 'setState' in the constructor)
+    [this.state.grid, this.state.fullColumns] = (function(rows) {
+      // Create the 'grid' data structure to keep track of
+      // which grid cells contain checkers of which color:
+      // 'grid' = array of COLUMN arrays!
+      let grid = [];
+      // Create the 'fullColumns' array to keep track of which grid columns are full:
+      let fullColumns = [];
+      let cols = rows + 1;
+      for (let c = 0; c < cols; c++) {
+        fullColumns.push(false);
+        let column = [];
+        for (let r = 0; r < rows; r++) {
+          column.push(null);
+        }
+        grid.push(column);
+      }
+
+      return [grid, fullColumns];
+
+    })(this.state.rows);
   }
 
-  componentWillMount() {
-    // componentWillMount() will be deprecated;
-    // its code should be put in constructor or componentDidMount(),
-    // but both pose problems here:
-    // the constructor can't contain 'this.setState()',
-    // and componentDidMount() is executed AFTER the component is mounted,
-    // which obviously requires the grid to already be initialised!
-    this.initGrid(this.state.rows);
-  }
+  // 'componentWillMount' is now moved into the constructor's anonymous function!
+  // componentWillMount() {
+  //   // componentWillMount() will be deprecated;
+  //   // its code should be put in constructor or componentDidMount(),
+  //   // but both pose problems here:
+  //   // the constructor can't contain 'this.setState()',
+  //   // and componentDidMount() is executed AFTER the component is mounted,
+  //   // which obviously requires the grid to already be initialised!
+  //   this.resetGrid(this.state.rows);
+  // }
 
-  initGrid(rows) {
+  resetGrid(rows) {
     // Create grid data structure to keep track of which grid cells
     // contain checkers of which color:
     // 'grid' = array of COLUMN arrays!
-    let cols = rows + 1;
     let grid = [];
+    // Create the 'fullColumns' array to keep track of which grid columns are full:
     let fullColumns = [];
+    let cols = rows + 1;
     for (let c = 0; c < cols; c++) {
       fullColumns.push(false);
       let column = [];
@@ -60,14 +88,15 @@ class App extends React.Component {
       rows,
       grid,
       fullColumns,
-      winner: null,
       p1Next: true,
+      winner: null,
+      gameOn: false,
     });
   }
 
-  setGet_colData = (colID) => {
-    // This method is called on every click on a column, to modify the
-    // grid data structure. It needs to be passed to <Column/> through
+  updateGridState = (colID) => {
+    // This method is called on every click on a column, to modify the grid data
+    // structure and related state. It needs to be passed to <Column/> through
     // props, where it will receive its 'colID' argument (the ID of the
     // Column its executing in). It then executes within the <App/>
     // component's context (since this is an ES6 arrow function), and
@@ -278,16 +307,16 @@ class App extends React.Component {
   // it takes the number of rows as input to determine the Gridsize and set the app state.
   setGridRows = (event) => {
     let rows = parseInt(event.target.value);
-    this.initGrid(rows);
+    this.resetGrid(rows);
   }
 
   // To pass parameters to event handlers while using property initializer syntax, we need to use currying;
-  // Passing two parameters to the same function like 'setCheckerColor = (color, event) => {}' would not work,
+  // Passing two parameters to the same function like 'setCheckerColor = (player, event) => {}' would not work,
   // because the onClick event invokes the callback by passing an event object as first and only parameter.
-  // Hence if we use '= (color, event) => {}' then the event would be passed in the 'color' parameter and
-  // 'event' would be undefined. By using currying, we are creating a closure which is equivalent to:
+  // Hence if we use '= (player, event) => {}' then the event would be passed in the 'player' parameter and the
+  // 'event' parameter would be undefined. By using currying, we are creating a closure which is equivalent to:
   //
-  // setCheckerColor = (color) => {
+  // setCheckerColor = (player) => {
   //   return (event) => {
   //     ...
   //   }
@@ -351,7 +380,7 @@ class App extends React.Component {
             p1Next={this.state.p1Next}
             p1Color={this.state.p1Color}
             p2Color={this.state.p2Color}
-            onColumnClick={this.setGet_colData}
+            onColumnClick={this.updateGridState}
         />
       </div>
     );

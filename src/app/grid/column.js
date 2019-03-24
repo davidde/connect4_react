@@ -13,7 +13,7 @@ class Column extends React.Component {
   //        - p1Next
   //        - p1Color
   //        - p2Color
-  //        - onColumnClick: onClick-handler that executes within the Game
+  //        - onColumnClick: onClick-handler that executes within the App
   //          component's context, and returns colData when necessary.
   constructor(props) {
     super(props);
@@ -38,8 +38,8 @@ class Column extends React.Component {
     // Guard against changing colData after winner or fullColumn:
     if (this.props.fullColumn || this.props.winner)
       return;
-    let setGet_colData = this.props.onColumnClick;
-    setGet_colData(this.props.colID);
+    let updateGridState = this.props.onColumnClick;
+    updateGridState(this.props.colID);
 
     this.mouseLeave();
   }
