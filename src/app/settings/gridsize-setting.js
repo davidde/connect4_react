@@ -7,7 +7,9 @@ function Gridsize(props) {
   return (
     <form>
       <label className='fontColor'>Gridsize: &nbsp;
-        <select name='gridsize' value={props.rows} onChange={props.setGridRows} >
+        <select name='gridsize' value={props.rows} onChange={props.changeGridSize} >
+          {/* value = number of rows in the grid; this is used to determine the gridsize
+              by passing it to the changeGridSize event handler. */}
           <option value='4'>extra small</option>
           <option value='5'>small</option>
           <option value='6'>medium</option>

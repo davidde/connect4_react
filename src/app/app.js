@@ -14,9 +14,25 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      rows: 6, // # rows of the grid; cols = rows + 1
-      grid: [],
-      fullColumns: [],
+      // number of rows of the grid; cols = rows + 1
+      rows: 6,
+      // The 'grid' data structure keeps track of
+      // which grid cells contain checkers of which color:
+      // NOTE: 'grid' = array of COLUMN arrays! (algorithmically simpler)
+      //       So the subarrays are really the columns, and NOT the rows,
+      //       unlike they appear in this representation:
+      grid: [
+              [null, null, null, null, null, null],
+              [null, null, null, null, null, null],
+              [null, null, null, null, null, null],
+              [null, null, null, null, null, null],
+              [null, null, null, null, null, null],
+              [null, null, null, null, null, null],
+              [null, null, null, null, null, null],
+            ],
+      // The 'fullColumns' array keeps track of which grid columns are full:
+      // (each entry corresponds to the equivalent column array in 'grid')
+      fullColumns: [false, false, false, false, false, false, false],
       p1Next: true,
       p1Color: 'red',
       p2Color: 'yellow',
@@ -30,30 +46,30 @@ class App extends React.Component {
       timer: 0,
     };
 
-    // Initialise 'this.state.grid' and 'this.state.fullColumns',
-    // using an anonymous self-invoking function that takes 'this.state.rows' as input:
-    // (Note: this is a slight duplication of the 'resetGrid' method,
-    // but is required since we cannot call any methods using 'setState' in the constructor)
-    [this.state.grid, this.state.fullColumns] = (function(rows) {
-      // Create the 'grid' data structure to keep track of
-      // which grid cells contain checkers of which color:
-      // 'grid' = array of COLUMN arrays!
-      let grid = [];
-      // Create the 'fullColumns' array to keep track of which grid columns are full:
-      let fullColumns = [];
-      let cols = rows + 1;
-      for (let c = 0; c < cols; c++) {
-        fullColumns.push(false);
-        let column = [];
-        for (let r = 0; r < rows; r++) {
-          column.push(null);
-        }
-        grid.push(column);
-      }
+    // // Initialise 'this.state.grid' and 'this.state.fullColumns',
+    // // using an anonymous self-invoking function that takes 'this.state.rows' as input:
+    // // (Note: this is a slight duplication of the 'resetGrid' method,
+    // // but is required since we cannot call any methods using 'setState' in the constructor)
+    // [this.state.grid, this.state.fullColumns] = (function(rows) {
+    //   // Create the 'grid' data structure to keep track of
+    //   // which grid cells contain checkers of which color:
+    //   // 'grid' = array of COLUMN arrays!
+    //   let grid = [];
+    //   // Create the 'fullColumns' array to keep track of which grid columns are full:
+    //   let fullColumns = [];
+    //   let cols = rows + 1;
+    //   for (let c = 0; c < cols; c++) {
+    //     fullColumns.push(false);
+    //     let column = [];
+    //     for (let r = 0; r < rows; r++) {
+    //       column.push(null);
+    //     }
+    //     grid.push(column);
+    //   }
 
-      return [grid, fullColumns];
+    //   return [grid, fullColumns];
 
-    })(this.state.rows);
+    // })(this.state.rows);
   }
 
   // 'componentWillMount' is now moved into the constructor's anonymous function!
@@ -305,7 +321,7 @@ class App extends React.Component {
 
   // This method should be passed to the Gridsize component inside the Settings component;
   // it takes the number of rows as input to determine the Gridsize and set the app state.
-  setGridRows = (event) => {
+  changeGridSize = (event) => {
     let rows = parseInt(event.target.value);
     this.resetGrid(rows);
   }
@@ -364,7 +380,7 @@ class App extends React.Component {
             onSideClick={this.handleSideClick}
 
             rows={this.state.rows}
-            setGridRows={this.setGridRows}
+            changeGridSize={this.changeGridSize}
             p1Color={this.state.p1Color}
             p2Color={this.state.p2Color}
             setCheckerColor={this.setCheckerColor}
