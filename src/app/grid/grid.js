@@ -154,6 +154,12 @@ function Grid(props) {
             <text className='svg-tags' filter='url(#redtags)' x='250' y='50' fontSize='0.9rem' fill='white'>Invisible top row for checkers about to drop</text>
           </g>
         </svg>
+
+        {/* Reset button; the 'value={props.rows}' is necessary because it is the argument to
+        the 'resetGrid' event handler */}
+        {/* BUG: Although the button logic is correct, the button is not entirely accessible
+        because of the svg-container overlapping with it */}
+        <button type="button" value={props.rows} onClick={props.resetGrid}>Reset</button>
       </div>
   );
 

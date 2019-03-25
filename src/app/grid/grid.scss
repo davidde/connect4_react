@@ -7,7 +7,12 @@
   position: relative;
   min-height: 200px;
   margin: 1rem;
+  button {
+    cursor: pointer;
+  }
 }
+
+
 
 #svg-container {
   position: absolute;

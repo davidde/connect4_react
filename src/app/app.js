@@ -294,7 +294,7 @@ class App extends React.Component {
 
   // This method should be passed to the Gridsize component inside the Settings component;
   // it takes the number of rows as input to determine the Gridsize and set the app state.
-  changeGridSize = (event) => {
+  resetGrid = (event) => {
     let rows = parseInt(event.target.value);
     this.initGrid(rows);
   }
@@ -353,7 +353,7 @@ class App extends React.Component {
             onSideClick={this.handleSideClick}
 
             rows={this.state.rows}
-            changeGridSize={this.changeGridSize}
+            resetGrid={this.resetGrid}
             p1Color={this.state.p1Color}
             p2Color={this.state.p2Color}
             setCheckerColor={this.setCheckerColor}
@@ -370,6 +370,7 @@ class App extends React.Component {
             p1Color={this.state.p1Color}
             p2Color={this.state.p2Color}
             onColumnClick={this.updateGridState}
+            resetGrid={this.resetGrid}
         />
       </div>
     );

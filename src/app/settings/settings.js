@@ -37,7 +37,7 @@ function Settings(props) {
             <div className='padding'>
               <GridSize
                 rows={props.rows}
-                changeGridSize={props.changeGridSize}
+                resetGrid={props.resetGrid}
               />
               <CheckerColor
                 player='Player 1:'
