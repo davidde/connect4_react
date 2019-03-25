@@ -18,21 +18,12 @@ class App extends React.Component {
       rows: 6,
       // The 'grid' data structure keeps track of
       // which grid cells contain checkers of which color:
-      // NOTE: 'grid' = array of COLUMN arrays! (algorithmically simpler)
-      //       So the subarrays are really the columns, and NOT the rows,
-      //       unlike they appear in this representation:
-      grid: [
-              [null, null, null, null, null, null],
-              [null, null, null, null, null, null],
-              [null, null, null, null, null, null],
-              [null, null, null, null, null, null],
-              [null, null, null, null, null, null],
-              [null, null, null, null, null, null],
-              [null, null, null, null, null, null],
-            ],
+      // NOTE: 'grid' = array of COLUMN arrays! (NOT rows, which would seem more intuitive at first sight)
+      // (COLUMN subarrays are algorithmically simpler when dropping checkers)
+      grid: [],
       // The 'fullColumns' array keeps track of which grid columns are full:
-      // (each entry corresponds to the equivalent column array in 'grid')
-      fullColumns: [false, false, false, false, false, false, false],
+      // (each entry corresponds to the equivalent column subarray in 'grid')
+      fullColumns: [],
       p1Next: true,
       p1Color: 'red',
       p2Color: 'yellow',
@@ -46,44 +37,10 @@ class App extends React.Component {
       timer: 0,
     };
 
-    // // Initialise 'this.state.grid' and 'this.state.fullColumns',
-    // // using an anonymous self-invoking function that takes 'this.state.rows' as input:
-    // // (Note: this is a slight duplication of the 'resetGrid' method,
-    // // but is required since we cannot call any methods using 'setState' in the constructor)
-    // [this.state.grid, this.state.fullColumns] = (function(rows) {
-    //   // Create the 'grid' data structure to keep track of
-    //   // which grid cells contain checkers of which color:
-    //   // 'grid' = array of COLUMN arrays!
-    //   let grid = [];
-    //   // Create the 'fullColumns' array to keep track of which grid columns are full:
-    //   let fullColumns = [];
-    //   let cols = rows + 1;
-    //   for (let c = 0; c < cols; c++) {
-    //     fullColumns.push(false);
-    //     let column = [];
-    //     for (let r = 0; r < rows; r++) {
-    //       column.push(null);
-    //     }
-    //     grid.push(column);
-    //   }
-
-    //   return [grid, fullColumns];
-
-    // })(this.state.rows);
+    this.initGrid(this.state.rows);
   }
 
-  // 'componentWillMount' is now moved into the constructor's anonymous function!
-  // componentWillMount() {
-  //   // componentWillMount() will be deprecated;
-  //   // its code should be put in constructor or componentDidMount(),
-  //   // but both pose problems here:
-  //   // the constructor can't contain 'this.setState()',
-  //   // and componentDidMount() is executed AFTER the component is mounted,
-  //   // which obviously requires the grid to already be initialised!
-  //   this.resetGrid(this.state.rows);
-  // }
-
-  resetGrid(rows) {
+  initGrid(rows) {
     // Create grid data structure to keep track of which grid cells
     // contain checkers of which color:
     // 'grid' = array of COLUMN arrays!
@@ -100,14 +57,30 @@ class App extends React.Component {
       grid.push(column);
     }
 
-    this.setState({
-      rows,
-      grid,
-      fullColumns,
-      p1Next: true,
-      winner: null,
-      gameOn: false,
-    });
+    // If 'this.state.grid' is already initialised (i.e. non-empty),
+    // the call is NOT from inside the constructor, so we use 'setState',
+    // and also reset state associated with game-over:
+    if (this.state.grid.length !== 0) {
+      this.setState({
+        rows,
+        grid,
+        fullColumns,
+        winner: null,
+        p1Next: true,
+      });
+    } else {
+      // If the grid is empty, this call came from inside the constructor,
+      // so we need to set state directly, instead of using 'setState'.
+      // We only need to initialise the 'grid' and 'fullColumns' arrays
+      // in this case, and we can safely silence the
+      // "Do not mutate state directly, Use setState()" warning:
+      // eslint-disable-next-line react/no-direct-mutation-state
+      this.state = {
+        ...this.state,
+        grid,
+        fullColumns,
+      }
+    }
   }
 
   updateGridState = (colID) => {
@@ -323,7 +296,7 @@ class App extends React.Component {
   // it takes the number of rows as input to determine the Gridsize and set the app state.
   changeGridSize = (event) => {
     let rows = parseInt(event.target.value);
-    this.resetGrid(rows);
+    this.initGrid(rows);
   }
 
   // To pass parameters to event handlers while using property initializer syntax, we need to use currying;
