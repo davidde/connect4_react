@@ -21,11 +21,12 @@ function Grid(props) {
   let pillarHeight = width - 20; // 680
   let rightPillarX = width + 36 - pillarCorrection; // 736
   
-  let className;
+  let className = '';
   if (props.winner)
       className = 'gridNoFocus';
 
   return (
+    <div id='game'>
       <div id='grid'>
         <svg id='svg-container' viewBox={viewbox} xmlns='http://www.w3.org/2000/svg'>
           {/* This is the container svg, which holds the left and right 'pillars', the bottom padding,
@@ -154,13 +155,17 @@ function Grid(props) {
             <text className='svg-tags' filter='url(#redtags)' x='250' y='50' fontSize='0.9rem' fill='white'>Invisible top row for checkers about to drop</text>
           </g>
         </svg>
+      </div>
 
+      <div id='buttons'>
         {/* Reset button; the 'value={props.rows}' is necessary because it is the argument to
         the 'resetGrid' event handler */}
         {/* BUG: Although the button logic is correct, the button is not entirely accessible
         because of the svg-container overlapping with it */}
-        <button type="button" value={props.rows} onClick={props.resetGrid}>Reset</button>
+          <button type="button" value={props.rows} onClick={props.resetGrid}>Start</button>
+          <button type="button" value={props.rows} onClick={props.resetGrid}>Reset</button>
       </div>
+    </div>
   );
 
 }

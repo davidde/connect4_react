@@ -66,8 +66,10 @@ html, body {
   .svg-tags {
     display: block;
   }
+  #game,
   #grid,
   #app,
+  #buttons,
   #status,
   #settings {
     position: relative;
@@ -75,8 +77,10 @@ html, body {
   // :after does not work on svgs!
   // This means we can't use #svg-container:after
   // or #svg-grid:after => svg-tags work-around.
+  #game:after,
   #grid:after,
   #app:after,
+  #buttons:after,
   #settings:after {
     position: absolute;
     left: 0;
@@ -86,11 +90,17 @@ html, body {
     padding: 0.2rem;
     font-size: 0.9rem;
   }
+  #game:after {
+    content: '#game div';
+  }
   #grid:after {
     content: '#grid div';
   }
   #app:after {
     content: '#app';
+  }
+  #buttons:after {
+    content: '#buttons';
   }
   #settings:after {
     content: '#settings';

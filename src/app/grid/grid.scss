@@ -1,33 +1,58 @@
+#game {
+  grid-area: grid;
+  display: flex;
+  flex-direction: column;
+}
+
+
 #grid {
   /* To fix an svg rendering inconsistency between Firefox and Chrome,
   one workaround is to set the parent position to relative (i.e. '#grid')
   and the svg's one to absolute. It's like one User Agent (FF) does create
   a new stack for the svg node, while the other (chrome) doesn't. */
-  grid-area: grid;
   position: relative;
+  flex: 1 1 auto;
   min-height: 200px;
   margin: 1rem;
-  button {
-    cursor: pointer;
+
+  #svg-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+  }
+
+  #svg-grid.gridNoFocus {
+    fill-opacity: 0.4;
+  }
+  
+  svg g.gridNoFocus {
+    fill-opacity: 0.45;
   }
 }
 
 
+#buttons {
+  // Google Chrome on Android has a bug that treats the viewport height (100vh)
+  // as the viewport height + height of the address bar.
+  // Firefox does the things correctly, so we fix it for chrome by adding more bottom margin:
+  @media(-webkit-min-device-pixel-ratio: 2) and (min-resolution: 200dpi) and (orientation: portrait) {
+    margin-bottom: 5rem;
+    @-moz-document url-prefix() {
+      // Firefox Specific:
+      margin-bottom: 1rem;
+    }
+  }
 
-#svg-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 95%;
-  width: 95%;
-  margin-left: 0.5rem;
-  padding-right: 1rem;
+  text-align: center;
+
+  button {
+    cursor: pointer;
+    margin-left: 4rem;
+    margin-right: 4rem;
+    margin-bottom: 1rem;
+  }
 }
 
-#svg-grid.gridNoFocus {
-  fill-opacity: 0.4;
-}
 
-svg g.gridNoFocus {
-  fill-opacity: 0.45;
-}
