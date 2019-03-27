@@ -47,7 +47,7 @@ html, body {
   but allow it to grow bigger if it is required to make the content fit.
   The second row gets a height of 90% of the viewport height. */
   grid-template-areas: 'settings status'
-                       'settings grid';
+                       'settings game';
   /* 'grid-template-areas' takes a string of space-separated names, allowing us to give
   each cell a name. If two adjacent cells have the same name, they are going to be
   coalesced into the same area. To finish up, we need to register our chosen names

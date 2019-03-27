@@ -5,7 +5,7 @@ import vars from './_variables.scss';
 
 import Status from './status/status';
 import Settings from './settings/settings';
-import Grid from './grid/grid';
+import Game from './game/game';
 
 
 class App extends React.Component {
@@ -335,16 +335,7 @@ class App extends React.Component {
       <div id='app'
             onTouchStart={this.handleTouchStart}
             onTouchMove={this.handleTouchMove} >
-        {/* 'app' is a css grid containing the <Status/>, <Settings/> and <Grid/> components */}
-
-        <Status
-            winner={this.state.winner}
-            p1Next={this.state.p1Next}
-            p1Color={this.state.p1Color}
-            p2Color={this.state.p2Color}
-            changeTurn={this.changeTurn}
-            timer={this.state.timer}
-        />
+        {/* 'app' is a css grid containing the <Settings/>, <Status/> and <Game/> components */}
 
         <Settings
             landscapePassive={this.state.landscapePassive}
@@ -361,7 +352,16 @@ class App extends React.Component {
             setTimer={this.setTimer}
         />
 
-        <Grid
+        <Status
+            winner={this.state.winner}
+            p1Next={this.state.p1Next}
+            p1Color={this.state.p1Color}
+            p2Color={this.state.p2Color}
+            changeTurn={this.changeTurn}
+            timer={this.state.timer}
+        />
+
+        <Game
             rows={this.state.rows}
             grid={this.state.grid}
             fullColumns={this.state.fullColumns}

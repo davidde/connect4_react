@@ -1,9 +1,9 @@
 import React from 'react';
 import Column from './column';
-import './grid.scss';
+import './game.scss';
 
 
-function Grid(props) {
+function Game(props) {
   // This may seem like a nasty wall of code, but it is entirely
   // inline-svg; it does nothing than set the visuals of the grid
   // and its checkers. The magic happens in its <Column/> child
@@ -31,7 +31,7 @@ function Grid(props) {
         <svg id='svg-container' viewBox={viewbox} xmlns='http://www.w3.org/2000/svg'>
           {/* This is the container svg, which holds the left and right 'pillars', the bottom padding,
               and an extra invisible top row, which will show the checkers that are about to drop,
-              when hovering. Turn on the $LSD bool in css to visualise this. */}
+              when hovering. Turn on the $LSD bool in 'src/app/app.scss' to visualise this. */}
           <defs>
             {/* Gradients to make checkers look all fancy */}
             <radialGradient id='yellow' cx='50%' cy='50%' r='50%' fx='50%' fy='50%'>
@@ -149,7 +149,7 @@ function Grid(props) {
             <rect id='left-pillar' width='60' height={pillarHeight} fill='url(#blackPillars)' x='0' y='100' rx='10' ry='10' />
             <rect id='right-pillar' width='60' height={pillarHeight} fill='url(#blackPillars)' x={rightPillarX} y='100' rx='10' ry='10' />
             
-            {/* Svg tags for LSD; only visible when '$LSD: true;' in css */}
+            {/* Svg tags for LSD; only visible when '$LSD: true;' in 'src/app/app.scss' */}
             <text className='svg-tags' filter='url(#redtags)' x='22' y='15' fontSize='0.9rem' fill='white'>#svg-container</text>
             <text className='svg-tags' filter='url(#redtags)' x='73' y='89' fontSize='0.9rem' fill='white'>#svg-grid</text>
             <text className='svg-tags' filter='url(#redtags)' x='250' y='50' fontSize='0.9rem' fill='white'>Invisible top row for checkers about to drop</text>
@@ -160,15 +160,14 @@ function Grid(props) {
       <div id='buttons'>
         {/* Reset button; the 'value={props.rows}' is necessary because it is the argument to
         the 'resetGrid' event handler */}
-        {/* BUG: Although the button logic is correct, the button is not entirely accessible
-        because of the svg-container overlapping with it */}
+        {/*
           <button type="button" value={props.rows} onClick={props.resetGrid}>Start</button>
+        */}
           <button type="button" value={props.rows} onClick={props.resetGrid}>Reset</button>
       </div>
     </div>
   );
-
 }
 
 
-export default Grid;
+export default Game;
