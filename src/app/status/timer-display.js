@@ -49,9 +49,10 @@ class TimerDisplay extends React.Component {
     let remainingSeconds = seconds + 's';
 
     // Turn is almost over because time is almost up => write message:
-    if (seconds < 2) {
-      remainingSeconds = '1s: Quickly now!';
-    }
+    // if (seconds < 2) {
+    //   remainingSeconds = '1s: Quickly now!';
+    // }
+    // -> Currently disabled, because buggy on mobile (too much text for small screens)
 
     // Turn is over because a player dropped a checker:
     if (this.p1Turn !== this.props.p1Next) {

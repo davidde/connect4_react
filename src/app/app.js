@@ -10,7 +10,7 @@ import Game from './game/game';
 
 class App extends React.Component {
   // The <App/> component functions as a container component for the
-  // <Status/>, <Settings/> and <Grid/> presenter components.
+  // <Status/>, <Settings/> and <Game/> presenter components.
   constructor(props) {
     super(props);
     this.state = {
@@ -18,7 +18,7 @@ class App extends React.Component {
       rows: 6,
       // The 'grid' data structure keeps track of
       // which grid cells contain checkers of which color:
-      // NOTE: 'grid' = array of COLUMN arrays! (NOT rows, which would seem more intuitive at first sight)
+      // NOTE: 'grid' = array of COLUMN arrays! (NOT row arrays, which seems more intuitive at first sight)
       // (COLUMN subarrays are algorithmically simpler when dropping checkers)
       grid: [],
       // The 'fullColumns' array keeps track of which grid columns are full:
@@ -29,12 +29,12 @@ class App extends React.Component {
       p2Color: 'yellow',
       winner: null, // also serves as a gameOver boolean
       gameOn: false,
+      timer: 0,
       // Settings/Sidebar state:
       portraitActive: false,
       landscapePassive: false,
       clientX: null,
       clientY: null,
-      timer: 0,
     };
 
     this.initGrid(this.state.rows);
@@ -291,6 +291,7 @@ class App extends React.Component {
       }
     }
   }
+  /////////// END Sidebar Methods ///////////////////////////////////////////////////////
 
   // This method should be passed to the Gridsize component inside the Settings component;
   // it takes the number of rows as input to determine the Gridsize and set the app state.

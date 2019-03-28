@@ -39,7 +39,7 @@
   // Firefox does the things correctly, so we fix it for chrome by adding more bottom margin:
   @media(-webkit-min-device-pixel-ratio: 2) and (min-resolution: 200dpi) and (orientation: portrait) {
     margin-bottom: 5rem;
-    @-moz-document url-prefix() {
+    @-moz-document url-prefix() { // This hack is disabled from Firefox 61 onwards; find workaround
       // Firefox Specific:
       margin-bottom: 1rem;
     }

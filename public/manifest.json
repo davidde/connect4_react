@@ -1,6 +1,6 @@
 {
-  "short_name": "Connect4",
-  "name": "Create React App Connect4",
+  "short_name": "Connect 4",
+  "name": "Connect Four",
   "icons": [
     {
       "src": "/images/icons-192.png",
