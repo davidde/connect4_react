@@ -31,8 +31,8 @@ class App extends React.Component {
       gameOn: false,
       timer: 0,
       // Settings/Sidebar state:
-      portraitActive: false,
-      landscapePassive: false,
+      portraitActive: false, // Sidebar is active in portrait orientation (inactive by default in portrait)
+      landscapePassive: false, // Sidebar is inactive in landscape orientation (active by default in landscape)
       clientX: null,
       clientY: null,
     };
@@ -272,6 +272,7 @@ class App extends React.Component {
     this.setState({ portraitActive: !this.state.portraitActive });
   }
 
+  // Clicking the Settings icon should activate the sidebar:
   handleClick = () => {
     if ( window.matchMedia("(orientation: landscape)").matches && window.innerWidth > vars.mediaQueryWidth) {
       this.toggleLandscape();
@@ -280,6 +281,7 @@ class App extends React.Component {
     }
   }
 
+  // Clicking the small strip of sidebar should also activate sidebar:
   handleSideClick = () => {
     if ( window.matchMedia("(orientation: landscape)").matches && window.innerWidth > vars.mediaQueryWidth) {
       if (this.state.landscapePassive) {

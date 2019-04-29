@@ -15,14 +15,26 @@
     &.landscapePassive {
       cursor: pointer;
       width: 0.5rem;
+      &:hover {
+        .sidebar-trigger {
+          color: $sidebarHoverColor;
+        }
+      }
     }
   }
   
   @media (orientation: portrait), (max-width: $mediaQueryWidth) {
     width: 0.5rem;
-    transition: width $transitionDuration;
 
     cursor: pointer;
+
+    &:not(.portraitActive) {
+      &:hover {
+        .sidebar-trigger {
+          color: $sidebarHoverColor;
+        }
+      }
+    }
   }
 
   @media (hover: none) {
@@ -89,7 +101,7 @@
       &.landscapePassive {
         left: -90vw;
       }
-      transition: left 0.5s;
+      transition: left $transitionDuration;
     }
 
     @media (orientation: portrait), (max-width: $mediaQueryWidth) {

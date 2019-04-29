@@ -17,6 +17,7 @@ function Settings(props) {
   }
 
   if (props.portraitActive) {
+    sidebarClass += ' portraitActive';
     bgClass += ' portraitActive';
     contentClass += ' portraitActive';
   }
