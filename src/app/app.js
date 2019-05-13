@@ -7,22 +7,17 @@ import Status from './status/status';
 import Settings from './settings/settings';
 import Game from './game/game';
 
-
+/**
+ * The <App/> component functions as a container component for the
+ * <Status/>, <Settings/> and <Game/> presenter components.
+ */
 class App extends React.Component {
-  // The <App/> component functions as a container component for the
-  // <Status/>, <Settings/> and <Game/> presenter components.
   constructor(props) {
     super(props);
     this.state = {
       // number of rows of the grid; cols = rows + 1
       rows: 6,
-      // The 'grid' data structure keeps track of
-      // which grid cells contain checkers of which color:
-      // NOTE: 'grid' = array of COLUMN arrays! (NOT row arrays, which seems more intuitive at first sight)
-      // (COLUMN subarrays are algorithmically simpler when dropping checkers)
       grid: [],
-      // The 'fullColumns' array keeps track of which grid columns are full:
-      // (each entry corresponds to the equivalent column subarray in 'grid')
       fullColumns: [],
       p1Next: true,
       p1Color: 'red',
@@ -40,12 +35,18 @@ class App extends React.Component {
     this.initGrid(this.state.rows);
   }
 
+  /**
+   * `initGrid` initialises the 'grid' and 'fullColumns' data structures:
+   * - 'grid' keeps track of which grid cells contain checkers of which player/color
+   *   NOTE:
+   *   'grid' = array of COLUMN arrays!
+   *   (NOT row arrays, which seems more intuitive at first sight)
+   *   (COLUMN subarrays are algorithmically simpler when dropping checkers)
+   * - 'fullColumns' keeps track of which grid columns are full:
+   *   each entry corresponds to the equivalent column subarray in 'grid'
+   */
   initGrid(rows) {
-    // Create grid data structure to keep track of which grid cells
-    // contain checkers of which color:
-    // 'grid' = array of COLUMN arrays!
     let grid = [];
-    // Create the 'fullColumns' array to keep track of which grid columns are full:
     let fullColumns = [];
     let cols = rows + 1;
     for (let c = 0; c < cols; c++) {
@@ -83,19 +84,21 @@ class App extends React.Component {
     }
   }
 
+  /**
+   * This method is called on every click on a column, to modify the grid data
+   * structure and related state. It needs to be passed to <Column/> through
+   * props, where it will receive its 'colID' argument (the ID of the
+   * Column its executing in). It then executes within the <App/>
+   * component's context (since this is an ES6 arrow function), and
+   * sets the bottom cell of the grid data structure to the relevant
+   * color. Finally, it checks if this change results in a winner
+   * or a 'fullColumn'.
+   */
   updateGridState = (colID) => {
-    // This method is called on every click on a column, to modify the grid data
-    // structure and related state. It needs to be passed to <Column/> through
-    // props, where it will receive its 'colID' argument (the ID of the
-    // Column its executing in). It then executes within the <App/>
-    // component's context (since this is an ES6 arrow function), and
-    // sets the bottom cell of the grid data structure to the relevant
-    // color. Finally, it checks if this change results in a winner
-    // or a 'fullColumn'.
     let bottomCell = this.findBottomCell(colID);
 
     const grid = this.state.grid.slice();
-    grid[colID][bottomCell] = this.state.p1Next ? this.state.p1Color : this.state.p2Color;
+    grid[colID][bottomCell] = this.state.p1Next ? 'p1:' + this.state.p1Color : 'p2:' + this.state.p2Color;
 
     let winner = this.checkForWinner(grid);
 
@@ -112,9 +115,11 @@ class App extends React.Component {
     });
   }
 
+  /**
+   * Finds the bottom empty cell in a column, where the checker should drop to.
+   * @param {array} col - State of a column; bottom of the column = START of the array!
+   */
   findBottomCell(col) {
-    // Finds the bottom empty cell in a column, where the checker should drop to.
-    // The bottom of the column is defined here as the START of the array!
     for (let r = 0; r < this.state.rows; r++) {
       if (this.state.grid[col][r] === null) {
         return r;
@@ -123,13 +128,16 @@ class App extends React.Component {
     return null;
   }
 
+  /**
+   * The idea of this function is to basically limit the checks to those that make sense.
+   * For example, when checking cells bottom to top (see the first loop),
+   * you only need to check the bottom 3 rows (r = 0, 1, 2) in each column (c = 0, 1, 2, 3, 4, 5, 6).
+   * That's because starting higher would run off the top of the board
+   * before finding a possible win. In other words, row sets {0,1,2,3}, {1,2,3,4} and {2,3,4,5}
+   * would be valid but {3,4,5,6} would not, because the six valid rows are 0-5.
+   * @param {array} grid - State of the grid, as an array of COLUMN arrays!
+   */
   checkForWinner(grid) {
-    // The idea of this function is to basically limit the checks to those that make sense.
-    // For example, when checking cells bottom to top (see the first loop),
-    // you only need to check the bottom 3 rows (r = 0, 1, 2) in each column (c = 0, 1, 2, 3, 4, 5, 6).
-    // That's because starting higher would run off the top of the board
-    // before finding a possible win. In other words, row sets {0,1,2,3}, {1,2,3,4} and {2,3,4,5}
-    // would be valid but {3,4,5,6} would not, because the six valid rows are 0-5.
     let cols = this.state.rows + 1;
 
     // Check bottom to top
@@ -139,9 +147,12 @@ class App extends React.Component {
           // if the bottom of the column is empty, continue with next column ...
           break;
         if (this.checkLine(grid[c][r], grid[c][r+1], grid[c][r+2], grid[c][r+3])) {
-          let winColor = grid[c][r];
-          // Make winning checkers recognizable in grid data structure:
-          grid[c][r] = grid[c][r+1] = grid[c][r+2] = grid[c][r+3] = winColor.toUpperCase();
+          let winColor = grid[c][r].slice(3);
+          // Mark winning checkers with 'w' instead of 'p':
+          grid[c][r] = 'w' + grid[c][r].slice(1);
+          grid[c][r+1] = 'w' + grid[c][r+1].slice(1);
+          grid[c][r+2] = 'w' + grid[c][r+2].slice(1);
+          grid[c][r+3] = 'w' + grid[c][r+3].slice(1);
           this.setState({ grid });
           return winColor;
         }
@@ -155,8 +166,12 @@ class App extends React.Component {
           // if the left of the row is empty, continue with next column ...
           break;
         if (this.checkLine(grid[c][r], grid[c+1][r], grid[c+2][r], grid[c+3][r])) {
-          let winColor = grid[c][r];
-          grid[c][r] = grid[c+1][r] = grid[c+2][r] = grid[c+3][r] = winColor.toUpperCase();
+          let winColor = grid[c][r].slice(3);
+          // Mark winning checkers with 'w' instead of 'p':
+          grid[c][r] = 'w' + grid[c][r].slice(1);
+          grid[c+1][r] = 'w' + grid[c+1][r].slice(1);
+          grid[c+2][r] = 'w' + grid[c+2][r].slice(1);
+          grid[c+3][r] = 'w' + grid[c+3][r].slice(1);
           this.setState({ grid });
           return winColor;
         }
@@ -170,8 +185,12 @@ class App extends React.Component {
           // if the left of the line is empty, continue with next column ...
           break;
         if (this.checkLine(grid[c][r], grid[c+1][r+1], grid[c+2][r+2], grid[c+3][r+3])) {
-          let winColor = grid[c][r];
-          grid[c][r] = grid[c+1][r+1] = grid[c+2][r+2] = grid[c+3][r+3] = winColor.toUpperCase();
+          let winColor = grid[c][r].slice(3);
+          // Mark winning checkers with 'w' instead of 'p':
+          grid[c][r] = 'w' + grid[c][r].slice(1);
+          grid[c+1][r+1] = 'w' + grid[c+1][r+1].slice(1);
+          grid[c+2][r+2] = 'w' + grid[c+2][r+2].slice(1);
+          grid[c+3][r+3] = 'w' + grid[c+3][r+3].slice(1);
           this.setState({ grid });
           return winColor;
         }
@@ -185,8 +204,12 @@ class App extends React.Component {
           // if the right of the line is empty, continue with next column on the left ...
           break;
         if (this.checkLine(grid[c][r], grid[c-1][r+1], grid[c-2][r+2], grid[c-3][r+3])) {
-          let winColor = grid[c][r];
-          grid[c][r] = grid[c-1][r+1] = grid[c-2][r+2] = grid[c-3][r+3] = winColor.toUpperCase();
+          let winColor = grid[c][r].slice(3);
+          // Mark winning checkers with 'w' instead of 'p':
+          grid[c][r] = 'w' + grid[c][r].slice(1);
+          grid[c-1][r+1] = 'w' + grid[c-1][r+1].slice(1);
+          grid[c-2][r+2] = 'w' + grid[c-2][r+2].slice(1);
+          grid[c-3][r+3] = 'w' + grid[c-3][r+3].slice(1);
           this.setState({ grid });
           return winColor;
         }
@@ -201,6 +224,21 @@ class App extends React.Component {
     // NOTE: Calling function needs to make sure
     //       first argument is a color, and not null.
     return ((color === a) && (color === b) && (color === c));
+  }
+
+  /**
+   * Check if all cells have a checker from the same player
+   * @param {null or string} a, b, c, d - Checkers in the grid
+   * Each checker string is of the form: 'p1:color' or 'p2:color'
+   */
+  checkLine(a, b, c, d) {
+    // Check if all cells are non-empty:
+    if (a && b && c && d) {
+      // check if all checkers are from same player:
+      // the second letter (index [1]) in a checker string indicates the player
+      return ((a[1] === b[1]) && (a[1] === c[1]) && (a[1] === d[1]));
+    }
+    return false;
   }
 
   //////////////////////////////////
@@ -295,27 +333,33 @@ class App extends React.Component {
   }
   /////////// END Sidebar Methods ///////////////////////////////////////////////////////
 
-  // This method should be passed to the Gridsize component inside the Settings component;
-  // it takes the number of rows as input to determine the Gridsize and set the app state.
+  /**
+   * This method should be passed to the Gridsize component inside the Settings component;
+   * it takes the number of rows as input to determine the Gridsize and set the app state.
+   */
   resetGrid = (event) => {
     let rows = parseInt(event.target.value);
     this.initGrid(rows);
   }
 
-  // To pass parameters to event handlers while using property initializer syntax, we need to use currying;
-  // Passing two parameters to the same function like 'setCheckerColor = (player, event) => {}' would not work,
-  // because the onClick event invokes the callback by passing an event object as first and only parameter.
-  // Hence if we use '= (player, event) => {}' then the event would be passed in the 'player' parameter and the
-  // 'event' parameter would be undefined. By using currying, we are creating a closure which is equivalent to:
-  //
-  // setCheckerColor = (player) => {
-  //   return (event) => {
-  //     ...
-  //   }
-  // }
-  //
-  // This method should be passed to the CheckerColor component inside the Settings component;
-  // it takes the checker color as input and sets it in app state.
+  /**
+   * To pass parameters to event handlers while using property initializer syntax, we need to use currying;
+   * Passing two parameters to the same function like 'setCheckerColor = (player, event) => {}' would not work,
+   * because the onClick event invokes the callback by passing an event object as first and only parameter.
+   * Hence if we use '= (player, event) => {}' then the event would be passed in the 'player' parameter and the
+   * 'event' parameter would be undefined. By using currying, we are creating a closure which is equivalent to:
+   *
+   * ```javascript
+   * setCheckerColor = (player) => {
+   *   return (event) => {
+   *     ...
+   *   }
+   * }
+   * ```
+   *
+   * This method should be passed to the CheckerColor component inside the Settings component;
+   * it takes the checker color as input and sets it in app state.
+   */
   setCheckerColor = (player) => (event) => {
     let color = event.target.value;
     if (player === 'Player 1:')

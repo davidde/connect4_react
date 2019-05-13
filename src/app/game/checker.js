@@ -34,12 +34,10 @@ class Checker extends React.Component {
   }
 
   render() {
-    let color = this.props.color;
     let className = this.props.color;
 
-    if (color === color.toUpperCase()) {
-      color = color.toLowerCase();
-      className = color + ' winningChecker';
+    if (this.props.winningChecker) {
+      className += ' winningChecker';
     }
 
     return <circle
@@ -47,7 +45,7 @@ class Checker extends React.Component {
               cx='50'
               cy='42.5'
               className={className}
-              fill={'url(#' + color + ')'}
+              fill={'url(#' + this.props.color + ')'}
               ref={circle => this.node = circle}
             />;
   }

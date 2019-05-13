@@ -74,14 +74,21 @@ class Column extends React.Component {
           }
 
           {
-            this.props.colData.map((color, i) => {
-              if (color)
+            this.props.colData.map((checker, i) => {
+              // Each checker string is of the form: 'p1:color', 'p2:color', 'w1:color' or 'w2:color'
+              if (checker) {
+                  let color = checker.slice(3);
+                  let winningChecker = false;
+                  if (checker[0] === 'w') winningChecker = true;
                   return <Checker
                             key={i}
                             // Invert rowID order because svg orders top down
                             // and the colData array is ordered bottom up!
                             rowID={Math.abs(i - this.props.rows)}
-                            color={color} />;
+                            color={color}
+                            winningChecker={winningChecker}
+                          />;
+              }
               return null;
             })
           }
