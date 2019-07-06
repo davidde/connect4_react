@@ -28,8 +28,8 @@ class App extends React.Component {
       // Settings/Sidebar state:
       portraitActive: false, // Sidebar is active in portrait orientation (inactive by default in portrait)
       landscapePassive: false, // Sidebar is inactive in landscape orientation (active by default in landscape)
-      clientX: null,
-      clientY: null,
+      clientX: null, // don't need to be in state!?
+      clientY: null, // should be: this.clientX and this.clientY
     };
 
     this.initGrid(this.state.rows);
@@ -219,13 +219,6 @@ class App extends React.Component {
     return null;
   }
 
-  checkLine(color, a, b, c) {
-    // Check if all cells have the same color
-    // NOTE: Calling function needs to make sure
-    //       first argument is a color, and not null.
-    return ((color === a) && (color === b) && (color === c));
-  }
-
   /**
    * Check if all cells have a checker from the same player
    * @param {null or string} a, b, c, d - Checkers in the grid
@@ -322,6 +315,7 @@ class App extends React.Component {
   // Clicking the small strip of sidebar should also activate sidebar:
   handleSideClick = () => {
     if ( window.matchMedia("(orientation: landscape)").matches && window.innerWidth > vars.mediaQueryWidth) {
+      // Clicking the sidestrip should only work when the sidebar is NOT active:
       if (this.state.landscapePassive) {
         this.toggleLandscape();
       }
