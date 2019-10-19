@@ -20,10 +20,9 @@ function Game(props) {
   let bottomPaddingY = height + 7; // 715
   let pillarHeight = width - 20; // 680
   let rightPillarX = width + 36 - pillarCorrection; // 736
-  
-  let className = '';
-  if (props.winner)
-      className = 'gridNoFocus';
+
+  let gridFocus = '';
+  if (props.gameOver) gridFocus = 'gridNoFocus';
 
   return (
     <div id='game'>
@@ -119,7 +118,7 @@ function Game(props) {
             </filter>
           </defs>
 
-          <svg id='svg-grid' className={className} width={width} height={height} x='54' y='8' xmlns='http://www.w3.org/2000/svg'>
+          <svg id='svg-grid' className={gridFocus} width={width} height={height} x='54' y='8' xmlns='http://www.w3.org/2000/svg'>
             {/* This is the actual grid svg consisting of 7 column svg's;
                 each column is 700px high by 100px wide, with the top cell an invisible one,
                 to show pending checkers. */}
@@ -134,7 +133,7 @@ function Game(props) {
                           rows={props.rows}
                           colData={props.grid[i]}
                           fullColumn={props.fullColumns[i]}
-                          winner={props.winner}
+                          gameOver={props.gameOver}
                           p1Next={props.p1Next}
                           p1Color={props.p1Color}
                           p2Color={props.p2Color}
@@ -144,7 +143,7 @@ function Game(props) {
             }
           </svg>
 
-          <g className={className}>
+          <g className={gridFocus}>
             <rect id='bottom-padding' width={bottomPaddingWidth} height='20' x='54' y={bottomPaddingY} fill='url(#blackBottom)' />
             <rect id='left-pillar' width='60' height={pillarHeight} fill='url(#blackPillars)' x='0' y='100' rx='10' ry='10' />
             <rect id='right-pillar' width='60' height={pillarHeight} fill='url(#blackPillars)' x={rightPillarX} y='100' rx='10' ry='10' />

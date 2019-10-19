@@ -9,7 +9,7 @@ class Column extends React.Component {
   //        - rows
   //        - colData
   //        - fullColumn
-  //        - winner
+  //        - gameOver
   //        - p1Next
   //        - p1Color
   //        - p2Color
@@ -35,8 +35,8 @@ class Column extends React.Component {
   }
 
   handleClick = () => {
-    // Guard against changing colData after winner or fullColumn:
-    if (this.props.fullColumn || this.props.winner)
+    // Guard against changing colData after gameOver or fullColumn:
+    if (this.props.fullColumn || this.props.gameOver)
       return;
     let updateGridState = this.props.onColumnClick;
     updateGridState(this.props.colID);
@@ -51,7 +51,7 @@ class Column extends React.Component {
 
     let className = 'colNoFocus';
     let hoverChecker = false;
-    if (this.state.isHovered && !this.props.fullColumn && !this.props.winner) {
+    if (this.state.isHovered && !this.props.fullColumn && !this.props.gameOver) {
       // In these conditions, enable a column to be focussed on,
       // and hovered over with a checker.
       className = 'colInFocus';

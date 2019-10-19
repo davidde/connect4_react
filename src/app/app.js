@@ -22,8 +22,8 @@ class App extends React.Component {
       p1Next: true,
       p1Color: 'red',
       p2Color: 'yellow',
-      winner: null, // also serves as a gameOver boolean
-      gameOn: false,
+      winner: null,
+      gameOver: false,
       timer: 0,
       // Settings/Sidebar state:
       portraitActive: false, // Sidebar is active in portrait orientation (inactive by default in portrait)
@@ -67,6 +67,7 @@ class App extends React.Component {
         grid,
         fullColumns,
         winner: null,
+        gameOver: false,
         p1Next: true,
       });
     } else {
@@ -101,16 +102,19 @@ class App extends React.Component {
     grid[colID][bottomCell] = this.state.p1Next ? 'p1:' + this.state.p1Color : 'p2:' + this.state.p2Color;
 
     let winner = this.checkForWinner(grid);
+    let gameOver = (winner !== null);
 
     // If there is not bottom empty cell AFTER grid update, that column is full:
     bottomCell = this.findBottomCell(colID);
     const fullColumns = this.state.fullColumns.slice();
     if (bottomCell === null) fullColumns[colID] = true;
+    if (!fullColumns.includes(false)) gameOver = true;
 
     this.setState({
       grid,
       fullColumns,
       winner,
+      gameOver,
       p1Next: !this.state.p1Next,
     });
   }
@@ -395,6 +399,7 @@ class App extends React.Component {
 
         <Status
             winner={this.state.winner}
+            gameOver={this.state.gameOver}
             p1Next={this.state.p1Next}
             p1Color={this.state.p1Color}
             p2Color={this.state.p2Color}
@@ -406,7 +411,7 @@ class App extends React.Component {
             rows={this.state.rows}
             grid={this.state.grid}
             fullColumns={this.state.fullColumns}
-            winner={this.state.winner}
+            gameOver={this.state.gameOver}
             p1Next={this.state.p1Next}
             p1Color={this.state.p1Color}
             p2Color={this.state.p2Color}

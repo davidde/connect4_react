@@ -45,14 +45,18 @@
   background-color: rgb(155, 3, 226);
 }
 
+.status.draw {
+  color: #faf1d7;
+}
+
 #timerDisplay {
   display: inline-block;
   text-align: left;
   margin-top: 1rem;
 }
 
-#winnerMessage {
-  // Use the empty #winnerMessage as filler, to push #timerDisplay
+#gameOverMessage {
+  // Use the empty #gameOverMessage as filler, to push #timerDisplay
   // and #statusMessage to the left and right respectively:
   flex-grow: 5;
   text-align: center;

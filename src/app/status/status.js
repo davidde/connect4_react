@@ -4,22 +4,25 @@ import TimerDisplay from './timer-display';
 
 
 function Status(props) {
-  let winnerMessage;
+  let gameOverMessage;
   let statusMessage;
   let statusClass;
   let color;
 
-  if (props.winner) {
-    color = props.winner; // winning color
-    winnerMessage = 'Winner: ' + props.winner + '!!!';
-    statusMessage = '';
-    
-    statusClass = color + ' status';
-  }
-
-  else {
+  if (props.gameOver) {
+    if (props.winner) {
+      color = props.winner; // winning color
+      gameOverMessage = 'Winner: ' + props.winner + '!!!';
+      statusMessage = '';
+      
+      statusClass = color + ' status';
+    } else {
+      gameOverMessage = 'Game over!';
+      statusClass = 'draw status';
+    }
+  } else {
     color = (props.p1Next ? props.p1Color : props.p2Color);
-    winnerMessage = '';
+    gameOverMessage = '';
     statusMessage = color + "'s turn";
     
     statusClass = 'status'
@@ -31,7 +34,7 @@ function Status(props) {
         {/* '#timerDisplay' displays invisually after win, which pushes the win message to the right: */}
         <span id='timerDisplay' className={color}>
           {
-            (props.timer && !props.winner) ? // Conditionally render TimerDisplay when a timer is set:
+            (props.timer && !props.gameOver) ? // Conditionally render TimerDisplay when a timer is set:
                 <TimerDisplay
                   p1Next={props.p1Next}
                   changeTurn={props.changeTurn}
@@ -40,8 +43,8 @@ function Status(props) {
           }
         </span>
 
-        <span id='winnerMessage'>
-          {winnerMessage}
+        <span id='gameOverMessage'>
+          {gameOverMessage}
         </span>
 
         <span id='statusMessage' className={color}>
