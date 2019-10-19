@@ -6,20 +6,20 @@ class TimerDisplay extends React.Component {
     super(props);
     this.state = {
       currentCount: this.props.timer,
+      p1Turn: this.props.p1Next,
     };
+  }
+
+  componentDidMount() {
     /* STATE vs INSTANCE variables in React:
     Whenever state is updated, React calls render
     and makes any necessary changes to the real DOM.
-    Because the value of 'this.p1Turn' and 'this.interval'
-    has no effect on the rendering of this component,
+    Because the value of 'this.interval' has no direct
+    effect on the rendering of this component,
     it shouldn't live in state. Putting it there would
     cause unnecessary calls to render. So it is perfectly
     fine to have local component variables that don't
     live in state! */
-    this.p1Turn = this.props.p1Next;
-  }
-
-  componentDidMount() {
     this.interval = setInterval(this.tick, 1000);
   }
 
@@ -33,14 +33,16 @@ class TimerDisplay extends React.Component {
     this.setState({currentCount});
 
     // Turn is over because time is up:
-    if (this.p1Turn === this.props.p1Next && currentCount < 1) {
+    if (this.state.p1Turn === this.props.p1Next && currentCount < 1) {
       this.props.changeTurn();
       this.setState({currentCount: this.props.timer});
     }
     // Turn is over because a player dropped a checker:
-    if (this.p1Turn !== this.props.p1Next) {
-      this.p1Turn = this.props.p1Next;
-      this.setState({currentCount: this.props.timer});
+    if (this.state.p1Turn !== this.props.p1Next) {
+      this.setState({
+        currentCount: this.props.timer,
+        p1Turn: this.props.p1Next,
+      });
     }
   }
 
@@ -55,7 +57,7 @@ class TimerDisplay extends React.Component {
     // -> Currently disabled, because buggy on mobile (too much text for small screens)
 
     // Turn is over because a player dropped a checker:
-    if (this.p1Turn !== this.props.p1Next) {
+    if (this.state.p1Turn !== this.props.p1Next) {
       // Prevent displaying the seconds of the previous turn for the
       // fraction of a second untill tick() resets the timer:
       remainingSeconds = '';
