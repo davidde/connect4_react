@@ -2,7 +2,7 @@
   "name": "connect4",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://daviddeprost.github.io/connect4_react/",
+  "homepage": "https://davidde.github.io/connect4_react/",
   "dependencies": {
     "gh-pages": "^2.1.1",
     "gsap": "^2.0.2",
